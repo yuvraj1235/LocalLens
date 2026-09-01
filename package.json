@@ -1,0 +1,20 @@
+{
+  "name": "local-vision-pipeline",
+  "version": "0.1.0",
+  "description": "OCR + UI/Face Detection + PII Fusion pipeline for the privacy-preserving browser agent (nishant branch)",
+  "main": "src/api/analyzeScreen.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --loader ts-node/esm test/sample.test.ts",
+    "bench": "node --loader ts-node/esm src/bench/benchmark.ts"
+  },
+  "dependencies": {
+    "onnxruntime-web": "^1.19.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.14.0"
+  }
+}
