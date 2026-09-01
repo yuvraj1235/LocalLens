@@ -1,4 +1,311 @@
-/.env
-/.venv
-/chroma_db
+# =========================================================
+# ENVIRONMENT & SECRETS
+# =========================================================
+
+.env
+.env.*
+!.env.example
+!.env.template
+
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+
+# API keys / credentials
+credentials.json
+service-account.json
+secrets.json
+
+# =========================================================
+# PYTHON / FASTAPI
+# =========================================================
+
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python build / distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+
+# Virtual environments
 .venv/
+venv/
+env/
+ENV/
+virtualenv/
+.venv*
+
+# Python tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.pyright/
+.hypothesis/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+# Type checking
+.dmypy.json
+dmypy.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python packaging
+pip-wheel-metadata/
+MANIFEST
+.installed.cfg
+
+# =========================================================
+# FASTAPI / UVICORN / APPLICATION LOGS
+# =========================================================
+
+*.log
+logs/
+*.pid
+
+# =========================================================
+# NODE / TYPESCRIPT
+# =========================================================
+
+node_modules/
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# npm
+.npm/
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+.pnp.*
+
+# pnpm
+.pnpm-store/
+
+# TypeScript build output
+dist/
+build/
+out/
+
+# TypeScript incremental compilation
+*.tsbuildinfo
+
+# =========================================================
+# FRONTEND FRAMEWORKS
+# =========================================================
+
+# Next.js
+.next/
+.vercel/
+
+# Vite
+.vite/
+
+# Nuxt
+.nuxt/
+.nitro/
+
+# SvelteKit
+.svelte-kit/
+
+# Angular
+.angular/
+
+# =========================================================
+# TESTING
+# =========================================================
+
+coverage/
+.nyc_output/
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# =========================================================
+# DATABASES / LOCAL DATA
+# =========================================================
+
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Local database directories
+data/
+database/
+db/
+
+# =========================================================
+# CACHE / TEMPORARY FILES
+# =========================================================
+
+.cache/
+.cache-loader/
+.temp/
+tmp/
+temp/
+
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# =========================================================
+# IDE / EDITORS
+# =========================================================
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Visual Studio
+.vs/
+
+# Vim
+*.swp
+*.swo
+
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+# =========================================================
+# OPERATING SYSTEM
+# =========================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.directory
+
+# =========================================================
+# DOCKER
+# =========================================================
+
+# Docker override/local config
+docker-compose.override.yml
+docker-compose.local.yml
+
+# =========================================================
+# GENERATED FILES
+# =========================================================
+
+*.generated.*
+generated/
+generated-files/
+
+# =========================================================
+# LOCAL CONFIGURATION
+# =========================================================
+
+config.local.*
+settings.local.*
+*.local.json
+*.local.yaml
+*.local.yml
+
+# =========================================================
+# AI / ML LOCAL FILES
+# =========================================================
+
+# Model weights
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+
+# Local vector databases
+chroma/
+chroma_db/
+*.faiss
+
+# HuggingFace cache
+.cache/huggingface/
+
+# =========================================================
+# UPLOADS / USER-GENERATED FILES
+# =========================================================
+
+uploads/*
+!uploads/.gitkeep
+
+media/*
+!media/.gitkeep
+
+storage/*
+!storage/.gitkeep
+
+# =========================================================
+# SECURITY / PRIVATE FILES
+# =========================================================
+
+*.secret
+*.secrets
+*.token
+*.credentials
+
+# SSH
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+# =========================================================
+# BACKUPS
+# =========================================================
+
+*.bak
+*.backup
+*.old
