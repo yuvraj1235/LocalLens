@@ -6,11 +6,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "node --loader ts-node/esm test/sample.test.ts",
-    "bench": "node --loader ts-node/esm src/bench/benchmark.ts"
+    "bench": "node --loader ts-node/esm src/bench/benchmark.ts",
+    "test": "vitest watch"
   },
   "dependencies": {
-    "onnxruntime-web": "^1.29.0"
+    "onnxruntime-web": "^1.29.0",
+    "vitest": "^4.1.11"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
