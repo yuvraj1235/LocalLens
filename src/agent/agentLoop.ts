@@ -98,6 +98,11 @@ export interface AgentLoopOptions {
    * Default: 0.4
    */
   minConfidence?: number;
+  /**
+   * Optional pre-built client — used in tests to inject a mock.
+   * If omitted, a real AgentClient is created automatically.
+   */
+  client?: { send: (request: TaskRequest) => Promise<unknown> };
 }
 
 // ---------------------------------------------------------------------------
@@ -120,7 +125,7 @@ export class AgentLoop {
     this.onLog = options.onLog;
     this.maxSteps = options.maxSteps ?? 20;
     this.minConfidence = options.minConfidence ?? 0.4;
-    this.client = new AgentClient("ws://localhost:8000/ws/agent");
+    this.client = options.client ?? new AgentClient("ws://localhost:8000/ws/agent");
   }
 
   /** Begin the agent loop with an initial SanitizedContext from Ankit. */
