@@ -5,6 +5,7 @@
   "main": "src/api/analyzeScreen.ts",
   "type": "module",
   "scripts": {
+    "dev": "vite",
     "build": "tsc -p tsconfig.json",
     "bench": "node --loader ts-node/esm src/bench/benchmark.ts",
     "test": "vitest watch"
