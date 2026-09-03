@@ -115,8 +115,12 @@ function validateSchema(action: StructuredAction): ValidationResult {
 
 function validateDOM(elementId: string): ValidationResult {
   // Try data-agent-id first (Ankit's content script stamps this attribute)
+  const escapedId = typeof CSS !== "undefined" && CSS.escape
+    ? CSS.escape(elementId)
+    : elementId.replace(/["\\]/g, "\\$&");
+
   let el: HTMLElement | null = document.querySelector<HTMLElement>(
-    `[data-agent-id="${CSS.escape(elementId)}"]`
+    `[data-agent-id="${escapedId}"]`
   );
 
   // Fallback: bare id
