@@ -1,0 +1,256 @@
+/* ──────────────────────────────────────────────────────────────────
+   popup.css  — LocalLens Extension Popup
+   Dark theme, 380px wide (Chrome extension popup max width)
+   ────────────────────────────────────────────────────────────────── */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+/* ── Tokens ──────────────────────────────────────────────────────── */
+:root {
+  --bg:          #0f1117;
+  --surface:     #1a1d27;
+  --surface-2:   #22263a;
+  --border:      #2e3248;
+  --accent:      #6c8ef5;
+  --accent-hover:#8aa3ff;
+  --danger:      #e05c5c;
+  --danger-hover:#f07070;
+  --success:     #4caf82;
+  --warn:        #e8a640;
+  --text:        #e2e4ef;
+  --text-muted:  #7b82a8;
+  --radius:      8px;
+  --radius-sm:   5px;
+  --font:        "Inter", system-ui, sans-serif;
+  --popup-width: 380px;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: var(--popup-width);
+  min-height: 480px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-icon { font-size: 18px; }
+.logo-text {
+  font-size: 15px;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Status badge ────────────────────────────────────────────────── */
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 20px;
+  border: 1px solid;
+  transition: all 0.25s ease;
+}
+.badge--idle    { color: var(--text-muted); border-color: var(--border);  background: transparent; }
+.badge--running { color: var(--accent);     border-color: var(--accent);  background: rgba(108,142,245,0.12); }
+.badge--done    { color: var(--success);    border-color: var(--success); background: rgba(76,175,130,0.12); }
+.badge--error   { color: var(--danger);     border-color: var(--danger);  background: rgba(224,92,92,0.12); }
+
+/* ── Task section ────────────────────────────────────────────────── */
+.task-section { padding: 14px 16px 10px; }
+
+.label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.input-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.task-input {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.task-input:focus { border-color: var(--accent); }
+.task-input::placeholder { color: var(--text-muted); }
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+.btn {
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 13px;
+  transition: background 0.2s, opacity 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn--primary { background: var(--accent);  color: #fff; }
+.btn--primary:hover:not(:disabled) { background: var(--accent-hover); }
+
+.btn--danger  { background: var(--danger);  color: #fff; }
+.btn--danger:hover:not(:disabled)  { background: var(--danger-hover); }
+
+.btn--ghost   { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+.btn--ghost:hover:not(:disabled) { color: var(--text); border-color: var(--text-muted); }
+
+.btn--sm { padding: 4px 10px; font-size: 11px; }
+
+/* ── Privacy strip ───────────────────────────────────────────────── */
+.privacy-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(108,142,245,0.06);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.privacy-label { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+.redaction-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.redaction-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 20px;
+  background: rgba(108,142,245,0.15);
+  color: var(--accent);
+  border: 1px solid rgba(108,142,245,0.3);
+}
+
+/* ── Log section ─────────────────────────────────────────────────── */
+.log-section { padding: 10px 16px 14px; }
+
+.log-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.log-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* ── Log entries ─────────────────────────────────────────────────── */
+.log-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border-left: 3px solid transparent;
+  font-size: 12px;
+  animation: fadeIn 0.18s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.log-entry--info    { border-left-color: var(--border); }
+.log-entry--success { border-left-color: var(--success); }
+.log-entry--warn    { border-left-color: var(--warn); }
+.log-entry--error   { border-left-color: var(--danger); }
+.log-entry--placeholder { color: var(--text-muted); font-style: italic; border-left-color: transparent; }
+
+.log-step {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 22px;
+  margin-top: 1px;
+}
+
+.log-icon { font-size: 13px; flex-shrink: 0; }
+.log-msg  { color: var(--text); flex: 1; }
+.log-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Ask-user overlay ────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.15s ease;
+}
+
+.overlay-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+.overlay-msg { font-size: 13px; color: var(--text); }
+
+.overlay-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ── Utility ─────────────────────────────────────────────────────── */
+.hidden { display: none !important; }
