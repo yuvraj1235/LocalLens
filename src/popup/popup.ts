@@ -146,12 +146,12 @@ function clearLog(): void {
     '<li class="log-entry log-entry--info log-entry--placeholder">Agent output will appear here…</li>';
 }
 
-/** Map log level → emoji icon */
+/** Map log level → minimal symbol */
 const ICONS: Record<string, string> = {
-  info:    "ℹ️",
-  success: "✅",
-  warn:    "⚠️",
-  error:   "❌",
+  info:    "·",
+  success: "✓",
+  warn:    "⚠",
+  error:   "✕",
 };
 
 function appendLog(entry: LogEntry): void {
