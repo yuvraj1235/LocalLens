@@ -95,9 +95,14 @@ export async function executeAction(
 function resolveElement(elementId: string | null): HTMLElement {
   if (!elementId) throw new Error("element_id is required but was null.");
 
+  // Safe escape: use CSS.escape when available (browsers), manual fallback for jsdom/tests
+  const escapedId = typeof CSS !== "undefined" && CSS.escape
+    ? CSS.escape(elementId)
+    : elementId.replace(/["\\]/g, "\\$&");
+
   // Primary: data-agent-id attribute (Ankit's content script stamps this)
   let el = document.querySelector<HTMLElement>(
-    `[data-agent-id="${CSS.escape(elementId)}"]`
+    `[data-agent-id="${escapedId}"]`
   );
 
   // Fallback: treat element_id as a bare CSS id
