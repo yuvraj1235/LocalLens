@@ -89,26 +89,35 @@ export class AgentLoop {
     this.client = options.client ?? new AgentClient("ws://localhost:8000/ws/agent");
   }
 
-  /** Begin the agent loop with an initial SanitizedContext from the content script. */
-  async start(context: SanitizedContext): Promise<void> {
+  async start(initialContext: SanitizedContext): Promise<void> {
     this.running = true;
     this.stepCount = 0;
     this.history = [];
 
     this.log("info", null, null, `Agent started. Task: "${this.task}"`);
+    let currentContext = initialContext;
 
     while (this.running && this.stepCount < this.maxSteps) {
       this.stepCount++;
 
-      // ── Step 1: Build request ──────────────────────────────────────────
+      // Step 1: On every step after the first, fetch fresh context from the
+      // content script so element IDs reflect the current DOM state.
+      if (this.stepCount > 1) {
+        const fresh = await this.sendMessage({ type: "GET_CONTEXT" });
+        if (fresh && !(fresh as any).error) {
+          currentContext = fresh as SanitizedContext;
+        }
+      }
+
+      // Step 2: Build request
       const request: TaskRequest = {
-        session_id: context.session_id,
+        session_id: currentContext.session_id,
         task: this.task,
-        context,
+        context: currentContext,
         history: [...this.history],
       };
 
-      // ── Step 2: Send to backend ────────────────────────────────────────
+      // Send to backend
       let rawResponse: unknown;
       try {
         rawResponse = await this.client.send(request);
@@ -125,7 +134,7 @@ export class AgentLoop {
         `Backend: ${action.action} → ${action.element_id ?? "—"} (confidence: ${action.confidence.toFixed(2)})`
       );
 
-      // ── Step 3: Confidence gate ────────────────────────────────────────
+      // Step 3: Confidence gate
       if (action.confidence < this.minConfidence) {
         this.log(
           "warn",
@@ -136,26 +145,16 @@ export class AgentLoop {
         break;
       }
 
-      // ── Step 4: Validate ───────────────────────────────────────────────
+      // Step 4: Validate
       const validation = validateAction(action);
       if (validation.status === "invalid") {
         this.log("error", action.action, action.element_id, `Validation failed: ${validation.reason}`);
-        break;
+        this.history.push(`Step ${this.stepCount}: FAILED — ${validation.reason}`);
+        await sleep(300);
+        continue;
       }
 
-      // ── Step 5: Execute ────────────────────────────────────────────────
-      const result = await executeAction(action);
-      if (result.status === "error") {
-        this.log("error", action.action, action.element_id, `Execution failed: ${result.message}`);
-        break;
-      }
-
-      this.log("success", action.action, action.element_id, result.message);
-
-      // Record this action for the history grounding context
-      this.history.push(`Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim());
-
-      // ── Step 6: Terminal conditions ────────────────────────────────────
+      // Step 5: Terminal conditions
       if (action.done || action.action === "DONE") {
         this.log("success", null, null, "Task completed by backend signal.");
         break;
@@ -166,8 +165,29 @@ export class AgentLoop {
         break;
       }
 
+      // Step 6: Execute via Content Script Message
+      const result: any = await this.sendMessage({ type: "EXECUTE_ACTION", action });
+      
+      if (!result || result.error) {
+        this.log("error", action.action, action.element_id,
+          `Relay error: ${result?.error ?? "No response from content script"}`);
+        break;
+      }
+
+      if (result.status === "error") {
+        this.log("error", action.action, action.element_id, `Execution failed: ${result.message}`);
+        this.history.push(`Step ${this.stepCount}: ${action.action} on ${action.element_id} failed — ${result.message}`);
+        await sleep(500);
+        continue;
+      }
+
+      this.log("success", action.action, action.element_id, result.message);
+
+      // Record this action for the history grounding context
+      this.history.push(`Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim());
+
       // Small delay between steps to avoid hammering the DOM
-      await sleep(300);
+      await sleep(600);
     }
 
     if (this.stepCount >= this.maxSteps) {
@@ -182,6 +202,26 @@ export class AgentLoop {
   stop(): void {
     this.running = false;
     this.log("info", null, null, "Agent loop stopped by caller.");
+  }
+
+  // ---------------------------------------------------------------------------
+  // Send a message via chrome.runtime → background → content script
+  // ---------------------------------------------------------------------------
+  private sendMessage(msg: any): Promise<unknown> {
+    return new Promise((resolve) => {
+      if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
+        chrome.runtime.sendMessage(msg, (response) => {
+          if (chrome.runtime.lastError) {
+            resolve({ error: chrome.runtime.lastError.message });
+          } else {
+            resolve(response);
+          }
+        });
+      } else {
+        // Dev mode fallback — no real content script available
+        resolve({ error: "chrome.runtime not available (dev mode)" });
+      }
+    });
   }
 
   // ── Private helpers ─────────────────────────────────────────────────────

@@ -1,0 +1,1 @@
+{"nodes": [{"id": "src_popup_popup_html", "label": "Popup UI", "file_type": "code", "source_file": "src/popup/popup.html"}], "edges": [{"source": "src_popup_popup_html", "target": "src_popup_popup_ts", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "src/popup/popup.html"}], "hyperedges": []}

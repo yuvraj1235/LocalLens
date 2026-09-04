@@ -1,0 +1,1 @@
+{"nodes": [{"id": "src_ui_index_html", "label": "Demo UI", "file_type": "code", "source_file": "src/ui/index.html"}], "edges": [{"source": "src_ui_index_html", "target": "src_ui_main_ts", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "src/ui/index.html"}], "hyperedges": []}

@@ -71,11 +71,11 @@ function getRole(el: Element): string {
 // DOM walker — builds the UIGraph
 // ---------------------------------------------------------------------------
 
+// Counter never resets — IDs are permanent for the lifetime of the content script.
+// New elements that appear after the first stamp get the next available number.
 let agentIdCounter = 0;
 
 function buildUIGraph(): UIElement[] {
-  // Reset counter each call so IDs are stable within a snapshot
-  agentIdCounter = 0;
   const elements: UIElement[] = [];
 
   const SELECTOR = [
@@ -85,16 +85,19 @@ function buildUIGraph(): UIElement[] {
   ].join(",");
 
   document.querySelectorAll<HTMLElement>(SELECTOR).forEach((el) => {
-    // Skip invisible elements
     const style = window.getComputedStyle(el);
     if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0") return;
 
     const bbox = getBbox(el);
-    if (!bbox) return; // off-screen / hidden
+    if (!bbox) return;
 
-    // Stamp with a stable agent id
-    const agentId = `agent_${agentIdCounter++}`;
-    el.setAttribute("data-agent-id", agentId);
+    // PRESERVE existing stamp — only assign a new ID if the element doesn't have one yet.
+    // This keeps IDs stable across repeated GET_CONTEXT calls.
+    let agentId = el.getAttribute("data-agent-id");
+    if (!agentId) {
+      agentId = `agent_${agentIdCounter++}`;
+      el.setAttribute("data-agent-id", agentId);
+    }
 
     const rawLabel = getLabel(el) ?? "";
     const redaction = detectPii(rawLabel);
@@ -107,7 +110,7 @@ function buildUIGraph(): UIElement[] {
     elements.push({
       element_id: agentId,
       role: getRole(el),
-      label: redaction === "NONE" ? rawLabel || null : null, // strip PII from label
+      label: redaction === "NONE" ? rawLabel || null : null,
       bbox,
       redaction,
       clickable: el.tagName === "BUTTON" || el.tagName === "A" || !!el.onclick || el.getAttribute("role") === "button",

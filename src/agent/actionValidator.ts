@@ -56,17 +56,13 @@ const VALID_ACTIONS: ActionType[] = [
  * or { status: "invalid", reason } if something is wrong.
  */
 export function validateAction(action: StructuredAction): ValidationResult {
-  // --- 1. Schema checks ---
-  const schemaResult = validateSchema(action);
-  if (schemaResult.status === "invalid") return schemaResult;
-
-  // --- 2. DOM checks (only for element-targeting actions) ---
-  if (ELEMENT_REQUIRED.includes(action.action) && action.element_id) {
-    const domResult = validateDOM(action.element_id);
-    if (domResult.status === "invalid") return domResult;
-  }
-
-  return { status: "valid", reason: "All checks passed." };
+  // Schema checks only.
+  // NOTE: DOM checks (element_id lookups) are intentionally skipped here because
+  // validateAction runs inside the extension popup, which is a separate document
+  // from the live webpage. The popup's document has none of the webpage's elements.
+  // DOM resolution is handled by the content script's executeAction, which runs
+  // in the correct page context and will return { status: "error" } if not found.
+  return validateSchema(action);
 }
 
 // ---------------------------------------------------------------------------
