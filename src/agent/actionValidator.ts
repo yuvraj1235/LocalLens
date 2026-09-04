@@ -54,15 +54,34 @@ const VALID_ACTIONS: ActionType[] = [
  * Validate a StructuredAction.
  * Returns { status: "valid" } if it is safe to execute,
  * or { status: "invalid", reason } if something is wrong.
+ *
+ * @param skipDomCheck — set to true when calling from the popup/agentLoop
+ *   context, where `document` is the popup's own document and does NOT
+ *   contain the live page's elements. The content script's executeAction()
+ *   will catch missing elements at the point of actual DOM interaction.
  */
-export function validateAction(action: StructuredAction): ValidationResult {
-  // Schema checks only.
-  // NOTE: DOM checks (element_id lookups) are intentionally skipped here because
-  // validateAction runs inside the extension popup, which is a separate document
-  // from the live webpage. The popup's document has none of the webpage's elements.
-  // DOM resolution is handled by the content script's executeAction, which runs
-  // in the correct page context and will return { status: "error" } if not found.
-  return validateSchema(action);
+export function validateAction(
+  action: StructuredAction,
+  { skipDomCheck = false }: { skipDomCheck?: boolean } = {}
+): ValidationResult {
+  // Layer 1: schema checks (always run)
+  const schema = validateSchema(action);
+  if (schema.status === "invalid") return schema;
+
+  // Layer 2: DOM checks — only when:
+  //   a) the action targets a specific element
+  //   b) the caller is running inside the page's document (content script)
+  //   c) the caller has not explicitly opted out (popup / agentLoop)
+  if (
+    !skipDomCheck &&
+    ELEMENT_REQUIRED.includes(action.action) &&
+    action.element_id &&
+    typeof document !== "undefined"
+  ) {
+    return validateDOM(action.element_id);
+  }
+
+  return { status: "valid", reason: "Schema valid." };
 }
 
 // ---------------------------------------------------------------------------

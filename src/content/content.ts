@@ -27,6 +27,9 @@ const PII_PATTERNS: { label: RedactionTag; re: RegExp }[] = [
 
 function detectPii(text: string): RedactionTag {
   for (const { label, re } of PII_PATTERNS) {
+    re.lastIndex = 0; // Reset stateful /g regex before each test() call.
+    // Without this, alternating calls on the same pattern skip every other match
+    // because .test() advances lastIndex and the next call starts mid-string.
     if (re.test(text)) return label;
   }
   return "NONE";
@@ -71,6 +74,13 @@ function getRole(el: Element): string {
 // DOM walker — builds the UIGraph
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Session ID — computed ONCE per content-script lifetime so the backend
+// SessionStore uses the same key for every step of the same tab session.
+// Using Date.now() + a random suffix avoids collisions across tabs/reloads.
+// ---------------------------------------------------------------------------
+const SESSION_ID = `tab-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
 // Counter never resets — IDs are permanent for the lifetime of the content script.
 // New elements that appear after the first stamp get the next available number.
 let agentIdCounter = 0;
@@ -113,7 +123,15 @@ function buildUIGraph(): UIElement[] {
       label: redaction === "NONE" ? rawLabel || null : null,
       bbox,
       redaction,
-      clickable: el.tagName === "BUTTON" || el.tagName === "A" || !!el.onclick || el.getAttribute("role") === "button",
+      clickable:
+        el.tagName === "BUTTON" ||
+        el.tagName === "A" ||
+        !!el.onclick ||
+        el.getAttribute("role") === "button" ||
+        el.getAttribute("role") === "link" ||
+        // Focusable custom components (tabindex >= 0) are keyboard-reachable
+        // and should be treated as clickable by the agent.
+        (el.hasAttribute("tabindex") && el.getAttribute("tabindex") !== "-1"),
       editable: isEditable,
     });
   });
@@ -127,7 +145,7 @@ function buildUIGraph(): UIElement[] {
 
 function buildContext(): SanitizedContext {
   return {
-    session_id: `tab-${Date.now()}`,
+    session_id: SESSION_ID,
     url_domain: window.location.hostname,
     screenshot_b64: null, // screenshot handled by background via chrome.tabs.captureVisibleTab
     viewport_width: window.innerWidth,
