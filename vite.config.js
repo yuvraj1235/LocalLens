@@ -57,8 +57,8 @@ export default defineConfig({
                     };
                     return dirs[chunk.name] ?? `[name]/[name].js`;
                 },
-                // Chunks go into a shared _chunks folder so CSP is easier
-                chunkFileNames: "_chunks/[name]-[hash].js",
+                // Chunks go into a shared chunks folder so CSP is easier
+                chunkFileNames: "chunks/[name]-[hash].js",
                 assetFileNames: (info) => {
                     // Keep popup.css next to popup.html
                     if (info.name?.endsWith(".css")) {

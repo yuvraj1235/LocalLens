@@ -14,9 +14,9 @@ import { executeAction } from "../agent/actionExecutor";
 // ---------------------------------------------------------------------------
 const PII_PATTERNS = [
     { label: "EMAIL_REDACTED", re: /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g },
-    { label: "PHONE_REDACTED", re: /(\+?\d[\d\s\-().]{7,}\d)/g },
-    { label: "CC_REDACTED", re: /\b(?:\d[ -]?){13,16}\b/g },
-    { label: "SSN_REDACTED", re: /\b\d{3}-\d{2}-\d{4}\b/g },
+    { label: "PII_REDACTED", re: /(\+?\d[\d\s\-().]{7,}\d)/g },
+    { label: "CARD_REDACTED", re: /\b(?:\d[ -]?){13,16}\b/g },
+    { label: "PII_REDACTED", re: /\b\d{3}-\d{2}-\d{4}\b/g },
     { label: "PASSWORD_REDACTED", re: /password|passwd|secret|token/i },
 ];
 function detectPii(text) {

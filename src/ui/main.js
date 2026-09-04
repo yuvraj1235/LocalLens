@@ -27,17 +27,24 @@ runBtn.addEventListener("click", async () => {
         appendLog("[⚠️] Prompt is empty");
         return;
     }
-    const request = { prompt };
+    const context = {
+        session_id: "test",
+        url_domain: window.location.hostname,
+        screenshot_b64: null,
+        ui_graph: [],
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+    };
+    const request = { session_id: "test", task: prompt, context, history: [] };
     appendLog(`> Sending task: ${prompt}`);
     try {
-        const response = await agentClient.sendTask(request);
-        const { action, graph } = response;
+        const action = await agentClient.send(request);
         // Log the structured action
         appendLog("[✅] Received StructuredAction:");
         appendLog(prettyPrint(action));
         // If debug overlay is enabled and we have a graph, render it
-        if (debugToggle.checked && graph) {
-            renderDebugOverlay(graph);
+        if (debugToggle.checked && context.ui_graph.length > 0) {
+            renderDebugOverlay(context.ui_graph);
             appendLog("[🔍] Debug overlay rendered");
         }
     }

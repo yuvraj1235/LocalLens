@@ -9,7 +9,7 @@
  *  4. Listen for EXECUTE_ACTION messages and run them on the live DOM.
  */
 
-import type { SanitizedContext, UIElement, BoundingBox } from "../agent/agentLoop";
+import type { SanitizedContext, UIElement, BoundingBox, RedactionTag } from "../ui/types";
 import { executeAction } from "../agent/actionExecutor";
 import type { StructuredAction } from "../agent/actionExecutor";
 
@@ -17,15 +17,15 @@ import type { StructuredAction } from "../agent/actionExecutor";
 // PII patterns — redact sensitive text before it ever leaves the device
 // ---------------------------------------------------------------------------
 
-const PII_PATTERNS: { label: string; re: RegExp }[] = [
+const PII_PATTERNS: { label: RedactionTag; re: RegExp }[] = [
   { label: "EMAIL_REDACTED",   re: /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g },
-  { label: "PHONE_REDACTED",   re: /(\+?\d[\d\s\-().]{7,}\d)/g },
-  { label: "CC_REDACTED",      re: /\b(?:\d[ -]?){13,16}\b/g },
-  { label: "SSN_REDACTED",     re: /\b\d{3}-\d{2}-\d{4}\b/g },
+  { label: "PII_REDACTED",     re: /(\+?\d[\d\s\-().]{7,}\d)/g },
+  { label: "CARD_REDACTED",    re: /\b(?:\d[ -]?){13,16}\b/g },
+  { label: "PII_REDACTED",     re: /\b\d{3}-\d{2}-\d{4}\b/g },
   { label: "PASSWORD_REDACTED",re: /password|passwd|secret|token/i },
 ];
 
-function detectPii(text: string): string {
+function detectPii(text: string): RedactionTag {
   for (const { label, re } of PII_PATTERNS) {
     if (re.test(text)) return label;
   }

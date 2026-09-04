@@ -1,7 +1,7 @@
 // main.ts – UI glue for the minimal LocalLens demo
 
 import { agentClient } from "./wsClient";
-import type { TaskRequest, StructuredAction, UIGraph } from "./types";
+import type { TaskRequest, StructuredAction, UIElement, SanitizedContext } from "./types";
 import { renderDebugOverlay } from "./debugOverlay";
 
 // Grab DOM elements
@@ -34,20 +34,27 @@ runBtn.addEventListener("click", async () => {
     return;
   }
 
-  const request: TaskRequest = { prompt };
+  const context: SanitizedContext = {
+    session_id: "test",
+    url_domain: window.location.hostname,
+    screenshot_b64: null,
+    ui_graph: [],
+    viewport_width: window.innerWidth,
+    viewport_height: window.innerHeight,
+  };
+  const request: TaskRequest = { session_id: "test", task: prompt, context, history: [] };
   appendLog(`> Sending task: ${prompt}`);
 
   try {
-    const response = await agentClient.sendTask(request);
-    const { action, graph } = response as { action: StructuredAction; graph?: UIGraph };
+    const action = await agentClient.send(request);
 
     // Log the structured action
     appendLog("[✅] Received StructuredAction:");
     appendLog(prettyPrint(action));
 
     // If debug overlay is enabled and we have a graph, render it
-    if (debugToggle.checked && graph) {
-      renderDebugOverlay(graph);
+    if (debugToggle.checked && context.ui_graph.length > 0) {
+      renderDebugOverlay(context.ui_graph);
       appendLog("[🔍] Debug overlay rendered");
     }
   } catch (err) {

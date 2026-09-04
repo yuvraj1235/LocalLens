@@ -2,7 +2,7 @@
 // It creates (or reuses) a full‑screen <canvas> element and draws bounding‑boxes
 // for each UIElement in the received UIGraph.
 
-import type { UIGraph, UIElement } from "./types";
+import type { UIElement } from "./types";
 
 // Singleton canvas reference
 let overlayCanvas: HTMLCanvasElement | null = null;
@@ -61,16 +61,16 @@ function drawElement(el: UIElement) {
   ctx.fillStyle = "white";
   ctx.font = "12px Inter, sans-serif";
   ctx.textBaseline = "top";
-  ctx.fillText(el.id, x + 3, y + 3);
+  ctx.fillText(el.element_id, x + 3, y + 3);
 }
 
 /**
  * Public API – render the whole UIGraph.
  */
-export function renderDebugOverlay(graph: UIGraph) {
+export function renderDebugOverlay(graph: UIElement[]) {
   ensureCanvas();
   clearOverlay();
-  for (const el of graph.elements) {
+  for (const el of graph) {
     drawElement(el);
   }
 }

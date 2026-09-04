@@ -4,24 +4,12 @@
  * The main agent loop for LocalLens.
  *
  * Orchestration order per tick:
- *   1. Receive SanitizedContext from Ankit's content script (via message).
- *   2. Build a TaskRequest and send it to Shreya's backend (via wsClient).
+ *   1. Receive SanitizedContext from the content script (via message).
+ *   2. Build a TaskRequest and send it to the backend (via wsClient).
  *   3. Validate the returned StructuredAction (via actionValidator).
  *   4. Execute the action on the live DOM (via actionExecutor).
  *   5. Emit a log event so the popup UI can display progress.
  *   6. If action.done === true or max steps reached → stop.
- *
- * Usage (called from the extension popup or content script):
- *
- *   import { AgentLoop } from "./agentLoop";
- *
- *   const loop = new AgentLoop({
- *     task: "Submit the login form",
- *     onLog: (entry) => console.log(entry),
- *   });
- *   loop.start(sanitizedContext);
- *   // later:
- *   loop.stop();
  */
 import { AgentClient } from "../ui/wsClient";
 import { validateAction } from "./actionValidator";
@@ -40,7 +28,7 @@ export class AgentLoop {
         this.minConfidence = options.minConfidence ?? 0.4;
         this.client = options.client ?? new AgentClient("ws://localhost:8000/ws/agent");
     }
-    /** Begin the agent loop with an initial SanitizedContext from Ankit. */
+    /** Begin the agent loop with an initial SanitizedContext from the content script. */
     async start(context) {
         this.running = true;
         this.stepCount = 0;
@@ -93,7 +81,6 @@ export class AgentLoop {
             }
             if (action.action === "ASK_USER") {
                 this.log("warn", null, null, `Agent paused — backend needs user input: ${action.value ?? ""}`);
-                // The popup UI should handle this (show a prompt) and call start() again
                 break;
             }
             // Small delay between steps to avoid hammering the DOM

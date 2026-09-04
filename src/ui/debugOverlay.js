@@ -56,7 +56,7 @@ function drawElement(el) {
     ctx.fillStyle = "white";
     ctx.font = "12px Inter, sans-serif";
     ctx.textBaseline = "top";
-    ctx.fillText(el.id, x + 3, y + 3);
+    ctx.fillText(el.element_id, x + 3, y + 3);
 }
 /**
  * Public API – render the whole UIGraph.
@@ -64,7 +64,7 @@ function drawElement(el) {
 export function renderDebugOverlay(graph) {
     ensureCanvas();
     clearOverlay();
-    for (const el of graph.elements) {
+    for (const el of graph) {
         drawElement(el);
     }
 }
