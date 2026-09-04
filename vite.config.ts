@@ -44,7 +44,6 @@ export default defineConfig({
         // Extension entry points
         popup:      resolve(__dirname, "src/popup/popup.html"),
         background: resolve(__dirname, "src/background/background.ts"),
-        content:    resolve(__dirname, "src/content/content.ts"),
         // Debug UI (optional, not loaded by Chrome but handy for dev)
         ui:         resolve(__dirname, "src/ui/index.html"),
       },
@@ -54,7 +53,6 @@ export default defineConfig({
           const dirs: Record<string, string> = {
             popup:      "popup/popup.js",
             background: "background/background.js",
-            content:    "content/content.js",
             ui:         "ui/main.js",
           };
           return dirs[chunk.name] ?? `[name]/[name].js`;

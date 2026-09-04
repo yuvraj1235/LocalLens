@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.json && vite build",
+    "build": "tsc -p tsconfig.json && vite build && vite build -c vite.content.config.ts",
     "bench": "node --loader ts-node/esm src/bench/benchmark.ts",
     "test": "vitest run",
     "test:watch": "vitest"
