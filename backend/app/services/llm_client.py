@@ -8,17 +8,23 @@ swapping base_url / api_key / model in config.
 from __future__ import annotations
 
 import json
+import logging
+import re
 from typing import Any
 
 import httpx
 
 from app.core.config import settings
 
+logger = logging.getLogger("agent")
+
+
 
 class LLMClient:
     def __init__(self, base_url: str, api_key: str, model: str, timeout: float):
         self._base_url = base_url.rstrip("/")
         self._model = model
+        self._api_key = api_key
         self._client = httpx.AsyncClient(
             base_url=self._base_url,
             headers={"Authorization": f"Bearer {api_key}"},
@@ -41,6 +47,20 @@ class LLMClient:
         how to handle/retry (this is intentionally strict; structured-action
         parsing should never silently guess).
         """
+        # MOCK MODE check
+        if self._api_key == "bana lijie":
+            import asyncio
+            await asyncio.sleep(1)  # simulate network delay
+            if "submit" in user_prompt.lower():
+                return {"action": "DONE", "value": None, "element_id": None, "confidence": 1.0}
+            else:
+                return {
+                    "action": "ASK_USER",
+                    "value": "Running in MOCK mode because VLM_API_KEY is set to 'bana lijie'. Provide a real API key in .env to call OpenRouter.",
+                    "element_id": None,
+                    "confidence": 1.0,
+                }
+
         content: Any
         if image_b64:
             content = [
@@ -53,6 +73,9 @@ class LLMClient:
         else:
             content = user_prompt
 
+        # NOTE: Do NOT send response_format: json_object to OpenRouter/Qwen —
+        # it causes some providers to return null content. Instead we instruct
+        # the model via the system prompt and parse the text ourselves.
         payload = {
             "model": self._model,
             "messages": [
@@ -60,19 +83,59 @@ class LLMClient:
                 {"role": "user", "content": content},
             ],
             "max_tokens": max_tokens,
-            "temperature": 0.0,  # deterministic action planning
-            "response_format": {"type": "json_object"},
+            "temperature": 0.0,
         }
 
         resp = await self._client.post("/chat/completions", json=payload)
+        if not resp.is_success:
+            logger.error("API error %s: %s", resp.status_code, resp.text)
         resp.raise_for_status()
         data = resp.json()
-        text = data["choices"][0]["message"]["content"]
 
+        msg = data["choices"][0]["message"]
+        text: str | None = msg.get("content")
+
+        # Qwen3 on OpenRouter sometimes puts the answer only in reasoning_content
+        # and leaves content=null when thinking mode is active.
+        if text is None:
+            text = msg.get("reasoning_content") or msg.get("reasoning")
+            if text is None:
+                logger.error("Null content from model. Full response: %s", data)
+                raise ValueError(
+                    "Model returned null content. Full response logged above. "
+                    "Try switching VLM_MODEL_NAME to 'qwen/qwen3-8b' or 'mistralai/mistral-7b-instruct'."
+                )
+            logger.debug("Falling back to reasoning_content field")
+
+        # Strip <think>...</think> reasoning blocks emitted by Qwen3
+        text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+
+        if not text:
+            raise ValueError("Model response was empty after stripping <think> blocks.")
+
+        # Try direct JSON parse first
         try:
             return json.loads(text)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Model did not return valid JSON: {text!r}") from e
+        except json.JSONDecodeError:
+            pass
+
+        # Fallback: extract JSON from markdown code fences
+        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group(1))
+            except json.JSONDecodeError:
+                pass
+
+        # Last resort: find first { ... } block in the text
+        match = re.search(r"(\{.*\})", text, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group(1))
+            except json.JSONDecodeError:
+                pass
+
+        raise ValueError(f"Model did not return valid JSON: {text!r}")
 
 
 def get_vlm_client() -> LLMClient:

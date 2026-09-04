@@ -4,67 +4,28 @@
  * The main agent loop for LocalLens.
  *
  * Orchestration order per tick:
- *   1. Receive SanitizedContext from Ankit's content script (via message).
- *   2. Build a TaskRequest and send it to Shreya's backend (via wsClient).
+ *   1. Receive SanitizedContext from the content script (via message).
+ *   2. Build a TaskRequest and send it to the backend (via wsClient).
  *   3. Validate the returned StructuredAction (via actionValidator).
  *   4. Execute the action on the live DOM (via actionExecutor).
  *   5. Emit a log event so the popup UI can display progress.
  *   6. If action.done === true or max steps reached → stop.
- *
- * Usage (called from the extension popup or content script):
- *
- *   import { AgentLoop } from "./agentLoop";
- *
- *   const loop = new AgentLoop({
- *     task: "Submit the login form",
- *     onLog: (entry) => console.log(entry),
- *   });
- *   loop.start(sanitizedContext);
- *   // later:
- *   loop.stop();
  */
 
+// Re-export shared types from the canonical source so other modules
+// can import from either place without duplication.
+export type {
+  BoundingBox,
+  UIElement,
+  SanitizedContext,
+  TaskRequest,
+} from "../ui/types";
+
+import type { SanitizedContext, TaskRequest } from "../ui/types";
 import { AgentClient } from "../ui/wsClient";
 import { validateAction } from "./actionValidator";
 import { executeAction } from "./actionExecutor";
 import type { StructuredAction } from "./actionExecutor";
-
-// ---------------------------------------------------------------------------
-// Types  (mirrors backend/app/schemas/context.py)
-// ---------------------------------------------------------------------------
-
-export interface BoundingBox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-export interface UIElement {
-  element_id: string;
-  role: string;
-  label: string | null;
-  bbox: BoundingBox | null;
-  redaction: string;
-  clickable: boolean;
-  editable: boolean;
-}
-
-export interface SanitizedContext {
-  session_id: string;
-  url_domain: string | null;
-  screenshot_b64: string | null;
-  ui_graph: UIElement[];
-  viewport_width: number | null;
-  viewport_height: number | null;
-}
-
-export interface TaskRequest {
-  session_id: string;
-  task: string;
-  context: SanitizedContext;
-  history: string[];
-}
 
 // ---------------------------------------------------------------------------
 // Log entry — emitted after every step so the popup UI can render progress
@@ -118,7 +79,7 @@ export class AgentLoop {
   private running = false;
   private stepCount = 0;
   private history: string[] = [];
-  private client: AgentClient;
+  private client: { send: (request: TaskRequest) => Promise<unknown> };
 
   constructor(options: AgentLoopOptions) {
     this.task = options.task;
@@ -128,26 +89,50 @@ export class AgentLoop {
     this.client = options.client ?? new AgentClient("ws://localhost:8000/ws/agent");
   }
 
-  /** Begin the agent loop with an initial SanitizedContext from Ankit. */
-  async start(context: SanitizedContext): Promise<void> {
+  async start(initialContext: SanitizedContext): Promise<void> {
     this.running = true;
     this.stepCount = 0;
     this.history = [];
 
     this.log("info", null, null, `Agent started. Task: "${this.task}"`);
+    let currentContext = initialContext;
 
     while (this.running && this.stepCount < this.maxSteps) {
       this.stepCount++;
 
-      // ── Step 1: Build request ──────────────────────────────────────────
+      // Step 1: On every step after the first, fetch fresh context from the
+      // content script so element IDs reflect the current DOM state.
+      if (this.stepCount > 1) {
+        let fresh: any = null;
+        let retries = 5;
+        while (retries > 0) {
+          fresh = await this.sendMessage({ type: "GET_CONTEXT" });
+          if (fresh && !fresh.error) {
+            break;
+          }
+          // If we failed to get context, the page might be navigating/loading.
+          // Wait and retry.
+          this.log("info", null, null, "Waiting for page to load...");
+          await sleep(1000);
+          retries--;
+        }
+        
+        if (fresh && !fresh.error) {
+          currentContext = fresh as SanitizedContext;
+        } else {
+          this.log("warn", null, null, "Failed to get fresh context, continuing with old context.");
+        }
+      }
+
+      // Step 2: Build request
       const request: TaskRequest = {
-        session_id: context.session_id,
+        session_id: currentContext.session_id,
         task: this.task,
-        context,
+        context: currentContext,
         history: [...this.history],
       };
 
-      // ── Step 2: Send to backend ────────────────────────────────────────
+      // Send to backend
       let rawResponse: unknown;
       try {
         rawResponse = await this.client.send(request);
@@ -164,7 +149,7 @@ export class AgentLoop {
         `Backend: ${action.action} → ${action.element_id ?? "—"} (confidence: ${action.confidence.toFixed(2)})`
       );
 
-      // ── Step 3: Confidence gate ────────────────────────────────────────
+      // Step 3: Confidence gate
       if (action.confidence < this.minConfidence) {
         this.log(
           "warn",
@@ -175,26 +160,16 @@ export class AgentLoop {
         break;
       }
 
-      // ── Step 4: Validate ───────────────────────────────────────────────
+      // Step 4: Validate
       const validation = validateAction(action);
       if (validation.status === "invalid") {
         this.log("error", action.action, action.element_id, `Validation failed: ${validation.reason}`);
-        break;
+        this.history.push(`Step ${this.stepCount}: FAILED — ${validation.reason}`);
+        await sleep(300);
+        continue;
       }
 
-      // ── Step 5: Execute ────────────────────────────────────────────────
-      const result = await executeAction(action);
-      if (result.status === "error") {
-        this.log("error", action.action, action.element_id, `Execution failed: ${result.message}`);
-        break;
-      }
-
-      this.log("success", action.action, action.element_id, result.message);
-
-      // Record this action for the history grounding context
-      this.history.push(`Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim());
-
-      // ── Step 6: Terminal conditions ────────────────────────────────────
+      // Step 5: Terminal conditions
       if (action.done || action.action === "DONE") {
         this.log("success", null, null, "Task completed by backend signal.");
         break;
@@ -202,12 +177,36 @@ export class AgentLoop {
 
       if (action.action === "ASK_USER") {
         this.log("warn", null, null, `Agent paused — backend needs user input: ${action.value ?? ""}`);
-        // The popup UI should handle this (show a prompt) and call start() again
         break;
       }
 
+      // Step 6: Execute via Content Script Message
+      const result: any = await this.sendMessage({ type: "EXECUTE_ACTION", action });
+      
+      if (!result || result.error) {
+        const errStr = result?.error ?? "No response from content script";
+        // If the page is navigating away, the message port will close early.
+        // We shouldn't crash the agent loop for this; assume it was a successful click/submit.
+        if (errStr.includes("message port closed") || errStr.includes("receiving end does not exist")) {
+            this.log("info", action.action, action.element_id, "Page navigation detected after action.");
+        } else {
+            this.log("error", action.action, action.element_id, `Relay error: ${errStr}`);
+            break;
+        }
+      } else if (result.status === "error") {
+        this.log("error", action.action, action.element_id, `Execution failed: ${result.message}`);
+        this.history.push(`Step ${this.stepCount}: ${action.action} on ${action.element_id} failed — ${result.message}`);
+        await sleep(500);
+        continue;
+      } else {
+        this.log("success", action.action, action.element_id, result.message);
+      }
+
+      // Record this action for the history grounding context
+      this.history.push(`Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim());
+
       // Small delay between steps to avoid hammering the DOM
-      await sleep(300);
+      await sleep(600);
     }
 
     if (this.stepCount >= this.maxSteps) {
@@ -222,6 +221,26 @@ export class AgentLoop {
   stop(): void {
     this.running = false;
     this.log("info", null, null, "Agent loop stopped by caller.");
+  }
+
+  // ---------------------------------------------------------------------------
+  // Send a message via chrome.runtime → background → content script
+  // ---------------------------------------------------------------------------
+  private sendMessage(msg: any): Promise<unknown> {
+    return new Promise((resolve) => {
+      if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
+        chrome.runtime.sendMessage(msg, (response) => {
+          if (chrome.runtime.lastError) {
+            resolve({ error: chrome.runtime.lastError.message });
+          } else {
+            resolve(response);
+          }
+        });
+      } else {
+        // Dev mode fallback — no real content script available
+        resolve({ error: "chrome.runtime not available (dev mode)" });
+      }
+    });
   }
 
   // ── Private helpers ─────────────────────────────────────────────────────

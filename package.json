@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && vite build && vite build -c vite.content.config.ts",
     "bench": "node --loader ts-node/esm src/bench/benchmark.ts",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -16,14 +16,18 @@
     "vitest": "^4.1.11"
   },
   "devDependencies": {
+    "@types/chrome": "^0.2.8",
     "@types/node": "^20.14.0",
     "@vitest/coverage-v8": "^4.1.11",
     "jsdom": "^26.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vite": "^8.2.2"
   },
   "vitest": {
     "environment": "jsdom",
-    "include": ["src/**/*.test.ts"]
+    "include": [
+      "src/**/*.test.ts"
+    ]
   }
 }

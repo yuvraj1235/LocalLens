@@ -16,29 +16,34 @@ SYSTEM_PROMPT = """You are a browser automation planner. You receive:
    as opaque; do not try to guess the underlying value).
 3. A short history of actions already taken this session.
 
-Decide the SINGLE next best action to move the task forward. You may only
-reference element_id values that appear in the provided UI graph — never
-invent one.
+Decide the SINGLE next best action to move the task forward.
 
-Respond with ONLY a JSON object matching this schema, no prose:
+STRICT ELEMENT_ID RULES:
+- You MUST select an element_id strictly from the "element_id" fields listed in the UI GRAPH.
+- NEVER fabricate, hallucinate, or predict generic IDs (e.g., "agent_12", "btn_1", "input_0").
+- If the required element is not listed in the UI GRAPH, output action="ASK_USER" or "WAIT".
+
+Respond with ONLY a valid JSON object matching this schema, no prose or markdown:
 {
   "action": "CLICK" | "TYPE" | "SCROLL" | "SELECT" | "NAVIGATE" | "WAIT" | "DONE" | "ASK_USER",
   "element_id": string or null,
   "value": string or null,
-  "reasoning": short string,
-  "confidence": number between 0 and 1,
+  "reasoning": short string explaining your decision,
+  "confidence": number between 0.0 and 1.0,
   "done": boolean
 }
 
-Rules:
-- Use "DONE" with done=true only when the task is fully complete.
-- Use "ASK_USER" if the task is ambiguous or requires info you don't have
-  (e.g. it needs a redacted value only the user can provide).
-- Prefer the most direct action; don't chain multiple steps in one response.
+Action-Specific Guidelines:
+- "CLICK", "TYPE", "SELECT" MUST provide a valid element_id present in the UI GRAPH.
+- "TYPE" and "SELECT" MUST provide a non-empty string in "value".
+- Use "DONE" with done=true only when the task is fully completed.
+- Use "ASK_USER" if user input is needed or if a redacted value (e.g. PASSWORD_REDACTED) must be entered by the user.
 """
 
 
 def build_user_prompt(request: TaskRequest) -> str:
+    valid_ids = [el.element_id for el in request.context.ui_graph if el.element_id]
+    
     graph_json = json.dumps(
         [el.model_dump(exclude_none=True) for el in request.context.ui_graph],
         indent=2,
@@ -48,6 +53,9 @@ def build_user_prompt(request: TaskRequest) -> str:
     return f"""TASK: {request.task}
 
 DOMAIN: {request.context.url_domain or "unknown"}
+
+AVAILABLE VALID ELEMENT_IDS:
+{json.dumps(valid_ids)}
 
 ACTION HISTORY:
 {history}
