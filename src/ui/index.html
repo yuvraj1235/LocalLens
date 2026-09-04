@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LocalLens Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="card">
+    <h1>LocalLens</h1>
+    <textarea id="prompt" placeholder="Enter your task..." rows="3"></textarea>
+    <div class="controls">
+      <button id="runBtn">Run</button>
+      <label>
+        <input type="checkbox" id="debugToggle" /> Debug Overlay
+      </label>
+    </div>
+    <pre id="log" class="log"></pre>
+  </main>
+  <script type="module" src="main.ts"></script>
+</body>
+</html>
