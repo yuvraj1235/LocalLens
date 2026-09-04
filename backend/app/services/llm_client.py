@@ -8,6 +8,7 @@ swapping base_url / api_key / model in config.
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 import httpx
@@ -19,6 +20,7 @@ class LLMClient:
     def __init__(self, base_url: str, api_key: str, model: str, timeout: float):
         self._base_url = base_url.rstrip("/")
         self._model = model
+        self._api_key = api_key
         self._client = httpx.AsyncClient(
             base_url=self._base_url,
             headers={"Authorization": f"Bearer {api_key}"},
@@ -41,6 +43,20 @@ class LLMClient:
         how to handle/retry (this is intentionally strict; structured-action
         parsing should never silently guess).
         """
+        # MOCK MODE check
+        if self._api_key == "bana lijie":
+            import asyncio
+            await asyncio.sleep(1)  # simulate network delay
+            if "submit" in user_prompt.lower():
+                return {"action": "DONE", "value": None, "element_id": None, "confidence": 1.0}
+            else:
+                return {
+                    "action": "ASK_USER",
+                    "value": "Running in MOCK mode because VLM_API_KEY is set to 'bana lijie'. Provide a real API key in .env to call OpenRouter.",
+                    "element_id": None,
+                    "confidence": 1.0,
+                }
+
         content: Any
         if image_b64:
             content = [
@@ -71,8 +87,15 @@ class LLMClient:
 
         try:
             return json.loads(text)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Model did not return valid JSON: {text!r}") from e
+        except json.JSONDecodeError:
+            # Fallback for models returning JSON wrapped inside Markdown code fences
+            match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+            if match:
+                try:
+                    return json.loads(match.group(1))
+                except json.JSONDecodeError:
+                    pass
+            raise ValueError(f"Model did not return valid JSON: {text!r}")
 
 
 def get_vlm_client() -> LLMClient:

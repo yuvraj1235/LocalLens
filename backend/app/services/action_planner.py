@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import logging
+
 from app.core.config import settings
 from app.schemas.context import StructuredAction, TaskRequest
 from app.services.llm_client import LLMClient
 from app.services.prompt_builder import SYSTEM_PROMPT, build_user_prompt
+
+logger = logging.getLogger("agent")
 
 
 class ActionPlanner:
@@ -40,10 +44,17 @@ class ActionPlanner:
 
         valid_ids = {el.element_id for el in request.context.ui_graph}
         if action.element_id not in valid_ids:
+            hallucinated_id = action.element_id
+            logger.warning(
+                "Hallucination guard triggered for session %s: model requested unknown element_id '%s'",
+                request.session_id,
+                hallucinated_id,
+            )
+
             action.action = "ASK_USER"
             action.element_id = None
-            action.value = None
+            action.value = f"The model attempted to interact with non-existent element '{hallucinated_id}'. Please perform this step manually or re-orient the agent."
             action.confidence = 0.0
             action.reasoning = (
-                f"Model referenced unknown element_id (hallucination guard triggered)."
+                f"Model referenced unknown element_id '{hallucinated_id}' (hallucination guard triggered)."
             )
