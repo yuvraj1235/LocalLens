@@ -9,56 +9,59 @@
  *  - Update the status badge based on loop state.
  *  - Show the privacy strip with redaction tags from the SanitizedContext.
  *  - Handle the ASK_USER overlay interaction.
- *
- * In the final extension, `buildMockContext()` is replaced by a real
- * `chrome.runtime.sendMessage({ type: "GET_CONTEXT" })` call to Ankit's
- * content script. Everything else stays the same.
  */
 import { AgentLoop } from "../agent/agentLoop";
+
 // ---------------------------------------------------------------------------
 // DOM refs
 // ---------------------------------------------------------------------------
-const taskInput = document.getElementById("task-input");
-const startBtn = document.getElementById("start-btn");
-const stopBtn = document.getElementById("stop-btn");
-const clearBtn = document.getElementById("clear-btn");
-const statusBadge = document.getElementById("status-badge");
-const logList = document.getElementById("log-list");
-const privacyStrip = document.getElementById("privacy-strip");
-const redactionTags = document.getElementById("redaction-tags");
-const askOverlay = document.getElementById("ask-user-overlay");
-const askMessage = document.getElementById("ask-user-message");
-const askInput = document.getElementById("ask-user-input");
-const askSubmit = document.getElementById("ask-user-submit");
+const taskInput = document.getElementById("task-input") as HTMLInputElement;
+const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
+const stopBtn = document.getElementById("stop-btn") as HTMLButtonElement;
+const clearBtn = document.getElementById("clear-btn") as HTMLButtonElement;
+const statusBadge = document.getElementById("status-badge") as HTMLElement;
+const logList = document.getElementById("log-list") as HTMLElement;
+const privacyStrip = document.getElementById("privacy-strip") as HTMLElement;
+const redactionTags = document.getElementById("redaction-tags") as HTMLElement;
+const askOverlay = document.getElementById("ask-user-overlay") as HTMLElement;
+const askMessage = document.getElementById("ask-user-message") as HTMLElement;
+const askInput = document.getElementById("ask-user-input") as HTMLInputElement;
+const askSubmit = document.getElementById("ask-user-submit") as HTMLButtonElement;
+
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
-let loop = null;
+let loop: AgentLoop | null = null;
+
 // ---------------------------------------------------------------------------
 // Event listeners
 // ---------------------------------------------------------------------------
 startBtn.addEventListener("click", handleStart);
 stopBtn.addEventListener("click", handleStop);
 clearBtn.addEventListener("click", clearLog);
-taskInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter")
-        handleStart();
+taskInput.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Enter") handleStart();
 });
+
 askSubmit.addEventListener("click", () => {
-    // User answered the ASK_USER prompt — hide overlay.
-    // The actual answer handling can be extended here (e.g. re-start the loop
-    // with the answer prepended to the task string).
+    const userReply = askInput.value.trim();
     askOverlay.classList.add("hidden");
+
     appendLog({
         step: 0,
         level: "info",
         action: "ASK_USER",
         element_id: null,
-        message: `User replied: "${askInput.value}"`,
+        message: `User replied: "${userReply}"`,
         timestamp: Date.now(),
     });
+
+    if (userReply && taskInput) {
+        taskInput.value = `${taskInput.value} (User Input: ${userReply})`;
+    }
     askInput.value = "";
 });
+
 // ---------------------------------------------------------------------------
 // Core handlers
 // ---------------------------------------------------------------------------
@@ -71,19 +74,37 @@ async function handleStart() {
     clearLog();
     setStatus("running");
     setButtons(true);
-    // In the final extension this context comes from Ankit's content script.
-    // For now we build a mock so the popup can be developed independently.
+
     const context = await getContext();
+
+    // Check for context retrieval errors or missing UI graph
+    if (!context || (context as any).error) {
+        appendLog({
+            step: 0,
+            level: "error",
+            action: null,
+            element_id: null,
+            message: `Context error: ${(context as any)?.error || "Failed to fetch tab context."}`,
+            timestamp: Date.now(),
+        });
+        setStatus("error");
+        setButtons(false);
+        return;
+    }
+
     renderPrivacyStrip(context);
+
     loop = new AgentLoop({
         task,
         onLog: (entry) => {
             appendLog(entry);
-            // If backend asks the user something, surface the overlay
+
+            // Surface overlay when backend requests user input
             if (entry.action === "ASK_USER") {
                 askMessage.textContent = entry.message;
                 askOverlay.classList.remove("hidden");
             }
+
             // Detect terminal log messages to reset buttons
             if (entry.message === "Agent loop ended.") {
                 const wasSuccessful = logList.querySelector(".log-entry--success") !== null;
@@ -92,14 +113,17 @@ async function handleStart() {
             }
         },
     });
+
     await loop.start(context);
 }
+
 function handleStop() {
     loop?.stop();
     setStatus("idle");
     setButtons(false);
 }
-function setStatus(state) {
+
+function setStatus(state: "idle" | "running" | "done" | "error") {
     const labels = {
         idle: "Idle",
         running: "Running…",
@@ -109,27 +133,30 @@ function setStatus(state) {
     statusBadge.textContent = labels[state];
     statusBadge.className = `badge badge--${state}`;
 }
-function setButtons(running) {
+
+function setButtons(running: boolean) {
     startBtn.disabled = running;
     stopBtn.disabled = !running;
     taskInput.disabled = running;
 }
+
 function clearLog() {
     logList.innerHTML =
         '<li class="log-entry log-entry--info log-entry--placeholder">Agent output will appear here…</li>';
 }
+
 /** Map log level → minimal symbol */
-const ICONS = {
+const ICONS: Record<string, string> = {
     info: "·",
     success: "✓",
     warn: "⚠",
     error: "✕",
 };
-function appendLog(entry) {
-    // Remove placeholder if present
+
+function appendLog(entry: any) {
     const placeholder = logList.querySelector(".log-entry--placeholder");
-    if (placeholder)
-        placeholder.remove();
+    if (placeholder) placeholder.remove();
+
     const li = document.createElement("li");
     li.className = `log-entry log-entry--${entry.level}`;
     const time = new Date(entry.timestamp).toLocaleTimeString([], {
@@ -137,6 +164,7 @@ function appendLog(entry) {
         minute: "2-digit",
         second: "2-digit",
     });
+
     li.innerHTML = `
     <span class="log-step">#${entry.step}</span>
     <span class="log-icon">${ICONS[entry.level] ?? "•"}</span>
@@ -144,56 +172,59 @@ function appendLog(entry) {
     <span class="log-time">${time}</span>
   `;
     logList.appendChild(li);
-    // Auto-scroll to the latest entry
     logList.scrollTop = logList.scrollHeight;
 }
+
 /** Show which fields were redacted before the context left the device. */
-function renderPrivacyStrip(context) {
+function renderPrivacyStrip(context: any) {
+    // Guard against undefined context or ui_graph
+    if (!context || !Array.isArray(context.ui_graph)) {
+        privacyStrip.classList.add("hidden");
+        return;
+    }
+
     const tags = context.ui_graph
-        .map((el) => el.redaction)
-        .filter((r) => r !== "NONE");
+        .map((el: any) => el.redaction)
+        .filter((r: string) => r && r !== "NONE");
+
     if (tags.length === 0) {
         privacyStrip.classList.add("hidden");
         return;
     }
-    // Deduplicate
+
     const unique = [...new Set(tags)];
     redactionTags.innerHTML = unique
         .map((t) => `<span class="redaction-tag">🔒 ${escapeHtml(t)}</span>`)
         .join("");
     privacyStrip.classList.remove("hidden");
 }
-function escapeHtml(str) {
+
+function escapeHtml(str: string): string {
     return str
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
 }
+
 // ---------------------------------------------------------------------------
 // Context source
 // ---------------------------------------------------------------------------
-/**
- * Get the SanitizedContext for the current tab.
- *
- * Production: replace with chrome.runtime.sendMessage({ type: "GET_CONTEXT" })
- * and await the response from Ankit's content script.
- *
- * Development (current): returns a mock context so the popup UI can be
- * developed and tested without the extension infrastructure.
- */
-async function getContext() {
-    // Try to get real context from the extension runtime
+async function getContext(): Promise<any> {
     if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
         return new Promise((resolve) => {
             chrome.runtime.sendMessage({ type: "GET_CONTEXT" }, (response) => {
-                resolve(response);
+                if (chrome.runtime.lastError) {
+                    resolve({ error: chrome.runtime.lastError.message });
+                } else {
+                    resolve(response);
+                }
             });
         });
     }
-    // Fallback: mock context for standalone development
     return buildMockContext();
 }
+
 function buildMockContext() {
     return {
         session_id: `dev-${Date.now()}`,
