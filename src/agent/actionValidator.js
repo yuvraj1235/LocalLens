@@ -37,13 +37,16 @@ const VALID_ACTIONS = [
  * or { status: "invalid", reason } if something is wrong.
  */
 export function validateAction(action) {
-    // Schema checks only.
-    // NOTE: DOM checks (element_id lookups) are intentionally skipped here because
-    // validateAction runs inside the extension popup, which is a separate document
-    // from the live webpage. The popup's document has none of the webpage's elements.
-    // DOM resolution is handled by the content script's executeAction, which runs
-    // in the correct page context and will return { status: "error" } if not found.
-    return validateSchema(action);
+    // Layer 1: schema checks (always run)
+    const schema = validateSchema(action);
+    if (schema.status === "invalid") return schema;
+    // Layer 2: DOM checks — only for actions that target a specific element AND
+    // only when we are running inside a real document (content script / jsdom).
+    // The popup runs in its own separate document, so guard on typeof document.
+    if (ELEMENT_REQUIRED.includes(action.action) && action.element_id && typeof document !== "undefined") {
+        return validateDOM(action.element_id);
+    }
+    return { status: "valid", reason: "Schema valid." };
 }
 // ---------------------------------------------------------------------------
 // Internal — schema validation
