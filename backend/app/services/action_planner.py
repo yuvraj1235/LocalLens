@@ -12,9 +12,6 @@ logger = logging.getLogger("agent")
 
 class ActionPlanner:
     def __init__(self, vlm_client: LLMClient):
-        # Using the VLM client since it can take the sanitized screenshot too;
-        # swap to a pure-text LLM client if you want a cheaper text-only path
-        # when no screenshot is attached.
         self._client = vlm_client
 
     async def plan_next_action(self, request: TaskRequest) -> StructuredAction:

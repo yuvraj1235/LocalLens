@@ -1,20 +1,8 @@
 /**
- * popup.ts
- *
- * Wires the extension popup UI (popup.html) to the AgentLoop.
- *
- * Responsibilities:
- *  - Start / stop the AgentLoop when buttons are clicked.
- *  - Render each LogEntry from the loop into the live log list.
- *  - Update the status badge based on loop state.
- *  - Show the privacy strip with redaction tags from the SanitizedContext.
- *  - Handle the ASK_USER overlay interaction.
+ * popup.ts — LocalLens Popup Script
  */
 import { AgentLoop } from "../agent/agentLoop";
 
-// ---------------------------------------------------------------------------
-// DOM refs
-// ---------------------------------------------------------------------------
 const taskInput = document.getElementById("task-input") as HTMLInputElement;
 const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
 const stopBtn = document.getElementById("stop-btn") as HTMLButtonElement;
@@ -28,14 +16,8 @@ const askMessage = document.getElementById("ask-user-message") as HTMLElement;
 const askInput = document.getElementById("ask-user-input") as HTMLInputElement;
 const askSubmit = document.getElementById("ask-user-submit") as HTMLButtonElement;
 
-// ---------------------------------------------------------------------------
-// State
-// ---------------------------------------------------------------------------
 let loop: AgentLoop | null = null;
 
-// ---------------------------------------------------------------------------
-// Event listeners
-// ---------------------------------------------------------------------------
 startBtn.addEventListener("click", handleStart);
 stopBtn.addEventListener("click", handleStop);
 clearBtn.addEventListener("click", clearLog);
@@ -62,9 +44,6 @@ askSubmit.addEventListener("click", () => {
     askInput.value = "";
 });
 
-// ---------------------------------------------------------------------------
-// Core handlers
-// ---------------------------------------------------------------------------
 async function handleStart() {
     const task = taskInput.value.trim();
     if (!task) {
@@ -77,7 +56,6 @@ async function handleStart() {
 
     const context = await getContext();
 
-    // Check for context retrieval errors or missing UI graph
     if (!context || (context as any).error) {
         appendLog({
             step: 0,
@@ -99,13 +77,11 @@ async function handleStart() {
         onLog: (entry) => {
             appendLog(entry);
 
-            // Surface overlay when backend requests user input
             if (entry.action === "ASK_USER") {
                 askMessage.textContent = entry.message;
                 askOverlay.classList.remove("hidden");
             }
 
-            // Detect terminal log messages to reset buttons
             if (entry.message === "Agent loop ended.") {
                 const wasSuccessful = logList.querySelector(".log-entry--success") !== null;
                 setStatus(wasSuccessful ? "done" : "idle");
@@ -145,7 +121,6 @@ function clearLog() {
         '<li class="log-entry log-entry--info log-entry--placeholder">Agent output will appear here…</li>';
 }
 
-/** Map log level → minimal symbol */
 const ICONS: Record<string, string> = {
     info: "·",
     success: "✓",
@@ -175,9 +150,7 @@ function appendLog(entry: any) {
     logList.scrollTop = logList.scrollHeight;
 }
 
-/** Show which fields were redacted before the context left the device. */
 function renderPrivacyStrip(context: any) {
-    // Guard against undefined context or ui_graph
     if (!context || !Array.isArray(context.ui_graph)) {
         privacyStrip.classList.add("hidden");
         return;
@@ -207,9 +180,6 @@ function escapeHtml(str: string): string {
         .replace(/"/g, "&quot;");
 }
 
-// ---------------------------------------------------------------------------
-// Context source
-// ---------------------------------------------------------------------------
 async function getContext(): Promise<any> {
     if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
         return new Promise((resolve) => {

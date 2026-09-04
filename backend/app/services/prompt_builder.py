@@ -42,7 +42,6 @@ Action-Specific Guidelines:
 
 
 def build_user_prompt(request: TaskRequest) -> str:
-    # Build list of valid IDs to explicitly signal available choices to the model
     valid_ids = [el.element_id for el in request.context.ui_graph if el.element_id]
     
     graph_json = json.dumps(

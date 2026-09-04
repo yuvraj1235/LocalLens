@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import ValidationError
 
 from app.schemas.context import StructuredAction, TaskRequest
@@ -20,7 +20,22 @@ async def plan_action_http(request: TaskRequest) -> StructuredAction:
     client = get_vlm_client()
     try:
         planner = ActionPlanner(client)
-        return await planner.plan_next_action(request)
+        
+        server_history = await session_store.get_history(request.session_id)
+        request.history = server_history
+
+        action = await planner.plan_next_action(request)
+
+        if action.action != "ASK_USER" and action.element_id:
+            action_desc = f"{action.action} on element '{action.element_id}'"
+            if action.value:
+                action_desc += f" with value '{action.value}'"
+            await session_store.append_history(request.session_id, action_desc)
+
+        return action
+    except Exception as e:
+        logger.exception("HTTP planning failed for session %s", request.session_id)
+        raise HTTPException(status_code=500, detail=f"Planning failed: {str(e)}")
     finally:
         await client.close()
 
@@ -29,6 +44,7 @@ async def plan_action_http(request: TaskRequest) -> StructuredAction:
 async def agent_websocket(websocket: WebSocket) -> None:
     """Realtime loop for the browser extension."""
     await websocket.accept()
+    
     client = get_vlm_client()
     planner = ActionPlanner(client)
 
@@ -41,15 +57,12 @@ async def agent_websocket(websocket: WebSocket) -> None:
                 await websocket.send_json({"error": "invalid_request", "detail": e.errors()})
                 continue
             
-            # Fetch server-side history and inject into request
             server_history = await session_store.get_history(request.session_id)
             request.history = server_history
 
             try:
-                # Plan the action
                 action = await planner.plan_next_action(request)
                 
-                # If action is valid and not a fallback, log it to Redis
                 if action.action != "ASK_USER" and action.element_id:
                     action_desc = f"{action.action} on element '{action.element_id}'"
                     if action.value:

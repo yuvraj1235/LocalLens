@@ -77,6 +77,10 @@ class LLMClient:
             ],
             "max_tokens": max_tokens,
             "temperature": 0.0,  # deterministic action planning
+            "top_p": 0.1,
+            "provider": {
+                "require_parameters": True
+            },
             "response_format": {"type": "json_object"},
         }
 
