@@ -103,9 +103,24 @@ export class AgentLoop {
       // Step 1: On every step after the first, fetch fresh context from the
       // content script so element IDs reflect the current DOM state.
       if (this.stepCount > 1) {
-        const fresh = await this.sendMessage({ type: "GET_CONTEXT" });
-        if (fresh && !(fresh as any).error) {
+        let fresh: any = null;
+        let retries = 5;
+        while (retries > 0) {
+          fresh = await this.sendMessage({ type: "GET_CONTEXT" });
+          if (fresh && !fresh.error) {
+            break;
+          }
+          // If we failed to get context, the page might be navigating/loading.
+          // Wait and retry.
+          this.log("info", null, null, "Waiting for page to load...");
+          await sleep(1000);
+          retries--;
+        }
+        
+        if (fresh && !fresh.error) {
           currentContext = fresh as SanitizedContext;
+        } else {
+          this.log("warn", null, null, "Failed to get fresh context, continuing with old context.");
         }
       }
 
@@ -169,19 +184,23 @@ export class AgentLoop {
       const result: any = await this.sendMessage({ type: "EXECUTE_ACTION", action });
       
       if (!result || result.error) {
-        this.log("error", action.action, action.element_id,
-          `Relay error: ${result?.error ?? "No response from content script"}`);
-        break;
-      }
-
-      if (result.status === "error") {
+        const errStr = result?.error ?? "No response from content script";
+        // If the page is navigating away, the message port will close early.
+        // We shouldn't crash the agent loop for this; assume it was a successful click/submit.
+        if (errStr.includes("message port closed") || errStr.includes("receiving end does not exist")) {
+            this.log("info", action.action, action.element_id, "Page navigation detected after action.");
+        } else {
+            this.log("error", action.action, action.element_id, `Relay error: ${errStr}`);
+            break;
+        }
+      } else if (result.status === "error") {
         this.log("error", action.action, action.element_id, `Execution failed: ${result.message}`);
         this.history.push(`Step ${this.stepCount}: ${action.action} on ${action.element_id} failed — ${result.message}`);
         await sleep(500);
         continue;
+      } else {
+        this.log("success", action.action, action.element_id, result.message);
       }
-
-      this.log("success", action.action, action.element_id, result.message);
 
       // Record this action for the history grounding context
       this.history.push(`Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim());
