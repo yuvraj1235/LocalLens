@@ -179,7 +179,9 @@ export class AgentLoop {
       }
 
       // Step 4: Schema validation.
-      const validation = validateAction(action);
+      // skipDomCheck=true because agentLoop runs in the popup context where
+      // document contains popup HTML, not the live page's elements.
+      const validation = validateAction(action, { skipDomCheck: true });
       if (validation.status === "invalid") {
         this.log("error", action.action, action.element_id, `Validation failed: ${validation.reason}`);
         this.history.push(`Step ${this.stepCount}: FAILED — ${validation.reason}`);
