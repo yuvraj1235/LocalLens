@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LocalLens Agent</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+
+  <body>
+    <!-- ── Header ─────────────────────────────────────── -->
+    <header class="header">
+      <div class="logo">
+        <svg class="logo-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="3" fill="#7c6af7"/>
+          <circle cx="8" cy="8" r="7" stroke="#7c6af7" stroke-width="1" opacity="0.3"/>
+        </svg>
+        <span class="logo-text">LocalLens</span>
+      </div>
+      <div id="status-badge" class="badge badge--idle">Idle</div>
+    </header>
+
+    <!-- ── Task input ─────────────────────────────────── -->
+    <section class="task-section">
+      <label class="label" for="task-input">What should the agent do?</label>
+      <div class="input-row">
+        <input
+          id="task-input"
+          class="task-input"
+          type="text"
+          placeholder='e.g. "Submit the login form"'
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="start-btn" class="btn btn--primary">Start</button>
+        <button id="stop-btn" class="btn btn--danger" disabled>Stop</button>
+      </div>
+    </section>
+
+    <!-- ── Privacy indicator strip ───────────────────── -->
+    <section id="privacy-strip" class="privacy-strip hidden">
+      <span class="privacy-label">🔒 Redacted before sending:</span>
+      <div id="redaction-tags" class="redaction-tags"></div>
+    </section>
+
+    <!-- ── Live action log ────────────────────────────── -->
+    <section class="log-section">
+      <div class="log-header">
+        <span class="label">Agent log</span>
+        <button id="clear-btn" class="btn btn--ghost btn--sm">Clear</button>
+      </div>
+      <ul id="log-list" class="log-list">
+        <li class="log-entry log-entry--info log-entry--placeholder">
+          Agent output will appear here…
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── Ask-user prompt (hidden by default) ────────── -->
+    <div id="ask-user-overlay" class="overlay hidden">
+      <div class="overlay-card">
+        <p id="ask-user-message" class="overlay-msg"></p>
+        <div class="overlay-actions">
+          <input id="ask-user-input" class="task-input" type="text" placeholder="Your answer…" />
+          <button id="ask-user-submit" class="btn btn--primary">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="popup.ts"></script>
+  </body>
+</html>
