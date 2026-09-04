@@ -4,67 +4,28 @@
  * The main agent loop for LocalLens.
  *
  * Orchestration order per tick:
- *   1. Receive SanitizedContext from Ankit's content script (via message).
- *   2. Build a TaskRequest and send it to Shreya's backend (via wsClient).
+ *   1. Receive SanitizedContext from the content script (via message).
+ *   2. Build a TaskRequest and send it to the backend (via wsClient).
  *   3. Validate the returned StructuredAction (via actionValidator).
  *   4. Execute the action on the live DOM (via actionExecutor).
  *   5. Emit a log event so the popup UI can display progress.
  *   6. If action.done === true or max steps reached → stop.
- *
- * Usage (called from the extension popup or content script):
- *
- *   import { AgentLoop } from "./agentLoop";
- *
- *   const loop = new AgentLoop({
- *     task: "Submit the login form",
- *     onLog: (entry) => console.log(entry),
- *   });
- *   loop.start(sanitizedContext);
- *   // later:
- *   loop.stop();
  */
 
+// Re-export shared types from the canonical source so other modules
+// can import from either place without duplication.
+export type {
+  BoundingBox,
+  UIElement,
+  SanitizedContext,
+  TaskRequest,
+} from "../ui/types";
+
+import type { SanitizedContext, TaskRequest } from "../ui/types";
 import { AgentClient } from "../ui/wsClient";
 import { validateAction } from "./actionValidator";
 import { executeAction } from "./actionExecutor";
 import type { StructuredAction } from "./actionExecutor";
-
-// ---------------------------------------------------------------------------
-// Types  (mirrors backend/app/schemas/context.py)
-// ---------------------------------------------------------------------------
-
-export interface BoundingBox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-export interface UIElement {
-  element_id: string;
-  role: string;
-  label: string | null;
-  bbox: BoundingBox | null;
-  redaction: string;
-  clickable: boolean;
-  editable: boolean;
-}
-
-export interface SanitizedContext {
-  session_id: string;
-  url_domain: string | null;
-  screenshot_b64: string | null;
-  ui_graph: UIElement[];
-  viewport_width: number | null;
-  viewport_height: number | null;
-}
-
-export interface TaskRequest {
-  session_id: string;
-  task: string;
-  context: SanitizedContext;
-  history: string[];
-}
 
 // ---------------------------------------------------------------------------
 // Log entry — emitted after every step so the popup UI can render progress
@@ -118,7 +79,7 @@ export class AgentLoop {
   private running = false;
   private stepCount = 0;
   private history: string[] = [];
-  private client: AgentClient;
+  private client: { send: (request: TaskRequest) => Promise<unknown> };
 
   constructor(options: AgentLoopOptions) {
     this.task = options.task;
@@ -128,7 +89,7 @@ export class AgentLoop {
     this.client = options.client ?? new AgentClient("ws://localhost:8000/ws/agent");
   }
 
-  /** Begin the agent loop with an initial SanitizedContext from Ankit. */
+  /** Begin the agent loop with an initial SanitizedContext from the content script. */
   async start(context: SanitizedContext): Promise<void> {
     this.running = true;
     this.stepCount = 0;
@@ -202,7 +163,6 @@ export class AgentLoop {
 
       if (action.action === "ASK_USER") {
         this.log("warn", null, null, `Agent paused — backend needs user input: ${action.value ?? ""}`);
-        // The popup UI should handle this (show a prompt) and call start() again
         break;
       }
 

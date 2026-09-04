@@ -4,6 +4,8 @@
     "lib": ["ES2020", "DOM"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "strict": true
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["chrome"]
   }
 }
