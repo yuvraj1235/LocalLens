@@ -43,6 +43,26 @@
       <div id="redaction-tags" class="redaction-tags"></div>
     </section>
 
+    <!-- ── Autofill Settings ─────────────────────────── -->
+    <section class="settings-section" style="margin: 16px; padding: 12px; background: #1e1e1e; border-radius: 8px;">
+      <div class="log-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="label" style="font-weight: bold; color: #fff;">Autofill Cache</span>
+        <button id="clear-cache-btn" class="btn btn--danger btn--sm">Clear All</button>
+      </div>
+      <div style="margin-bottom: 8px; color: #ccc;">
+        <label style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="autofill-enable-cb"> Enable Local Autofill
+        </label>
+      </div>
+      <div style="margin-bottom: 12px; color: #ccc;">
+        <label style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="autofill-confirm-cb"> Require Confirmation
+        </label>
+      </div>
+      <ul id="cache-list" class="log-list" style="max-height: 100px; overflow-y: auto; background: #000; border-radius: 4px; padding: 8px;">
+      </ul>
+    </section>
+
     <!-- ── Live action log ────────────────────────────── -->
     <section class="log-section">
       <div class="log-header">

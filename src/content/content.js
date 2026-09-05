@@ -9,6 +9,44 @@
  *  4. Listen for EXECUTE_ACTION messages and run them on the live DOM.
  */
 import { executeAction } from "../agent/actionExecutor";
+import { setupCacheListeners, getSemanticKey } from "./cacheIntegration";
+import { getCachedValue, getAutofillSettings } from "../cache/fieldCache";
+/**
+ * In-memory map of agentId → plaintext cached value.
+ * Values are NEVER written to the DOM until the user explicitly confirms.
+ * Cleared on each full buildUIGraph() call so stale suggestions don't linger.
+ */
+const pendingAutofillSuggestions = new Map();
+/**
+ * Called by the popup confirm handler when the user accepts an autofill suggestion.
+ * Only then does the plaintext value touch the live DOM.
+ */
+export function applyAutofillSuggestion(agentId) {
+    const value = pendingAutofillSuggestions.get(agentId);
+    if (!value)
+        return false;
+    const el = document.querySelector(`[data-agent-id="${agentId}"]`);
+    if (el) {
+        // 1. Get the native property descriptor
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;
+        const nativeTextAreaValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value")?.set;
+        // 2. Call the native setter bypassing React's wrapper
+        if (el.tagName === "INPUT" && nativeInputValueSetter) {
+            nativeInputValueSetter.call(el, value);
+        }
+        else if (el.tagName === "TEXTAREA" && nativeTextAreaValueSetter) {
+            nativeTextAreaValueSetter.call(el, value);
+        }
+        else {
+            el.value = value; // Fallback for standard HTML
+        }
+        // 3. Dispatch events that frameworks listen to
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+        el.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    pendingAutofillSuggestions.delete(agentId);
+    return !!el;
+}
 // ---------------------------------------------------------------------------
 // PII patterns — redact sensitive text before it ever leaves the device
 // ---------------------------------------------------------------------------
@@ -22,8 +60,6 @@ const PII_PATTERNS = [
 function detectPii(text) {
     for (const { label, re } of PII_PATTERNS) {
         re.lastIndex = 0; // Reset stateful /g regex before each test() call.
-        // Without this, alternating calls on the same pattern skip every other match
-        // because .test() advances lastIndex and the next call starts mid-string.
         if (re.test(text))
             return label;
     }
@@ -63,41 +99,62 @@ function getRole(el) {
 // ---------------------------------------------------------------------------
 // DOM walker — builds the UIGraph
 // ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
-// Session ID — computed ONCE per content-script lifetime so the backend
-// SessionStore uses the same key for every step of the same tab session.
-// Using Date.now() + a random suffix avoids collisions across tabs/reloads.
-// ---------------------------------------------------------------------------
 const SESSION_ID = `tab-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-// Counter never resets — IDs are permanent for the lifetime of the content script.
-// New elements that appear after the first stamp get the next available number.
 let agentIdCounter = 0;
-function buildUIGraph() {
+async function buildUIGraph() {
     const elements = [];
+    const settings = await getAutofillSettings();
     const SELECTOR = [
         "a[href]", "button", "input:not([type=hidden])", "select", "textarea",
         "[role=button]", "[role=link]", "[role=checkbox]", "[role=menuitem]",
         "[role=tab]", "[role=option]", "[tabindex]",
     ].join(",");
-    document.querySelectorAll(SELECTOR).forEach((el) => {
+    pendingAutofillSuggestions.clear();
+    const nodes = document.querySelectorAll(SELECTOR);
+    for (const el of Array.from(nodes)) {
         const style = window.getComputedStyle(el);
         if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0")
-            return;
+            continue;
         const bbox = getBbox(el);
         if (!bbox)
-            return;
-        // PRESERVE existing stamp — only assign a new ID if the element doesn't have one yet.
-        // This keeps IDs stable across repeated GET_CONTEXT calls.
+            continue;
         let agentId = el.getAttribute("data-agent-id");
         if (!agentId) {
             agentId = `agent_${agentIdCounter++}`;
             el.setAttribute("data-agent-id", agentId);
         }
-        const rawLabel = getLabel(el) ?? "";
-        const redaction = detectPii(rawLabel);
+        let rawLabel = getLabel(el) ?? "";
+        let redaction = detectPii(rawLabel);
+        // Bulletproof redaction overrides based on HTML attributes
+        if (el.tagName === "INPUT") {
+            const inputEl = el;
+            const inputType = (inputEl.type || "").toLowerCase();
+            const inputName = (inputEl.name || "").toLowerCase();
+            if (inputType === "password" || inputName.includes("password")) {
+                redaction = "PASSWORD_REDACTED";
+            }
+            else if (inputType === "email" || inputName.includes("email")) {
+                redaction = "EMAIL_REDACTED";
+            }
+            else if (inputType === "tel" || inputName.includes("phone")) {
+                redaction = "PII_REDACTED";
+            }
+        }
         const isEditable = el.tagName === "INPUT" ||
             el.tagName === "TEXTAREA" ||
             el.getAttribute("contenteditable") === "true";
+        let hasCacheSuggestion = false;
+        if (isEditable && settings.enabled) {
+            const key = getSemanticKey(el);
+            if (key) {
+                const cached = await getCachedValue(key);
+                if (cached) {
+                    hasCacheSuggestion = true;
+                    pendingAutofillSuggestions.set(agentId, cached);
+                    el.setAttribute("data-autofill-pending", "1");
+                }
+            }
+        }
         elements.push({
             element_id: agentId,
             role: getRole(el),
@@ -109,25 +166,23 @@ function buildUIGraph() {
                 !!el.onclick ||
                 el.getAttribute("role") === "button" ||
                 el.getAttribute("role") === "link" ||
-                // Focusable custom components (tabindex >= 0) are keyboard-reachable
-                // and should be treated as clickable by the agent.
                 (el.hasAttribute("tabindex") && el.getAttribute("tabindex") !== "-1"),
             editable: isEditable,
         });
-    });
+    }
     return elements;
 }
 // ---------------------------------------------------------------------------
 // Snapshot builder
 // ---------------------------------------------------------------------------
-function buildContext() {
+async function buildContext() {
     return {
         session_id: SESSION_ID,
         url_domain: window.location.hostname,
-        screenshot_b64: null, // screenshot handled by background via chrome.tabs.captureVisibleTab
+        screenshot_b64: null,
         viewport_width: window.innerWidth,
         viewport_height: window.innerHeight,
-        ui_graph: buildUIGraph(),
+        ui_graph: await buildUIGraph(),
     };
 }
 // ---------------------------------------------------------------------------
@@ -135,13 +190,30 @@ function buildContext() {
 // ---------------------------------------------------------------------------
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     if (msg.type === "GET_CONTEXT") {
-        sendResponse(buildContext());
-        return true; // keep channel open for async
+        buildContext().then(sendResponse);
+        return true;
     }
     if (msg.type === "EXECUTE_ACTION") {
         const action = msg.action;
         executeAction(action).then(sendResponse);
-        return true; // async response
+        return true;
+    }
+    // Listen for manual autofill confirmation from the popup
+    if (msg.type === "APPLY_AUTOFILL") {
+        buildUIGraph().then(() => {
+            let appliedCount = 0;
+            for (const agentId of pendingAutofillSuggestions.keys()) {
+                if (applyAutofillSuggestion(agentId)) {
+                    appliedCount++;
+                }
+            }
+            sendResponse({ success: true, count: appliedCount });
+        }).catch(err => {
+            console.error("[LocalLens] Autofill scan failed:", err);
+            sendResponse({ success: false, count: 0 });
+        });
+        return true;
     }
 });
+setupCacheListeners();
 console.log("[LocalLens] Content script loaded on", window.location.hostname);

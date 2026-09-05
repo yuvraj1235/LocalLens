@@ -16,6 +16,13 @@
  */
 
 import { AgentLoop, SanitizedContext, LogEntry } from "../agent/agentLoop";
+import {
+  getAutofillSettings,
+  updateAutofillSettings,
+  listCachedKeys,
+  clearAllCachedValues,
+  clearCachedValue
+} from "../cache/fieldCache.js";
 
 // ---------------------------------------------------------------------------
 // DOM refs
@@ -33,6 +40,12 @@ const askOverlay      = document.getElementById("ask-user-overlay") as HTMLEleme
 const askMessage      = document.getElementById("ask-user-message") as HTMLParagraphElement;
 const askInput        = document.getElementById("ask-user-input")   as HTMLInputElement;
 const askSubmit       = document.getElementById("ask-user-submit")  as HTMLButtonElement;
+
+// Autofill settings
+const autofillEnableCb  = document.getElementById("autofill-enable-cb") as HTMLInputElement;
+const autofillConfirmCb = document.getElementById("autofill-confirm-cb") as HTMLInputElement;
+const clearCacheBtn     = document.getElementById("clear-cache-btn") as HTMLButtonElement;
+const cacheList         = document.getElementById("cache-list") as HTMLUListElement;
 
 // ---------------------------------------------------------------------------
 // State
@@ -69,8 +82,103 @@ askSubmit.addEventListener("click", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Autofill Settings Handlers
+// ---------------------------------------------------------------------------
+
+async function initSettings() {
+  const settings = await getAutofillSettings();
+  if (autofillEnableCb) autofillEnableCb.checked = settings.enabled;
+  if (autofillConfirmCb) autofillConfirmCb.checked = settings.confirmRequired;
+
+  autofillEnableCb?.addEventListener("change", async () => {
+    await updateAutofillSettings({ enabled: autofillEnableCb.checked });
+  });
+
+  autofillConfirmCb?.addEventListener("change", async () => {
+    await updateAutofillSettings({ confirmRequired: autofillConfirmCb.checked });
+  });
+
+  clearCacheBtn?.addEventListener("click", async () => {
+    await clearAllCachedValues();
+    renderCacheList();
+  });
+
+  // NEW: Dynamically create the trigger button for testing
+  const applyBtn = document.createElement("button");
+  applyBtn.textContent = "Inject Pending Autofills";
+  applyBtn.style.marginTop = "10px";
+  applyBtn.style.width = "100%";
+  applyBtn.style.padding = "6px";
+  applyBtn.style.backgroundColor = "#6366f1"; // matching your primary purple
+  applyBtn.style.color = "white";
+  applyBtn.style.border = "none";
+  applyBtn.style.borderRadius = "4px";
+  applyBtn.style.cursor = "pointer";
+  applyBtn.onclick = triggerAutofill;
+  
+  cacheList?.parentElement?.appendChild(applyBtn);
+
+  renderCacheList();
+}
+
+async function renderCacheList() {
+  if (!cacheList) return;
+  const keys = await listCachedKeys();
+  cacheList.innerHTML = "";
+  if (keys.length === 0) {
+    cacheList.innerHTML = '<li style="color: #666; font-size: 12px; padding: 4px;">Cache is empty</li>';
+    return;
+  }
+  
+  for (const { key, updatedAt } of keys) {
+    const li = document.createElement("li");
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.marginBottom = "4px";
+    
+    const timeStr = new Date(updatedAt).toLocaleTimeString();
+    li.innerHTML = `
+      <span style="color: #fff; font-size: 12px;">${escapeHtml(key)} <span style="color:#666">(${timeStr})</span></span>
+      <button class="btn btn--ghost btn--sm" data-key="${escapeHtml(key)}">Del</button>
+    `;
+    cacheList.appendChild(li);
+  }
+
+  cacheList.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      const target = e.target as HTMLButtonElement;
+      const k = target.getAttribute("data-key");
+      if (k) {
+        await clearCachedValue(k);
+        renderCacheList();
+      }
+    });
+  });
+}
+
+initSettings();
+
+// ---------------------------------------------------------------------------
 // Core handlers
 // ---------------------------------------------------------------------------
+
+async function triggerAutofill() {
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tabs[0]?.id) {
+    chrome.tabs.sendMessage(tabs[0].id, { type: "APPLY_AUTOFILL" }, (response) => {
+      if (response?.success) {
+        appendLog({
+          step: 0,
+          level: "success",
+          action: "AUTOFILL",
+          element_id: null,
+          message: `Successfully injected ${response.count} cached fields.`,
+          timestamp: Date.now(),
+        });
+      }
+    });
+  }
+}
 
 async function handleStart(): Promise<void> {
   const task = taskInput.value.trim();
