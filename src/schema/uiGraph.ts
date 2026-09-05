@@ -55,7 +55,7 @@ export interface DetectedElement {
   piiType?: PiiType;
   risk?: RiskLevel;
   /** which subsystems contributed to this element, useful for debugging fusion */
-  sources: Array<"ocr" | "detector" | "face" | "dom" | "pii">;
+  sources: Array<"ocr" | "detector" | "face" | "dom" | "pii" | "cache">;
 }
 
 export interface DetectedFace {
