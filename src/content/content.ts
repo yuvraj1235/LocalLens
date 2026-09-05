@@ -238,6 +238,12 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     executeAction(action).then(sendResponse);
     return true; 
   }
+  
+  if (msg.type === "TOGGLE_WIDGET") {
+    toggleFloatingWidget();
+    sendResponse({ success: true });
+    return true;
+  }
 
   // Listen for manual autofill confirmation from the popup
   if (msg.type === "APPLY_AUTOFILL") {
@@ -260,3 +266,101 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 
 setupCacheListeners();
 console.log("[LocalLens] Content script loaded on", window.location.hostname);
+
+// ---------------------------------------------------------------------------
+// Floating Draggable UI Widget
+// ---------------------------------------------------------------------------
+
+function toggleFloatingWidget() {
+  const existing = document.getElementById("locallens-widget-container");
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  const container = document.createElement("div");
+  container.id = "locallens-widget-container";
+  container.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 380px;
+    height: 600px;
+    z-index: 2147483647; /* Max z-index to stay above everything */
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    background: #0a0a0b;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+  `;
+
+  // We add a native drag handle above the iframe because mouse events 
+  // get swallowed once the cursor crosses into the iframe document.
+  const dragBar = document.createElement("div");
+  dragBar.style.cssText = `
+    height: 20px;
+    background: #111113;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #1e1e22;
+  `;
+  dragBar.innerHTML = `<div style="width: 40px; height: 4px; background: #55555f; border-radius: 2px;"></div>`;
+
+  const iframe = document.createElement("iframe");
+  iframe.src = chrome.runtime.getURL("src/popup/popup.html");
+  iframe.style.cssText = "flex: 1; width: 100%; border: none;";
+
+  container.appendChild(dragBar);
+  container.appendChild(iframe);
+  document.body.appendChild(container);
+
+  // Drag Math
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  dragBar.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    dragBar.style.cursor = "grabbing";
+    
+    const rect = container.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    
+    // Prevent text selection while dragging
+    e.preventDefault(); 
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    
+    // Calculate new position keeping it inside the viewport bounds
+    let newX = e.clientX - offsetX;
+    let newY = e.clientY - offsetY;
+    
+    const maxX = window.innerWidth - container.offsetWidth;
+    const maxY = window.innerHeight - container.offsetHeight;
+    
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+    
+    container.style.left = `${newX}px`;
+    container.style.top = `${newY}px`;
+    container.style.right = 'auto'; // Clear the initial 'right: 20px'
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    dragBar.style.cursor = "grab";
+  });
+}
+
+// chrome.runtime.onMessage listener in content.ts
+// to allow the background script or the iframe to trigger/close the widget:
+/*
+  
+*/

@@ -131,11 +131,16 @@ export class AgentLoop {
           await sleep(1000);
           retries--;
         }
-        
+
         if (fresh && !fresh.error) {
           currentContext = fresh as SanitizedContext;
         } else {
-          this.log("warn", null, null, "Failed to get fresh context, continuing with old context.");
+          this.log(
+            "warn",
+            null,
+            null,
+            "Failed to get fresh context, continuing with old context.",
+          );
         }
       }
 
@@ -157,23 +162,30 @@ export class AgentLoop {
       }
 
       const action = rawResponse as StructuredAction;
-      this.log(
-        "info",
-        action.action,
-        action.element_id,
-        `Backend: ${action.action} → ${action.element_id ?? "—"} (confidence: ${action.confidence.toFixed(2)})`
-      );
+
+      let displayMessage = `Backend: ${action.action} → ${action.element_id ?? "—"} (confidence: ${action.confidence.toFixed(2)})`;
+      if (
+        (action.action === "DONE" || action.action === "ASK_USER") &&
+        action.reasoning
+      ) {
+        displayMessage = `Agent Answer: ${action.reasoning}`;
+      }
+
+      this.log("info", action.action, action.element_id, displayMessage);
 
       // Step 3: Confidence gate.
       // DONE and ASK_USER are terminal signals — they must NEVER be swallowed
       // by a low confidence score (e.g. when the hallucination guard resets
       // confidence to 0.0). Skip the gate for those two actions.
-      if (!TERMINAL_ACTIONS.has(action.action) && action.confidence < this.minConfidence) {
+      if (
+        !TERMINAL_ACTIONS.has(action.action) &&
+        action.confidence < this.minConfidence
+      ) {
         this.log(
           "warn",
           action.action,
           action.element_id,
-          `Skipping — confidence ${action.confidence.toFixed(2)} below threshold ${this.minConfidence}.`
+          `Skipping — confidence ${action.confidence.toFixed(2)} below threshold ${this.minConfidence}.`,
         );
         break;
       }
@@ -183,15 +195,27 @@ export class AgentLoop {
       // document contains popup HTML, not the live page's elements.
       const validation = validateAction(action, { skipDomCheck: true });
       if (validation.status === "invalid") {
-        this.log("error", action.action, action.element_id, `Validation failed: ${validation.reason}`);
-        this.history.push(`Step ${this.stepCount}: FAILED — ${validation.reason}`);
+        this.log(
+          "error",
+          action.action,
+          action.element_id,
+          `Validation failed: ${validation.reason}`,
+        );
+        this.history.push(
+          `Step ${this.stepCount}: FAILED — ${validation.reason}`,
+        );
         await sleep(300);
         continue;
       }
 
       // Step 5: Handle ASK_USER immediately — no DOM action to take.
       if (action.action === "ASK_USER") {
-        this.log("warn", null, null, `Agent paused — backend needs user input: ${action.value ?? ""}`);
+        this.log(
+          "warn",
+          null,
+          null,
+          `Agent paused — backend needs user input: ${action.value ?? ""}`,
+        );
         break;
       }
 
@@ -205,29 +229,52 @@ export class AgentLoop {
 
         if (execResult.navigated) {
           // Page is navigating — action succeeded, still record it for history.
-          this.log("info", action.action, action.element_id, "Page navigation detected after action.");
+          this.log(
+            "info",
+            action.action,
+            action.element_id,
+            "Page navigation detected after action.",
+          );
           this.history.push(
-            `Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim()
+            `Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim(),
           );
         } else if (execResult.status === "error") {
-          this.log("error", action.action, action.element_id, `Execution failed: ${execResult.message}`);
+          this.log(
+            "error",
+            action.action,
+            action.element_id,
+            `Execution failed: ${execResult.message}`,
+          );
           this.history.push(
-            `Step ${this.stepCount}: ${action.action} on ${action.element_id} failed — ${execResult.message}`
+            `Step ${this.stepCount}: ${action.action} on ${action.element_id} failed — ${execResult.message}`,
           );
           await sleep(500);
           continue;
         } else {
-          this.log("success", action.action, action.element_id, execResult.message);
+          this.log(
+            "success",
+            action.action,
+            action.element_id,
+            execResult.message,
+          );
           this.history.push(
-            `Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim()
+            `Step ${this.stepCount}: ${action.action} ${action.element_id ?? ""} ${action.value ?? ""}`.trim(),
           );
         }
       }
 
       // Step 7: Stop if the backend signalled task completion.
       // Checked AFTER execution so the final DOM action always fires.
+      // Step 7: Stop if the backend signalled task completion.
       if (action.done || action.action === "DONE") {
-        this.log("success", null, null, "Task completed by backend signal.");
+        this.log(
+          "success",
+          null,
+          null,
+          action.reasoning
+            ? `Task completed: ${action.reasoning}`
+            : "Task completed by backend signal.",
+        );
         break;
       }
 

@@ -39,7 +39,7 @@ class LLMClient:
         system_prompt: str,
         user_prompt: str,
         image_b64: str | None = None,
-        max_tokens: int = 512,
+        max_tokens: int = 2048,
     ) -> dict[str, Any]:
         """
         Calls chat/completions and parses the response as JSON.
