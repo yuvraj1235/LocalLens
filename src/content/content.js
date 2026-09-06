@@ -140,14 +140,31 @@ async function buildUIGraph() {
                 redaction = "PII_REDACTED";
             }
         }
+        // --- Tier 1: Hard-coded always-redact for sensitive semantic key types ---
+        // Card numbers must always be redacted regardless of HTML attributes.
+        const semanticKey = getSemanticKey(el);
+        if (semanticKey === "credit_card") {
+            redaction = "CARD_REDACTED";
+        }
+        else if (semanticKey === "otp") {
+            // OTP fields — treat as PII
+            redaction = "PII_REDACTED";
+        }
+        // --- Tier 2: User-selected always-redact keys ---
+        // If the user has opted to always redact this semantic field type, force it.
+        if (redaction === "NONE" &&
+            semanticKey &&
+            settings.userRedactedKeys.includes(semanticKey)) {
+            redaction = "PII_REDACTED";
+        }
         const isEditable = el.tagName === "INPUT" ||
             el.tagName === "TEXTAREA" ||
             el.getAttribute("contenteditable") === "true";
         let hasCacheSuggestion = false;
         if (isEditable && settings.enabled) {
-            const key = getSemanticKey(el);
-            if (key) {
-                const cached = await getCachedValue(key);
+            // Reuse semanticKey already computed above for redaction checks
+            if (semanticKey) {
+                const cached = await getCachedValue(semanticKey);
                 if (cached) {
                     hasCacheSuggestion = true;
                     pendingAutofillSuggestions.set(agentId, cached);
@@ -159,6 +176,8 @@ async function buildUIGraph() {
             element_id: agentId,
             role: getRole(el),
             label: redaction === "NONE" ? rawLabel || null : null,
+            // Keep the field's accessible name even when redacted — safe (name ≠ value).
+            redacted_label: redaction !== "NONE" ? (rawLabel || null) : null,
             bbox,
             redaction,
             clickable: el.tagName === "BUTTON" ||

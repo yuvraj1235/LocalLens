@@ -61,7 +61,41 @@
       <div id="redaction-tags" class="redaction-tags"></div>
     </section>
 
-    <!-- ── Autofill Settings ─────────────────────────── -->
+    <!-- ── Privacy Controls ─────────────────────────── -->
+    <section class="settings-section privacy-controls-section">
+      <div class="log-header">
+        <span class="label section-title">🔐 Privacy Controls</span>
+      </div>
+
+      <!-- Tier 1: Hard-locked always-redact fields -->
+      <div class="privacy-tier">
+        <p class="privacy-tier-label">Always redacted (locked):</p>
+        <div class="privacy-locked-chips">
+          <span class="privacy-chip privacy-chip--locked">🔒 Passwords</span>
+          <span class="privacy-chip privacy-chip--locked">🔒 Card Numbers</span>
+          <span class="privacy-chip privacy-chip--locked">🔒 OTPs</span>
+        </div>
+      </div>
+
+      <!-- Tier 2: User-selectable fields -->
+      <div class="privacy-tier">
+        <p class="privacy-tier-label">Also redact these field types:</p>
+        <div class="privacy-add-row">
+          <input
+            id="privacy-key-input"
+            class="task-input privacy-key-input"
+            type="text"
+            placeholder='e.g. phone, dob, national_id'
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="privacy-add-btn" class="btn btn--primary btn--sm">Add</button>
+        </div>
+        <ul id="privacy-keys-list" class="privacy-keys-list"></ul>
+      </div>
+    </section>
+
+    <!-- ── Autofill Cache ────────────────────────────── -->
     <section class="settings-section" style="margin: 16px; padding: 12px; background: #1e1e1e; border-radius: 8px;">
       <div class="log-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
         <span class="label" style="font-weight: bold; color: #fff;">Autofill Cache</span>

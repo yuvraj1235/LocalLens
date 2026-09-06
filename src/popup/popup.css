@@ -491,3 +491,91 @@ body {
   white-space: normal;
   word-wrap: break-word;
 }
+
+/* ── Privacy Controls section ─────────────────────────────────────── */
+
+.privacy-controls-section {
+  margin: 16px;
+  padding: 12px;
+  background: #1a1a1e;
+  border: 1px solid #2a2a32;
+  border-radius: var(--radius);
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+
+.privacy-tier {
+  margin-top: 10px;
+}
+
+.privacy-tier-label {
+  font-size: 11px;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.privacy-locked-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.privacy-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.privacy-chip--locked {
+  background: rgba(246, 102, 102, 0.12);
+  color: #f66;
+  border: 1px solid rgba(246, 102, 102, 0.25);
+  cursor: default;
+}
+
+.privacy-chip--user {
+  background: rgba(124, 106, 247, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(124, 106, 247, 0.25);
+}
+
+.privacy-add-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.privacy-key-input {
+  flex: 1;
+  font-size: 12px;
+  padding: 5px 8px;
+  height: 30px;
+}
+
+.privacy-keys-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.privacy-key-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0;
+}

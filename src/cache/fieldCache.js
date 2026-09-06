@@ -166,7 +166,8 @@ export async function getAutofillSettings() {
     const settings = result[SETTINGS_KEY];
     return {
         enabled: settings?.enabled ?? true,
-        confirmRequired: settings?.confirmRequired ?? true
+        confirmRequired: settings?.confirmRequired ?? true,
+        userRedactedKeys: settings?.userRedactedKeys ?? [],
     };
 }
 export async function updateAutofillSettings(updates) {

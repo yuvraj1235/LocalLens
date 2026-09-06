@@ -215,6 +215,8 @@ const SETTINGS_KEY = "_autofill_settings";
 export interface AutofillSettings {
   enabled: boolean;
   confirmRequired: boolean;
+  /** Semantic field keys the user has opted to always redact (e.g. ["phone", "dob"]). */
+  userRedactedKeys: string[];
 }
 
 export async function getAutofillSettings(): Promise<AutofillSettings> {
@@ -222,7 +224,8 @@ export async function getAutofillSettings(): Promise<AutofillSettings> {
   const settings = result[SETTINGS_KEY];
   return {
     enabled: settings?.enabled ?? true,
-    confirmRequired: settings?.confirmRequired ?? true
+    confirmRequired: settings?.confirmRequired ?? true,
+    userRedactedKeys: settings?.userRedactedKeys ?? [],
   };
 }
 
