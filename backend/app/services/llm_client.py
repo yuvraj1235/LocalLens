@@ -19,7 +19,6 @@ from app.core.config import settings
 logger = logging.getLogger("agent")
 
 
-
 class LLMClient:
     def __init__(self, base_url: str, api_key: str, model: str, timeout: float):
         self._base_url = base_url.rstrip("/")
@@ -92,7 +91,9 @@ class LLMClient:
         resp.raise_for_status()
         data = resp.json()
 
-        msg = data["choices"][0]["message"]
+        choice = data["choices"][0]
+        msg = choice["message"]
+        finish_reason = choice.get("finish_reason")
         text: str | None = msg.get("content")
 
         # Qwen3 on OpenRouter sometimes puts the answer only in reasoning_content
@@ -134,6 +135,18 @@ class LLMClient:
                 return json.loads(match.group(1))
             except json.JSONDecodeError:
                 pass
+
+        # Distinguish "ran out of tokens before producing JSON" from
+        # "model produced malformed/no JSON" — these need different fixes
+        # (raise max_tokens or switch model, vs. fix prompt/parsing).
+        if finish_reason == "length":
+            raise ValueError(
+                f"Response truncated by max_tokens ({max_tokens}) before JSON was "
+                f"produced — model emitted {len(text)} chars of non-JSON text first "
+                f"(likely inline reasoning not wrapped in <think>). "
+                f"Either raise max_tokens, or switch to a non-reasoning instruct model. "
+                f"First 200 chars: {text[:200]!r}"
+            )
 
         raise ValueError(f"Model did not return valid JSON: {text!r}")
 
