@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import ValidationError
 
@@ -24,8 +25,14 @@ async def plan_action_http(request: TaskRequest) -> StructuredAction:
         server_history = await session_store.get_history(request.session_id)
         request.history = server_history
 
+        # Metric: Track HTTP inference latency
+        inference_start = time.time()
         action = await planner.plan_next_action(request)
-
+        inference_latency = time.time() - inference_start
+        print(f"[METRIC] HTTP Inference Latency: {inference_latency:.3f}s")
+        print("\n=== OUTGOING TO FRONTEND (HTTP) ===")
+        print(action.model_dump_json(indent=2))
+        print("===================================\n")
         if action.action != "ASK_USER" and action.element_id:
             action_desc = f"{action.action} on element '{action.element_id}'"
             if action.value:
@@ -50,9 +57,15 @@ async def agent_websocket(websocket: WebSocket) -> None:
 
     try:
         while True:
+            # Metric: Start end-to-end timer the moment we wait for a message
+            e2e_start = time.time()
             raw = await websocket.receive_json()
+            
             try:
                 request = TaskRequest.model_validate(raw)
+                print("\n=== INCOMING FROM FRONTEND ===")
+                print(request.model_dump_json(indent=2))
+                print("==============================\n")
             except ValidationError as e:
                 await websocket.send_json({"error": "invalid_request", "detail": e.errors()})
                 continue
@@ -61,7 +74,14 @@ async def agent_websocket(websocket: WebSocket) -> None:
             request.history = server_history
 
             try:
+                # Metric: Start inference timer exactly before calling the AI
+                inference_start = time.time()
                 action = await planner.plan_next_action(request)
+                inference_latency = time.time() - inference_start
+                
+                print("\n=== OUTGOING TO FRONTEND ===")
+                print(action.model_dump_json(indent=2))
+                print("============================\n")
                 
                 if action.action != "ASK_USER" and action.element_id:
                     action_desc = f"{action.action} on element '{action.element_id}'"
@@ -75,6 +95,14 @@ async def agent_websocket(websocket: WebSocket) -> None:
                 continue
 
             await websocket.send_json(action.model_dump())
+            
+            # Metric: Calculate total time taken to receive, process, and reply
+            e2e_latency = time.time() - e2e_start
+            
+            print(f"\nSession: {request.session_id}")
+            print(f" ├─ VLM Inference Latency: {inference_latency:.3f} seconds")
+            print(f" └─ End-to-End Turnaround: {e2e_latency:.3f} seconds\n")
+            
     except WebSocketDisconnect:
         logger.info("client disconnected")
     finally:

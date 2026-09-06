@@ -17,13 +17,24 @@
         </svg>
         <span class="logo-text">LocalLens</span>
       </div>
-      <div id="status-badge" class="badge badge--idle">Idle</div>
+      <div class="header-right">
+        <div id="status-badge" class="badge badge--idle">Idle</div>
+        <button id="close-btn" class="btn btn--icon" title="Close Widget">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
     </header>
 
     <!-- ── Task input ─────────────────────────────────── -->
     <section class="task-section">
       <label class="label" for="task-input">What should the agent do?</label>
       <div class="input-row">
+        
+        <!-- Upload Icon (Placeholder) -->
+        <button id="upload-btn" class="btn btn--icon" title="Upload Image (Coming Soon)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </button>
+
         <input
           id="task-input"
           class="task-input"
@@ -32,8 +43,15 @@
           autocomplete="off"
           spellcheck="false"
         />
+
+        <!-- Voice Icon (Placeholder) -->
+        <button id="voice-btn" class="btn btn--icon" title="Voice Input (Coming Soon)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+        </button>
+
         <button id="start-btn" class="btn btn--primary">Start</button>
-        <button id="stop-btn" class="btn btn--danger" disabled>Stop</button>
+        <!-- Stop button temporarily hidden unless running, controlled by JS -->
+        <button id="stop-btn" class="btn btn--danger" style="display:none;" disabled>Stop</button>
       </div>
     </section>
 

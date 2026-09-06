@@ -88,12 +88,18 @@ export class AgentLoop {
                 break;
             }
             const action = rawResponse;
-            this.log("info", action.action, action.element_id, `Backend: ${action.action} → ${action.element_id ?? "—"} (confidence: ${action.confidence.toFixed(2)})`);
+            let displayMessage = `Backend: ${action.action} → ${action.element_id ?? "—"} (confidence: ${action.confidence.toFixed(2)})`;
+            if ((action.action === "DONE" || action.action === "ASK_USER") &&
+                action.reasoning) {
+                displayMessage = `Agent Answer: ${action.reasoning}`;
+            }
+            this.log("info", action.action, action.element_id, displayMessage);
             // Step 3: Confidence gate.
             // DONE and ASK_USER are terminal signals — they must NEVER be swallowed
             // by a low confidence score (e.g. when the hallucination guard resets
             // confidence to 0.0). Skip the gate for those two actions.
-            if (!TERMINAL_ACTIONS.has(action.action) && action.confidence < this.minConfidence) {
+            if (!TERMINAL_ACTIONS.has(action.action) &&
+                action.confidence < this.minConfidence) {
                 this.log("warn", action.action, action.element_id, `Skipping — confidence ${action.confidence.toFixed(2)} below threshold ${this.minConfidence}.`);
                 break;
             }
@@ -137,8 +143,11 @@ export class AgentLoop {
             }
             // Step 7: Stop if the backend signalled task completion.
             // Checked AFTER execution so the final DOM action always fires.
+            // Step 7: Stop if the backend signalled task completion.
             if (action.done || action.action === "DONE") {
-                this.log("success", null, null, "Task completed by backend signal.");
+                this.log("success", null, null, action.reasoning
+                    ? `Task completed: ${action.reasoning}`
+                    : "Task completed by backend signal.");
                 break;
             }
             // Small delay between steps to avoid hammering the DOM.
