@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 
+from pydantic import ValidationError
+
 from app.core.config import settings
 from app.schemas.context import StructuredAction, TaskRequest
 from app.services.llm_client import LLMClient
@@ -38,7 +40,25 @@ class ActionPlanner:
                 max_tokens=settings.max_output_tokens,
             )
 
-        action = StructuredAction.model_validate(raw)
+        try:
+            action = StructuredAction.model_validate(raw)
+        except ValidationError as e:
+            logger.error(
+                "Model output failed schema validation for session %s after retry: %s",
+                request.session_id,
+                e,
+            )
+            return StructuredAction(
+                action="ASK_USER",
+                element_id=None,
+                value=(
+                    "The agent produced an invalid response after a retry. "
+                    "Please perform this step manually or re-orient the agent."
+                ),
+                confidence=0.0,
+                reasoning=f"Schema validation failed after retry: {e}",
+            )
+
         self._validate_against_graph(action, request)
         self._apply_confidence_gate(action, request)
         return action
@@ -77,7 +97,7 @@ class ActionPlanner:
         Downgrade to ASK_USER rather than letting a shaky CLICK/TYPE fire.
         """
         threshold = getattr(settings, "min_confidence_threshold", None)
-        if not threshold:
+        if threshold is None:
             return
         if action.action in ("ASK_USER", "DONE", "WAIT"):
             return
@@ -89,9 +109,14 @@ class ActionPlanner:
                 threshold,
                 request.session_id,
             )
+            original_action = action.action
             action.value = (
-                f"Low confidence ({action.confidence:.2f}) on action '{action.action}'. "
+                f"Low confidence ({action.confidence:.2f}) on action '{original_action}'. "
                 "Please confirm or specify manually."
+            )
+            action.reasoning = (
+                f"Confidence {action.confidence:.2f} was below threshold {threshold:.2f} "
+                f"for action '{original_action}' (confidence gate triggered)."
             )
             action.action = "ASK_USER"
             action.element_id = None

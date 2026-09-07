@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import logging
 import time
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
+import httpx
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, File, UploadFile
 from pydantic import ValidationError
-
+from app.core.config import settings
 from app.schemas.context import StructuredAction, TaskRequest
 from app.services.action_planner import ActionPlanner
 from app.services.llm_client import get_vlm_client
@@ -107,3 +108,36 @@ async def agent_websocket(websocket: WebSocket) -> None:
         logger.info("client disconnected")
     finally:
         await client.close()
+
+
+@router.post("/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    if not settings.deepgram_api_key:
+        raise HTTPException(status_code=500, detail="DEEPGRAM_API_KEY is not configured on the backend.")
+    
+    audio_bytes = await file.read()
+    
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(
+                "https://api.deepgram.com/v1/listen?model=nova-3&smart_format=true",
+                headers={
+                    "Authorization": f"Token {settings.deepgram_api_key}",
+                    "Content-Type": "audio/webm",
+                },
+                content=audio_bytes,
+                timeout=10.0,
+            )
+            response.raise_for_status()
+            result = response.json()
+            
+            transcript = (
+                result.get("results", {})
+                .get("channels", [{}])[0]
+                .get("alternatives", [{}])[0]
+                .get("transcript", "")
+            )
+            return {"transcript": transcript}
+        except httpx.HTTPError as e:
+            logger.error("Deepgram API error: %s", e)
+            raise HTTPException(status_code=502, detail="Failed to transcribe audio via Deepgram.")
