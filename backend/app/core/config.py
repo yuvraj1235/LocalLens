@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     port: int = 8000
     log_level: str = "info"
 
+    # --- Speech / Audio Services ---
+    deepgram_api_key: str = ""
+
     # --- LLM / VLM backend (vLLM exposes an OpenAI-compatible endpoint) ---
     # During SIH finale you can point this at a cloud-hosted Qwen3-VL / Qwen3
     # endpoint; locally point it at your own vLLM server.
