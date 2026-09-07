@@ -1,0 +1,236 @@
+{
+  "communities": {
+    "0": [
+      "app_schemas_context_rationale_33",
+      "app_schemas_context_uielement",
+      "app_services_jev_classifier",
+      "app_services_jev_classifier_build_element_summary",
+      "app_services_jev_classifier_build_state",
+      "app_services_jev_classifier_classify_action",
+      "app_services_jev_classifier_extract_type_value",
+      "app_services_jev_classifier_jev_fast_path",
+      "app_services_jev_classifier_rationale_1",
+      "app_services_jev_classifier_rationale_122",
+      "app_services_jev_classifier_rationale_151",
+      "app_services_jev_classifier_rationale_208",
+      "app_services_jev_classifier_rationale_296",
+      "app_services_jev_classifier_rationale_336",
+      "app_services_jev_classifier_rationale_392",
+      "app_services_jev_classifier_rationale_95",
+      "app_services_jev_classifier_select_element",
+      "app_services_jev_classifier_verify_element",
+      "typesafeclient"
+    ],
+    "1": [
+      "any",
+      "app_routers_agent_agent_websocket",
+      "app_routers_agent_rationale_53",
+      "app_services_action_planner_actionplanner_init",
+      "app_services_llm_client",
+      "app_services_llm_client_get_llm_client",
+      "app_services_llm_client_get_vlm_client",
+      "app_services_llm_client_llmclient",
+      "app_services_llm_client_llmclient_chat_json",
+      "app_services_llm_client_llmclient_close",
+      "app_services_llm_client_llmclient_init",
+      "app_services_llm_client_rationale_1",
+      "app_services_llm_client_rationale_44",
+      "app_services_llm_client_rationale_76",
+      "app_tests",
+      "qwen_vl_model",
+      "vllm_service",
+      "websocket"
+    ],
+    "2": [
+      "app_core_config",
+      "app_core_config_rationale_1",
+      "app_core_config_settings",
+      "app_main",
+      "app_main_health",
+      "app_routers_agent",
+      "app_routers_agent_transcribe_audio",
+      "app_services_session_store",
+      "app_services_session_store_sessionstore",
+      "app_services_session_store_sessionstore_append_history",
+      "app_services_session_store_sessionstore_close",
+      "app_services_session_store_sessionstore_get_history",
+      "app_services_session_store_sessionstore_init",
+      "basesettings",
+      "docker_compose",
+      "uploadfile"
+    ],
+    "3": [
+      "app_schemas_context",
+      "app_schemas_context_rationale_1",
+      "app_schemas_context_redactiontag",
+      "app_services_action_planner",
+      "app_services_jev_classifier_is_available",
+      "app_services_jev_classifier_rationale_90",
+      "app_services_prompt_builder",
+      "app_services_prompt_builder_build_user_prompt",
+      "app_services_prompt_builder_rationale_1",
+      "enum",
+      "str"
+    ],
+    "4": [
+      "app_schemas_context_rationale_50",
+      "app_schemas_context_sanitizedcontext",
+      "app_tests_test_action_planner",
+      "app_tests_test_action_planner_fakellmclient",
+      "app_tests_test_action_planner_fakellmclient_chat_json",
+      "app_tests_test_action_planner_fakellmclient_init",
+      "app_tests_test_action_planner_make_request",
+      "app_tests_test_action_planner_rationale_8",
+      "app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
+      "app_tests_test_action_planner_test_valid_action_passes_through"
+    ],
+    "5": [
+      "app_schemas_context_rationale_79",
+      "app_schemas_context_structuredaction",
+      "app_services_action_planner_actionplanner",
+      "app_services_action_planner_actionplanner_apply_confidence_gate",
+      "app_services_action_planner_actionplanner_plan_next_action",
+      "app_services_action_planner_actionplanner_validate_against_graph",
+      "app_services_action_planner_rationale_113",
+      "app_services_action_planner_rationale_141"
+    ],
+    "6": [
+      "app_routers_agent_plan_action_http",
+      "app_routers_agent_rationale_21",
+      "app_schemas_context_boundingbox",
+      "app_schemas_context_rationale_65",
+      "app_schemas_context_taskrequest",
+      "basemodel"
+    ],
+    "7": [
+      "readme"
+    ],
+    "8": [
+      "requirements"
+    ]
+  },
+  "cohesion": {
+    "0": 0.1871345029239766,
+    "1": 0.12418300653594772,
+    "2": 0.15,
+    "3": 0.23636363636363636,
+    "4": 0.3333333333333333,
+    "5": 0.42857142857142855,
+    "6": 0.3333333333333333,
+    "7": 1.0,
+    "8": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_schemas_context_taskrequest",
+      "label": "TaskRequest",
+      "degree": 18
+    },
+    {
+      "id": "app_services_action_planner_actionplanner",
+      "label": "ActionPlanner",
+      "degree": 15
+    },
+    {
+      "id": "app_schemas_context_structuredaction",
+      "label": "StructuredAction",
+      "degree": 14
+    },
+    {
+      "id": "app_services_jev_classifier_jev_fast_path",
+      "label": "jev_fast_path()",
+      "degree": 12
+    },
+    {
+      "id": "app_schemas_context_uielement",
+      "label": "UIElement",
+      "degree": 11
+    },
+    {
+      "id": "app_services_llm_client_llmclient",
+      "label": "LLMClient",
+      "degree": 10
+    },
+    {
+      "id": "app_tests_test_action_planner_fakellmclient",
+      "label": "FakeLLMClient",
+      "degree": 10
+    },
+    {
+      "id": "app_routers_agent_plan_action_http",
+      "label": "plan_action_http()",
+      "degree": 6
+    },
+    {
+      "id": "app_schemas_context_sanitizedcontext",
+      "label": "SanitizedContext",
+      "degree": 6
+    },
+    {
+      "id": "app_services_session_store_sessionstore",
+      "label": "SessionStore",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "FakeLLMClient",
+      "target": "UIElement",
+      "source_files": [
+        "app/tests/test_action_planner.py",
+        "app/schemas/context.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "ActionPlanner",
+      "target": "TaskRequest",
+      "source_files": [
+        "app/services/action_planner.py",
+        "app/schemas/context.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "FakeLLMClient",
+      "target": "TaskRequest",
+      "source_files": [
+        "app/tests/test_action_planner.py",
+        "app/schemas/context.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "LLMClient",
+      "target": "StructuredAction",
+      "source_files": [
+        "app/services/llm_client.py",
+        "app/schemas/context.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "ActionPlanner",
+      "target": "LLMClient",
+      "source_files": [
+        "app/services/action_planner.py",
+        "app/services/llm_client.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 1866,
+    "output": 953
+  }
+}

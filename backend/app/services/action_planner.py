@@ -8,6 +8,13 @@ from app.core.config import settings
 from app.schemas.context import StructuredAction, TaskRequest
 from app.services.llm_client import LLMClient
 from app.services.prompt_builder import SYSTEM_PROMPT, build_user_prompt
+from app.services.jev_classifier import (
+    jev_fast_path,
+    is_available as jev_is_available,
+    JEV_ACTION_CONFIDENCE_GATE,
+    JEV_ELEMENT_SCORE_GATE,
+    JEV_ELEMENT_VERIFY_GATE,
+)
 
 logger = logging.getLogger("agent")
 
@@ -15,8 +22,47 @@ logger = logging.getLogger("agent")
 class ActionPlanner:
     def __init__(self, vlm_client: LLMClient):
         self._client = vlm_client
+        _has_key = bool(settings.typesafe_api_key) or bool(settings.vlm_api_key)
+        _jev_on = settings.jev_enabled and _has_key and jev_is_available()
+        logger.info(
+            "ActionPlanner initialised — Jev fast path: %s",
+            "ENABLED" if _jev_on else "DISABLED (set TYPESAFE_API_KEY or VLM_API_KEY to enable)",
+        )
 
     async def plan_next_action(self, request: TaskRequest) -> StructuredAction:
+        # ----------------------------------------------------------------
+        # Fast path — try Jev first (70–500 ms, no VLM call)
+        # ----------------------------------------------------------------
+        _has_key = bool(settings.typesafe_api_key) or bool(settings.vlm_api_key)
+        if settings.jev_enabled and _has_key and jev_is_available():
+            try:
+                jev_action = await jev_fast_path(
+                    request=request,
+                    api_key=settings.typesafe_api_key or settings.vlm_api_key,
+                )
+                if jev_action is not None:
+                    logger.info(
+                        "Jev fast path hit for session %s → %s (confidence=%.3f)",
+                        request.session_id, jev_action.action, jev_action.confidence,
+                    )
+                    # Still run the existing guards on Jev's output for safety
+                    self._validate_against_graph(jev_action, request)
+                    self._apply_confidence_gate(jev_action, request)
+                    return jev_action
+                else:
+                    logger.info(
+                        "Jev fast path miss for session %s — falling back to VLM",
+                        request.session_id,
+                    )
+            except Exception as exc:  # noqa: BLE001
+                logger.warning(
+                    "Jev fast path raised an unexpected error for session %s: %s — falling back to VLM",
+                    request.session_id, exc,
+                )
+
+        # ----------------------------------------------------------------
+        # Slow path — full VLM (existing behaviour, unchanged)
+        # ----------------------------------------------------------------
         user_prompt = build_user_prompt(request)
 
         try:

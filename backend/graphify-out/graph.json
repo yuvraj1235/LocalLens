@@ -1,0 +1,2773 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "action_planning_flow",
+        "label": "Action Planning Flow",
+        "nodes": [
+          "app_services_action_planner",
+          "app_services_prompt_builder",
+          "app_services_llm_client",
+          "app_schemas_context"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "README.md"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "config.py",
+      "file_type": "code",
+      "source_file": "app/core/config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_core_config",
+      "community": 2,
+      "norm_label": "config.py"
+    },
+    {
+      "label": "Settings",
+      "file_type": "code",
+      "source_file": "app/core/config.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "app_core_config_settings",
+      "community": 2,
+      "norm_label": "settings"
+    },
+    {
+      "label": "BaseSettings",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "basesettings",
+      "community": 2,
+      "norm_label": "basesettings"
+    },
+    {
+      "label": "Central config, loaded from environment variables / .env. single source of truth",
+      "file_type": "rationale",
+      "source_file": "app/core/config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_core_config_rationale_1",
+      "community": 2,
+      "norm_label": "central config, loaded from environment variables / .env. single source of truth"
+    },
+    {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "app/main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_main",
+      "community": 2,
+      "norm_label": "main.py"
+    },
+    {
+      "label": "health()",
+      "file_type": "code",
+      "source_file": "app/main.py",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "app_main_health",
+      "community": 2,
+      "norm_label": "health()"
+    },
+    {
+      "label": "agent.py",
+      "file_type": "code",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_routers_agent",
+      "community": 2,
+      "norm_label": "agent.py"
+    },
+    {
+      "label": "plan_action_http()",
+      "file_type": "code",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "app_routers_agent_plan_action_http",
+      "community": 6,
+      "norm_label": "plan_action_http()"
+    },
+    {
+      "label": "agent_websocket()",
+      "file_type": "code",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "app_routers_agent_agent_websocket",
+      "community": 1,
+      "norm_label": "agent_websocket()"
+    },
+    {
+      "label": "WebSocket",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "websocket",
+      "community": 1,
+      "norm_label": "websocket"
+    },
+    {
+      "label": "transcribe_audio()",
+      "file_type": "code",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "app_routers_agent_transcribe_audio",
+      "community": 2,
+      "norm_label": "transcribe_audio()"
+    },
+    {
+      "label": "UploadFile",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "uploadfile",
+      "community": 2,
+      "norm_label": "uploadfile"
+    },
+    {
+      "label": "REST fallback \u2014 handy for Swagger/curl testing without a WS client.",
+      "file_type": "rationale",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "app_routers_agent_rationale_21",
+      "community": 6,
+      "norm_label": "rest fallback \u2014 handy for swagger/curl testing without a ws client."
+    },
+    {
+      "label": "Realtime loop for the browser extension.",
+      "file_type": "rationale",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "app_routers_agent_rationale_53",
+      "community": 1,
+      "norm_label": "realtime loop for the browser extension."
+    },
+    {
+      "label": "context.py",
+      "file_type": "code",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_schemas_context",
+      "community": 3,
+      "norm_label": "context.py"
+    },
+    {
+      "label": "BoundingBox",
+      "file_type": "code",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "app_schemas_context_boundingbox",
+      "community": 6,
+      "norm_label": "boundingbox"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "basemodel",
+      "community": 6,
+      "norm_label": "basemodel"
+    },
+    {
+      "label": "RedactionTag",
+      "file_type": "code",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "app_schemas_context_redactiontag",
+      "community": 3,
+      "norm_label": "redactiontag"
+    },
+    {
+      "label": "str",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "str",
+      "community": 3,
+      "norm_label": "str"
+    },
+    {
+      "label": "Enum",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "enum",
+      "community": 3,
+      "norm_label": "enum"
+    },
+    {
+      "label": "UIElement",
+      "file_type": "code",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "app_schemas_context_uielement",
+      "community": 0,
+      "norm_label": "uielement"
+    },
+    {
+      "label": "SanitizedContext",
+      "file_type": "code",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "app_schemas_context_sanitizedcontext",
+      "community": 4,
+      "norm_label": "sanitizedcontext"
+    },
+    {
+      "label": "TaskRequest",
+      "file_type": "code",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L64",
+      "_origin": "ast",
+      "id": "app_schemas_context_taskrequest",
+      "community": 6,
+      "norm_label": "taskrequest"
+    },
+    {
+      "label": "StructuredAction",
+      "file_type": "code",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "app_schemas_context_structuredaction",
+      "community": 5,
+      "norm_label": "structuredaction"
+    },
+    {
+      "label": "These schemas are the CONTRACT between Ankit/Rohit's extension and this server.",
+      "file_type": "rationale",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_schemas_context_rationale_1",
+      "community": 3,
+      "norm_label": "these schemas are the contract between ankit/rohit's extension and this server."
+    },
+    {
+      "label": "One node from the local UI Graph (DOM + accessibility tree + CV fusion).",
+      "file_type": "rationale",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "app_schemas_context_rationale_33",
+      "community": 0,
+      "norm_label": "one node from the local ui graph (dom + accessibility tree + cv fusion)."
+    },
+    {
+      "label": "The ONLY payload allowed to leave the device, per the architecture doc.",
+      "file_type": "rationale",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "app_schemas_context_rationale_50",
+      "community": 4,
+      "norm_label": "the only payload allowed to leave the device, per the architecture doc."
+    },
+    {
+      "label": "What the user asked the agent to do, plus the current sanitized context.",
+      "file_type": "rationale",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "app_schemas_context_rationale_65",
+      "community": 6,
+      "norm_label": "what the user asked the agent to do, plus the current sanitized context."
+    },
+    {
+      "label": "What the server hands back for the Action Validator/Executor to run.",
+      "file_type": "rationale",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "app_schemas_context_rationale_79",
+      "community": 5,
+      "norm_label": "what the server hands back for the action validator/executor to run."
+    },
+    {
+      "label": "action_planner.py",
+      "file_type": "code",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_action_planner",
+      "community": 3,
+      "norm_label": "action_planner.py"
+    },
+    {
+      "label": "ActionPlanner",
+      "file_type": "code",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "app_services_action_planner_actionplanner",
+      "community": 5,
+      "norm_label": "actionplanner"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "app_services_action_planner_actionplanner_init",
+      "community": 1,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".plan_next_action()",
+      "file_type": "code",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "app_services_action_planner_actionplanner_plan_next_action",
+      "community": 5,
+      "norm_label": ".plan_next_action()"
+    },
+    {
+      "label": "._validate_against_graph()",
+      "file_type": "code",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L112",
+      "_origin": "ast",
+      "id": "app_services_action_planner_actionplanner_validate_against_graph",
+      "community": 5,
+      "norm_label": "._validate_against_graph()"
+    },
+    {
+      "label": "._apply_confidence_gate()",
+      "file_type": "code",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L140",
+      "_origin": "ast",
+      "id": "app_services_action_planner_actionplanner_apply_confidence_gate",
+      "community": 5,
+      "norm_label": "._apply_confidence_gate()"
+    },
+    {
+      "label": "Never trust the model's element_id blindly. If it references an id         that",
+      "file_type": "rationale",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "app_services_action_planner_rationale_113",
+      "community": 5,
+      "norm_label": "never trust the model's element_id blindly. if it references an id         that"
+    },
+    {
+      "label": "A valid but low-confidence action still shouldn't execute unattended.         Do",
+      "file_type": "rationale",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L141",
+      "_origin": "ast",
+      "id": "app_services_action_planner_rationale_141",
+      "community": 5,
+      "norm_label": "a valid but low-confidence action still shouldn't execute unattended.         do"
+    },
+    {
+      "label": "jev_classifier.py",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier",
+      "community": 0,
+      "norm_label": "jev_classifier.py"
+    },
+    {
+      "label": "is_available()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_is_available",
+      "community": 3,
+      "norm_label": "is_available()"
+    },
+    {
+      "label": "_build_element_summary()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_build_element_summary",
+      "community": 0,
+      "norm_label": "_build_element_summary()"
+    },
+    {
+      "label": "_build_state()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_build_state",
+      "community": 0,
+      "norm_label": "_build_state()"
+    },
+    {
+      "label": "_classify_action()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L150",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_classify_action",
+      "community": 0,
+      "norm_label": "_classify_action()"
+    },
+    {
+      "label": "TypeSafeClient",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "typesafeclient",
+      "community": 0,
+      "norm_label": "typesafeclient"
+    },
+    {
+      "label": "_select_element()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L202",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_select_element",
+      "community": 0,
+      "norm_label": "_select_element()"
+    },
+    {
+      "label": "_verify_element()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L290",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_verify_element",
+      "community": 0,
+      "norm_label": "_verify_element()"
+    },
+    {
+      "label": "_extract_type_value()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L331",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_extract_type_value",
+      "community": 0,
+      "norm_label": "_extract_type_value()"
+    },
+    {
+      "label": "jev_fast_path()",
+      "file_type": "code",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L388",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_jev_fast_path",
+      "community": 0,
+      "norm_label": "jev_fast_path()"
+    },
+    {
+      "label": "backend/app/services/jev_classifier.py  Jev Classification Layer (TypeSafe AI \"S",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_1",
+      "community": 0,
+      "norm_label": "backend/app/services/jev_classifier.py  jev classification layer (typesafe ai \"s"
+    },
+    {
+      "label": "True when the typesafe-sdk package is installed and importable.",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L90",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_90",
+      "community": 3,
+      "norm_label": "true when the typesafe-sdk package is installed and importable."
+    },
+    {
+      "label": "Serialise the UI graph into a compact plaintext block that Jev can read.     We",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_95",
+      "community": 0,
+      "norm_label": "serialise the ui graph into a compact plaintext block that jev can read.     we"
+    },
+    {
+      "label": "Compose the Jev 'state' \u2014 the input context it evaluates.     Jev works best wit",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L122",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_122",
+      "community": 0,
+      "norm_label": "compose the jev 'state' \u2014 the input context it evaluates.     jev works best wit"
+    },
+    {
+      "label": "Ask Jev: which ActionType does this context require?      Returns (action_type,",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L151",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_151",
+      "community": 0,
+      "norm_label": "ask jev: which actiontype does this context require?      returns (action_type,"
+    },
+    {
+      "label": "Ask Jev: among the candidate elements, which one is the best target for     the",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L208",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_208",
+      "community": 0,
+      "norm_label": "ask jev: among the candidate elements, which one is the best target for     the"
+    },
+    {
+      "label": "Final verification gate: ask Jev to confirm the winner before we commit.     Ret",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L296",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_296",
+      "community": 0,
+      "norm_label": "final verification gate: ask jev to confirm the winner before we commit.     ret"
+    },
+    {
+      "label": "For TYPE actions: ask Jev whether the value to type is deterministic     from co",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L336",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_336",
+      "community": 0,
+      "norm_label": "for type actions: ask jev whether the value to type is deterministic     from co"
+    },
+    {
+      "label": "Attempt to resolve the next action purely via Jev (no VLM call).      Returns a",
+      "file_type": "rationale",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L392",
+      "_origin": "ast",
+      "id": "app_services_jev_classifier_rationale_392",
+      "community": 0,
+      "norm_label": "attempt to resolve the next action purely via jev (no vlm call).      returns a"
+    },
+    {
+      "label": "llm_client.py",
+      "file_type": "code",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_llm_client",
+      "community": 1,
+      "norm_label": "llm_client.py"
+    },
+    {
+      "label": "LLMClient",
+      "file_type": "code",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "app_services_llm_client_llmclient",
+      "community": 1,
+      "norm_label": "llmclient"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "app_services_llm_client_llmclient_init",
+      "community": 1,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "app_services_llm_client_llmclient_close",
+      "community": 1,
+      "norm_label": ".close()"
+    },
+    {
+      "label": ".chat_json()",
+      "file_type": "code",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "app_services_llm_client_llmclient_chat_json",
+      "community": 1,
+      "norm_label": ".chat_json()"
+    },
+    {
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "any",
+      "community": 1,
+      "norm_label": "any"
+    },
+    {
+      "label": "get_vlm_client()",
+      "file_type": "code",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L145",
+      "_origin": "ast",
+      "id": "app_services_llm_client_get_vlm_client",
+      "community": 1,
+      "norm_label": "get_vlm_client()"
+    },
+    {
+      "label": "get_llm_client()",
+      "file_type": "code",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L154",
+      "_origin": "ast",
+      "id": "app_services_llm_client_get_llm_client",
+      "community": 1,
+      "norm_label": "get_llm_client()"
+    },
+    {
+      "label": "Thin async client around an OpenAI-compatible chat completions endpoint. vLLM se",
+      "file_type": "rationale",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_llm_client_rationale_1",
+      "community": 1,
+      "norm_label": "thin async client around an openai-compatible chat completions endpoint. vllm se"
+    },
+    {
+      "label": "Calls chat/completions and parses the response as JSON.         Raises ValueErro",
+      "file_type": "rationale",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "app_services_llm_client_rationale_44",
+      "community": 1,
+      "norm_label": "calls chat/completions and parses the response as json.         raises valueerro"
+    },
+    {
+      "label": "# NOTE: Do NOT send response_format: json_object to OpenRouter/Qwen \u2014",
+      "file_type": "rationale",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "app_services_llm_client_rationale_76",
+      "community": 1,
+      "norm_label": "# note: do not send response_format: json_object to openrouter/qwen \u2014"
+    },
+    {
+      "label": "prompt_builder.py",
+      "file_type": "code",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_prompt_builder",
+      "community": 3,
+      "norm_label": "prompt_builder.py"
+    },
+    {
+      "label": "build_user_prompt()",
+      "file_type": "code",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "id": "app_services_prompt_builder_build_user_prompt",
+      "community": 3,
+      "norm_label": "build_user_prompt()"
+    },
+    {
+      "label": "Prompt construction for the action-planning call. Kept separate from llm_client",
+      "file_type": "rationale",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_prompt_builder_rationale_1",
+      "community": 3,
+      "norm_label": "prompt construction for the action-planning call. kept separate from llm_client"
+    },
+    {
+      "label": "session_store.py",
+      "file_type": "code",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_session_store",
+      "community": 2,
+      "norm_label": "session_store.py"
+    },
+    {
+      "label": "SessionStore",
+      "file_type": "code",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "app_services_session_store_sessionstore",
+      "community": 2,
+      "norm_label": "sessionstore"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "app_services_session_store_sessionstore_init",
+      "community": 2,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "app_services_session_store_sessionstore_close",
+      "community": 2,
+      "norm_label": ".close()"
+    },
+    {
+      "label": ".get_history()",
+      "file_type": "code",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "app_services_session_store_sessionstore_get_history",
+      "community": 2,
+      "norm_label": ".get_history()"
+    },
+    {
+      "label": ".append_history()",
+      "file_type": "code",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "app_services_session_store_sessionstore_append_history",
+      "community": 2,
+      "norm_label": ".append_history()"
+    },
+    {
+      "label": "test_action_planner.py",
+      "file_type": "code",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner",
+      "community": 4,
+      "norm_label": "test_action_planner.py"
+    },
+    {
+      "label": "FakeLLMClient",
+      "file_type": "code",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner_fakellmclient",
+      "community": 4,
+      "norm_label": "fakellmclient"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner_fakellmclient_init",
+      "community": 4,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".chat_json()",
+      "file_type": "code",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner_fakellmclient_chat_json",
+      "community": 4,
+      "norm_label": ".chat_json()"
+    },
+    {
+      "label": "make_request()",
+      "file_type": "code",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner_make_request",
+      "community": 4,
+      "norm_label": "make_request()"
+    },
+    {
+      "label": "test_valid_action_passes_through()",
+      "file_type": "code",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner_test_valid_action_passes_through",
+      "community": 4,
+      "norm_label": "test_valid_action_passes_through()"
+    },
+    {
+      "label": "test_hallucinated_element_id_is_downgraded()",
+      "file_type": "code",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
+      "community": 4,
+      "norm_label": "test_hallucinated_element_id_is_downgraded()"
+    },
+    {
+      "label": "Stands in for LLMClient so tests don't need a live vLLM server.",
+      "file_type": "rationale",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "app_tests_test_action_planner_rationale_8",
+      "community": 4,
+      "norm_label": "stands in for llmclient so tests don't need a live vllm server."
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "id": "readme",
+      "community": 7,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "docker-compose.yml",
+      "file_type": "code",
+      "source_file": "docker-compose.yml",
+      "id": "docker_compose",
+      "community": 2,
+      "norm_label": "docker-compose.yml"
+    },
+    {
+      "label": "requirements.txt",
+      "file_type": "code",
+      "source_file": "requirements.txt",
+      "id": "requirements",
+      "community": 8,
+      "norm_label": "requirements.txt"
+    },
+    {
+      "label": "app.tests",
+      "file_type": "code",
+      "source_file": "app/tests/",
+      "id": "app_tests",
+      "community": 1,
+      "norm_label": "app.tests"
+    },
+    {
+      "label": "vLLM Server",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "id": "vllm_service",
+      "community": 1,
+      "norm_label": "vllm server"
+    },
+    {
+      "label": "Qwen/Qwen3-VL-7B-Instruct",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "id": "qwen_vl_model",
+      "community": 1,
+      "norm_label": "qwen/qwen3-vl-7b-instruct"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/core/config.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "app_core_config",
+      "target": "app_core_config_settings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/core/config.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "app_core_config_rationale_1",
+      "target": "app_core_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "import",
+      "confidence": "INFERRED",
+      "source_file": "README.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 0.8,
+      "source": "app_main",
+      "target": "app_core_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_core_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_core_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "app_services_llm_client",
+      "target": "app_core_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "app_services_session_store",
+      "target": "app_core_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/core/config.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "app_core_config_settings",
+      "target": "basesettings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/main.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "app_main",
+      "target": "app_main_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main",
+      "target": "app_routers_agent"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "docker-compose.yml",
+      "source": "docker_compose",
+      "target": "app_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_routers_agent_agent_websocket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_routers_agent_plan_action_http",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_routers_agent_transcribe_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_schemas_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "source_file": "app/routers/agent.py",
+      "context": "import",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_services_action_planner"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_services_action_planner_actionplanner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_services_llm_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_services_llm_client_get_vlm_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_services_session_store",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "app_routers_agent",
+      "target": "app_services_session_store_sessionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "app_routers_agent_plan_action_http",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "app_routers_agent_plan_action_http",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/routers/agent.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "app_routers_agent_plan_action_http",
+      "target": "app_services_action_planner_actionplanner"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/routers/agent.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "app_routers_agent_plan_action_http",
+      "target": "app_services_llm_client_get_vlm_client"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "app_routers_agent_rationale_21",
+      "target": "app_routers_agent_plan_action_http",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/routers/agent.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "app_routers_agent_agent_websocket",
+      "target": "app_services_action_planner_actionplanner"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/routers/agent.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "app_routers_agent_agent_websocket",
+      "target": "app_services_llm_client_get_vlm_client"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "app_routers_agent_agent_websocket",
+      "target": "websocket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "app_routers_agent_rationale_53",
+      "target": "app_routers_agent_agent_websocket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routers/agent.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "app_routers_agent_transcribe_audio",
+      "target": "uploadfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "app_schemas_context",
+      "target": "app_schemas_context_boundingbox",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "app_schemas_context",
+      "target": "app_schemas_context_redactiontag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "app_schemas_context",
+      "target": "app_schemas_context_sanitizedcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "app_schemas_context",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "app_schemas_context",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "app_schemas_context",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_schemas_context",
+      "target": "enum",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "app_schemas_context_rationale_1",
+      "target": "app_schemas_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_schemas_context"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_schemas_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "app_services_llm_client",
+      "target": "app_schemas_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_services_prompt_builder",
+      "target": "app_schemas_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_schemas_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "app_schemas_context_boundingbox",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "app_schemas_context_sanitizedcontext",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "app_schemas_context_structuredaction",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "app_schemas_context_taskrequest",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "app_schemas_context_uielement",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "app_schemas_context_redactiontag",
+      "target": "enum",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "app_schemas_context_redactiontag",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "app_schemas_context_rationale_33",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_build_element_summary",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L331",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_extract_type_value",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_select_element",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L290",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_verify_element",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L3",
+      "weight": 0.8,
+      "source": "app_tests_test_action_planner_fakellmclient",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_make_request",
+      "target": "app_schemas_context_uielement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "app_schemas_context_rationale_50",
+      "target": "app_schemas_context_sanitizedcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_schemas_context_sanitizedcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L3",
+      "weight": 0.8,
+      "source": "app_tests_test_action_planner_fakellmclient",
+      "target": "app_schemas_context_sanitizedcontext",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_make_request",
+      "target": "app_schemas_context_sanitizedcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "app_schemas_context_rationale_65",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L8",
+      "weight": 0.8,
+      "source": "app_services_action_planner_actionplanner",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_apply_confidence_gate",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_plan_next_action",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_validate_against_graph",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_build_state",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_services_prompt_builder",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "app_services_prompt_builder_build_user_prompt",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L3",
+      "weight": 0.8,
+      "source": "app_tests_test_action_planner_fakellmclient",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_make_request",
+      "target": "app_schemas_context_taskrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/schemas/context.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "app_schemas_context_rationale_79",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L8",
+      "weight": 0.8,
+      "source": "app_services_action_planner_actionplanner",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_apply_confidence_gate",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_plan_next_action",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_validate_against_graph",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "app_services_llm_client",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L18",
+      "weight": 0.8,
+      "source": "app_services_llm_client_llmclient",
+      "target": "app_schemas_context_structuredaction",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_action_planner_actionplanner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_jev_classifier",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_jev_classifier_is_available",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_jev_classifier_jev_fast_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/services/action_planner.py",
+      "context": "import",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_llm_client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_llm_client_llmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "source_file": "app/services/action_planner.py",
+      "context": "import",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_prompt_builder"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_services_action_planner",
+      "target": "app_services_prompt_builder_build_user_prompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_services_action_planner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner",
+      "target": "app_services_action_planner_actionplanner_apply_confidence_gate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner",
+      "target": "app_services_action_planner_actionplanner_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner",
+      "target": "app_services_action_planner_actionplanner_plan_next_action",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner",
+      "target": "app_services_action_planner_actionplanner_validate_against_graph",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "source": "app_services_action_planner_actionplanner",
+      "target": "app_services_llm_client_llmclient",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_services_action_planner_actionplanner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "source": "app_tests_test_action_planner_fakellmclient",
+      "target": "app_services_action_planner_actionplanner",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
+      "target": "app_services_action_planner_actionplanner"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_test_valid_action_passes_through",
+      "target": "app_services_action_planner_actionplanner"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_init",
+      "target": "app_services_llm_client_llmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_plan_next_action",
+      "target": "app_services_action_planner_actionplanner_apply_confidence_gate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_plan_next_action",
+      "target": "app_services_action_planner_actionplanner_validate_against_graph",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_plan_next_action",
+      "target": "app_services_jev_classifier_jev_fast_path"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "app_services_action_planner_actionplanner_plan_next_action",
+      "target": "app_services_prompt_builder_build_user_prompt"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "app_services_action_planner_rationale_113",
+      "target": "app_services_action_planner_actionplanner_validate_against_graph",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/action_planner.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "app_services_action_planner_rationale_141",
+      "target": "app_services_action_planner_actionplanner_apply_confidence_gate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_build_element_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_build_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_classify_action",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L331",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_extract_type_value",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_is_available",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_jev_fast_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_select_element",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L290",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier",
+      "target": "app_services_jev_classifier_verify_element",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_1",
+      "target": "app_services_jev_classifier",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_90",
+      "target": "app_services_jev_classifier_is_available",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_build_state",
+      "target": "app_services_jev_classifier_build_element_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_95",
+      "target": "app_services_jev_classifier_build_element_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L424",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "app_services_jev_classifier_build_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_122",
+      "target": "app_services_jev_classifier_build_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_classify_action",
+      "target": "typesafeclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L429",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "app_services_jev_classifier_classify_action",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_151",
+      "target": "app_services_jev_classifier_classify_action",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L331",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_extract_type_value",
+      "target": "typesafeclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L419",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "typesafeclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_select_element",
+      "target": "typesafeclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L290",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_verify_element",
+      "target": "typesafeclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L453",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "app_services_jev_classifier_select_element",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_208",
+      "target": "app_services_jev_classifier_select_element",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L475",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "app_services_jev_classifier_verify_element",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_296",
+      "target": "app_services_jev_classifier_verify_element",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L487",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_jev_fast_path",
+      "target": "app_services_jev_classifier_extract_type_value",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L336",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_336",
+      "target": "app_services_jev_classifier_extract_type_value",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/jev_classifier.py",
+      "source_location": "L392",
+      "weight": 1.0,
+      "source": "app_services_jev_classifier_rationale_392",
+      "target": "app_services_jev_classifier_jev_fast_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "app_services_llm_client",
+      "target": "app_services_llm_client_get_llm_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "app_services_llm_client",
+      "target": "app_services_llm_client_get_vlm_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "app_services_llm_client",
+      "target": "app_services_llm_client_llmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source": "app_services_llm_client",
+      "target": "vllm_service"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "app_services_llm_client_rationale_1",
+      "target": "app_services_llm_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "app_services_llm_client_rationale_76",
+      "target": "app_services_llm_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source": "app_tests",
+      "target": "app_services_llm_client"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "app_services_llm_client_get_llm_client",
+      "target": "app_services_llm_client_llmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "app_services_llm_client_get_vlm_client",
+      "target": "app_services_llm_client_llmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "app_services_llm_client_llmclient",
+      "target": "app_services_llm_client_llmclient_chat_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "app_services_llm_client_llmclient",
+      "target": "app_services_llm_client_llmclient_close",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "app_services_llm_client_llmclient",
+      "target": "app_services_llm_client_llmclient_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "app_services_llm_client_llmclient_chat_json",
+      "target": "any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/llm_client.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "app_services_llm_client_rationale_44",
+      "target": "app_services_llm_client_llmclient_chat_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "app_services_prompt_builder",
+      "target": "app_services_prompt_builder_build_user_prompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/prompt_builder.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "app_services_prompt_builder_rationale_1",
+      "target": "app_services_prompt_builder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_services_session_store",
+      "target": "app_services_session_store_sessionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "app_services_session_store_sessionstore",
+      "target": "app_services_session_store_sessionstore_append_history",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "app_services_session_store_sessionstore",
+      "target": "app_services_session_store_sessionstore_close",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "app_services_session_store_sessionstore",
+      "target": "app_services_session_store_sessionstore_get_history",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/services/session_store.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "app_services_session_store_sessionstore",
+      "target": "app_services_session_store_sessionstore_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_tests_test_action_planner_fakellmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_tests_test_action_planner_make_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner",
+      "target": "app_tests_test_action_planner_test_valid_action_passes_through",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_fakellmclient",
+      "target": "app_tests_test_action_planner_fakellmclient_chat_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_fakellmclient",
+      "target": "app_tests_test_action_planner_fakellmclient_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_rationale_8",
+      "target": "app_tests_test_action_planner_fakellmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
+      "target": "app_tests_test_action_planner_fakellmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_test_valid_action_passes_through",
+      "target": "app_tests_test_action_planner_fakellmclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
+      "target": "app_tests_test_action_planner_make_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/tests/test_action_planner.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "app_tests_test_action_planner_test_valid_action_passes_through",
+      "target": "app_tests_test_action_planner_make_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source": "vllm_service",
+      "target": "qwen_vl_model"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "action_planning_flow",
+      "label": "Action Planning Flow",
+      "nodes": [
+        "app_services_action_planner",
+        "app_services_prompt_builder",
+        "app_services_llm_client",
+        "app_schemas_context"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md"
+    }
+  ],
+  "built_at_commit": "99b962ffab57878bf76fe9ef89167063c08adf26"
+}

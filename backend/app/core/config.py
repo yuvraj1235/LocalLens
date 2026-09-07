@@ -40,5 +40,28 @@ class Settings(BaseSettings):
     # in the UI graph it was just given.
     strict_element_validation: bool = True
 
+    # --- Jev (TypeSafe AI) fast-path classification ---
+    # Set TYPESAFE_API_KEY in .env to enable the Jev fast path.
+    # Leave empty ("") to disable Jev and always use the VLM.
+    typesafe_api_key: str = ""
+
+    # Minimum Jev Choice confidence required to trust the classified action.
+    # Below this threshold the request falls through to the VLM.
+    jev_action_confidence_gate: float = 0.70
+
+    # Minimum Jev Noul score for the winning element to be accepted.
+    jev_element_score_gate: float = 0.65
+
+    # Secondary verification probability gate.
+    jev_element_verify_gate: float = 0.60
+
+    # When True, the Jev fast path is attempted before the VLM for every
+    # request.  Set to False to disable Jev globally without removing the key.
+    jev_enabled: bool = True
+
+    # Optional: minimum_confidence_threshold already used by ActionPlanner for
+    # downgrading low-confidence VLM actions to ASK_USER.
+    min_confidence_threshold: float | None = None
+
 
 settings = Settings()

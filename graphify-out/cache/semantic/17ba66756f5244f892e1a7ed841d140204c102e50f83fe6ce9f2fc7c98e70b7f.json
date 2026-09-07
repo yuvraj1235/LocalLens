@@ -1,0 +1,1 @@
+{"nodes": [{"id": "backend_requirements", "label": "Backend Requirements", "file_type": "document", "source_file": "backend/requirements.txt"}], "edges": [{"source": "backend_requirements", "target": "readme_action_planner_py", "relation": "references", "confidence": "INFERRED", "confidence_score": 0.7, "source_file": "backend/requirements.txt"}], "hyperedges": []}

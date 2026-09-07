@@ -8,3 +8,7 @@ redis>=5.0
 pytest>=8.2
 pytest-asyncio>=0.23
 python-multipart>=0.0.9
+# TypeSafe AI Jev classification SDK (fast-path decision layer)
+# Optional — the backend degrades gracefully without it, but it is strongly
+# recommended for production.  Install with:  pip install typesafe-sdk
+typesafe-sdk>=0.7.0
