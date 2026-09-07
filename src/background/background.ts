@@ -22,8 +22,34 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  // Only relay messages that didn't originate from a content script
-  if (sender.tab) return; // came from content script — ignore
+  // ---------------------------------------------------------------------------
+  // CAPTURE_SCREENSHOT — callable from content scripts.
+  // Only the service worker can call captureVisibleTab; content scripts delegate
+  // here so they don't need the "tabs" host permission themselves.
+  // ---------------------------------------------------------------------------
+  if (msg.type === "CAPTURE_SCREENSHOT") {
+    // Use the sender tab's windowId when available (content script origin),
+    // otherwise fall back to the current window.
+    const windowId = sender.tab?.windowId ?? chrome.windows.WINDOW_ID_CURRENT;
+    chrome.tabs.captureVisibleTab(
+      windowId,
+      { format: "jpeg", quality: 70 },  // JPEG 70% — good VLM input, ~60 KB
+      (dataUrl) => {
+        if (chrome.runtime.lastError) {
+          console.warn("[LocalLens BG] captureVisibleTab failed:", chrome.runtime.lastError.message);
+          sendResponse({ error: chrome.runtime.lastError.message, screenshot_b64: null });
+        } else {
+          // Strip the data-URL prefix — send only the raw base64 payload.
+          const b64 = dataUrl?.replace(/^data:image\/jpeg;base64,/, "") ?? null;
+          sendResponse({ screenshot_b64: b64 });
+        }
+      }
+    );
+    return true; // async — keep channel open
+  }
+
+  // Only relay non-screenshot messages that didn't originate from a content script
+  if (sender.tab) return;
 
   if (msg.type === "GET_CONTEXT" || msg.type === "EXECUTE_ACTION") {
     // Forward to the active tab

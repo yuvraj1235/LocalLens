@@ -192,16 +192,56 @@ async function buildUIGraph() {
     return elements;
 }
 // ---------------------------------------------------------------------------
+// Screenshot capture — delegated to the background service worker because
+// only service workers can call chrome.tabs.captureVisibleTab.
+// ---------------------------------------------------------------------------
+/**
+ * Asks the background to capture the visible tab as a JPEG and returns the
+ * raw base64 string (without the data-URL prefix), or null on failure.
+ * Failures are non-fatal — the agent continues with UIGraph only.
+ */
+async function captureScreenshot() {
+    return new Promise((resolve) => {
+        try {
+            chrome.runtime.sendMessage({ type: "CAPTURE_SCREENSHOT" }, (response) => {
+                if (chrome.runtime.lastError) {
+                    // Expected on restricted pages (chrome://, file://) — not an error.
+                    console.warn("[LocalLens] Screenshot unavailable:", chrome.runtime.lastError.message);
+                    resolve(null);
+                    return;
+                }
+                if (response?.error) {
+                    console.warn("[LocalLens] Screenshot capture failed:", response.error);
+                    resolve(null);
+                    return;
+                }
+                resolve(response?.screenshot_b64 ?? null);
+            });
+        }
+        catch (err) {
+            // sendMessage can throw if the extension context is invalidated.
+            console.warn("[LocalLens] captureScreenshot sendMessage threw:", err);
+            resolve(null);
+        }
+    });
+}
+// ---------------------------------------------------------------------------
 // Snapshot builder
 // ---------------------------------------------------------------------------
 async function buildContext() {
+    // Run UIGraph build and screenshot capture concurrently — they are
+    // independent and this shaves ~30–80 ms off each agent step.
+    const [ui_graph, screenshot_b64] = await Promise.all([
+        buildUIGraph(),
+        captureScreenshot(),
+    ]);
     return {
         session_id: SESSION_ID,
         url_domain: window.location.hostname,
-        screenshot_b64: null,
+        screenshot_b64, // null-safe; backend VLM handles null gracefully
         viewport_width: window.innerWidth,
         viewport_height: window.innerHeight,
-        ui_graph: await buildUIGraph(),
+        ui_graph,
     };
 }
 // ---------------------------------------------------------------------------
