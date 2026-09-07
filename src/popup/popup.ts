@@ -55,6 +55,17 @@ const clearCacheBtn = document.getElementById(
 ) as HTMLButtonElement;
 const cacheList = document.getElementById("cache-list") as HTMLUListElement;
 
+// Privacy controls
+const privacyKeyInput = document.getElementById(
+  "privacy-key-input",
+) as HTMLInputElement | null;
+const privacyAddBtn = document.getElementById(
+  "privacy-add-btn",
+) as HTMLButtonElement | null;
+const privacyKeysList = document.getElementById(
+  "privacy-keys-list",
+) as HTMLUListElement | null;
+
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
@@ -309,6 +320,72 @@ async function renderCacheList() {
 initSettings();
 
 // ---------------------------------------------------------------------------
+// Privacy Controls handlers
+// ---------------------------------------------------------------------------
+
+async function renderPrivacyKeysList(): Promise<void> {
+  if (!privacyKeysList) return;
+  const settings = await getAutofillSettings();
+  const keys = settings.userRedactedKeys;
+
+  privacyKeysList.innerHTML = "";
+  if (keys.length === 0) {
+    privacyKeysList.innerHTML =
+      '<li style="color: #666; font-size: 12px; padding: 4px;">No custom fields added yet.</li>';
+    return;
+  }
+
+  for (const key of keys) {
+    const li = document.createElement("li");
+    li.className = "privacy-key-item";
+    li.innerHTML = `
+      <span class="privacy-chip privacy-chip--user">🔒 ${escapeHtml(key)}</span>
+      <button class="btn btn--ghost btn--sm" data-key="${escapeHtml(key)}" title="Remove">✕</button>
+    `;
+    privacyKeysList.appendChild(li);
+  }
+
+  privacyKeysList.querySelectorAll("button[data-key]").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const target = e.target as HTMLButtonElement;
+      const k = target.getAttribute("data-key");
+      if (!k) return;
+      const current = await getAutofillSettings();
+      await updateAutofillSettings({
+        userRedactedKeys: current.userRedactedKeys.filter((x) => x !== k),
+      });
+      renderPrivacyKeysList();
+    });
+  });
+}
+
+async function addPrivacyKey(): Promise<void> {
+  if (!privacyKeyInput) return;
+  // Normalize: lowercase, replace spaces with underscores
+  const raw = privacyKeyInput.value.trim().toLowerCase().replace(/\s+/g, "_");
+  if (!raw) return;
+
+  const current = await getAutofillSettings();
+  if (!current.userRedactedKeys.includes(raw)) {
+    await updateAutofillSettings({
+      userRedactedKeys: [...current.userRedactedKeys, raw],
+    });
+  }
+  privacyKeyInput.value = "";
+  renderPrivacyKeysList();
+}
+
+function initPrivacyControls(): void {
+  privacyAddBtn?.addEventListener("click", addPrivacyKey);
+  privacyKeyInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") addPrivacyKey();
+  });
+  renderPrivacyKeysList();
+}
+
+initPrivacyControls();
+
+// ---------------------------------------------------------------------------
 // Core handlers
 // ---------------------------------------------------------------------------
 
@@ -470,17 +547,26 @@ function appendLog(entry: LogEntry): void {
 }
 
 function renderPrivacyStrip(context: SanitizedContext): void {
-  const tags = context.ui_graph
-    .map((el) => el.redaction)
-    .filter((r) => r !== "NONE");
+  const redactedElements = context.ui_graph.filter((el) => el.redaction !== "NONE");
 
-  if (tags.length === 0) {
+  if (redactedElements.length === 0) {
     privacyStrip.classList.add("hidden");
     return;
   }
 
-  const unique = [...new Set(tags)];
-  redactionTags.innerHTML = unique
+  // Build a deduplicated list of label+tag chips for display
+  const seen = new Set<string>();
+  const chips: string[] = [];
+  for (const el of redactedElements) {
+    const label = (el as any).redacted_label as string | null | undefined;
+    const display = label ? `${label} (${el.redaction})` : el.redaction;
+    if (!seen.has(display)) {
+      seen.add(display);
+      chips.push(display);
+    }
+  }
+
+  redactionTags.innerHTML = chips
     .map((t) => `<span class="redaction-tag">🔒 ${escapeHtml(t)}</span>`)
     .join("");
   privacyStrip.classList.remove("hidden");

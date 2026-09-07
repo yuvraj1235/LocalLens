@@ -35,6 +35,11 @@ class UIElement(BaseModel):
     element_id: str = Field(..., description="Stable id assigned client-side, e.g. 'btn_17'")
     role: str = Field(..., description="ARIA role / element type, e.g. 'button', 'textbox'")
     label: str | None = Field(None, description="Visible or accessible text, already sanitized")
+    redacted_label: str | None = Field(
+        None,
+        description="Field's accessible name preserved even when label is nulled due to redaction. "
+                    "This is the field NAME only — never the field's current value.",
+    )
     bbox: BoundingBox | None = None
     redaction: RedactionTag = RedactionTag.NONE
     clickable: bool = False

@@ -42,6 +42,9 @@ class ActionPlanner:
         try:
             user_prompt = build_user_prompt(request)
 
+        user_prompt = build_user_prompt(request)
+
+        try:
             raw = await self._client.chat_json(
                 system_prompt=SYSTEM_PROMPT,
                 user_prompt=user_prompt,
@@ -63,6 +66,24 @@ class ActionPlanner:
                 confidence=1.0,
                 done=True
             )
+        except ValueError as e:
+            logger.warning(
+                "First attempt failed for session %s: %s — retrying once",
+                request.session_id,
+                e,
+            )
+            raw = await self._client.chat_json(
+                system_prompt=SYSTEM_PROMPT,
+                user_prompt=user_prompt
+                + "\n\nIMPORTANT: Your previous response was not valid JSON. Output ONLY the JSON object, nothing else.",
+                image_b64=request.context.screenshot_b64,
+                max_tokens=settings.max_output_tokens,
+            )
+
+        action = StructuredAction.model_validate(raw)
+        self._validate_against_graph(action, request)
+        self._apply_confidence_gate(action, request)
+        return action
 
     def _validate_against_graph(self, action: StructuredAction, request: TaskRequest) -> None:
         """
@@ -91,3 +112,28 @@ class ActionPlanner:
             action.reasoning = (
                 f"Model referenced unknown element_id '{hallucinated_id}' (hallucination guard triggered)."
             )
+
+    def _apply_confidence_gate(self, action: StructuredAction, request: TaskRequest) -> None:
+        """
+        A valid but low-confidence action still shouldn't execute unattended.
+        Downgrade to ASK_USER rather than letting a shaky CLICK/TYPE fire.
+        """
+        threshold = getattr(settings, "min_confidence_threshold", None)
+        if not threshold:
+            return
+        if action.action in ("ASK_USER", "DONE", "WAIT"):
+            return
+
+        if action.confidence < threshold:
+            logger.info(
+                "Low-confidence action (%.2f < %.2f) for session %s, downgrading to ASK_USER",
+                action.confidence,
+                threshold,
+                request.session_id,
+            )
+            action.value = (
+                f"Low confidence ({action.confidence:.2f}) on action '{action.action}'. "
+                "Please confirm or specify manually."
+            )
+            action.action = "ASK_USER"
+            action.element_id = None
