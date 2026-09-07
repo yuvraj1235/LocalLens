@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     vlm_base_url: str = "http://localhost:8001/v1"
     vlm_model_name: str = "qwen3-vl"
     vlm_api_key: str = "not-needed-for-local-vllm"
+    deepgram_api_key: str = ""
 
     llm_base_url: str = "http://localhost:8002/v1"
     llm_model_name: str = "qwen3"

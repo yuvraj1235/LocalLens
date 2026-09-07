@@ -95,16 +95,121 @@ uploadBtn?.addEventListener("click", () => {
     timestamp: Date.now(),
   });
 });
+// ---------------------------------------------------------------------------
+// Deepgram Voice Input via FastAPI Backend (Bypasses Brave / Browser blocks)
+// ---------------------------------------------------------------------------
 
-voiceBtn?.addEventListener("click", () => {
-  appendLog({
-    step: 0,
-    level: "info",
-    action: "VOICE",
-    element_id: null,
-    message: "Voice input feature coming soon.",
-    timestamp: Date.now(),
-  });
+let mediaRecorder: MediaRecorder | null = null;
+let audioChunks: Blob[] = [];
+let isRecording = false;
+let originalPlaceholder = "";
+
+voiceBtn?.addEventListener("click", async () => {
+  if (!voiceBtn || !taskInput) return;
+
+  if (!isRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        if (taskInput) {
+          taskInput.placeholder = originalPlaceholder;
+          taskInput.disabled = false;
+        }
+
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        const formData = new FormData();
+        formData.append("file", audioBlob, "voice-input.webm");
+
+        appendLog({
+          step: 0,
+          level: "info",
+          action: "VOICE",
+          element_id: null,
+          message: "Transcribing audio via Deepgram...",
+          timestamp: Date.now(),
+        });
+
+        try {
+          const response = await fetch("http://localhost:8000/transcribe", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const errDetail = await response.text();
+            throw new Error(`Server error: ${errDetail}`);
+          }
+
+          const data = await response.json();
+          if (data.transcript) {
+            taskInput.value = data.transcript;
+            handleStart(); // Automatically trigger execution with transcribed text
+          } else {
+            appendLog({
+              step: 0,
+              level: "warn",
+              action: "VOICE",
+              element_id: null,
+              message: "No speech detected. Please try again.",
+              timestamp: Date.now(),
+            });
+          }
+        } catch (err: any) {
+          appendLog({
+            step: 0,
+            level: "error",
+            action: "VOICE",
+            element_id: null,
+            message: `Transcription failed: ${err.message}`,
+            timestamp: Date.now(),
+          });
+        }
+      };
+
+      mediaRecorder.start();
+      isRecording = true;
+
+      // UI state update
+      voiceBtn.style.backgroundColor = "#ef4444";
+      voiceBtn.style.boxShadow = "0 0 10px #ef4444";
+      originalPlaceholder = taskInput.placeholder;
+      taskInput.placeholder = "🔴 Listening... Speak now";
+      taskInput.style.borderColor = "#ef4444";
+
+    } catch (err: any) {
+      console.error("Microphone access denied:", err);
+      appendLog({
+        step: 0,
+        level: "error",
+        action: "VOICE",
+        element_id: null,
+        message: "Microphone permission denied. Allow mic access in Brave settings.",
+        timestamp: Date.now(),
+      });
+    }
+  } else {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      mediaRecorder.stop();
+      mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+    }
+    isRecording = false;
+    
+    if (voiceBtn) {
+      voiceBtn.style.backgroundColor = "";
+      voiceBtn.style.boxShadow = "";
+    }
+    if (taskInput) {
+      taskInput.style.borderColor = "";
+      if (originalPlaceholder) taskInput.placeholder = originalPlaceholder;
+    }
+  }
 });
 
 taskInput.addEventListener("keydown", (e) => {
