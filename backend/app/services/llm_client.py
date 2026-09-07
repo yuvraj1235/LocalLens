@@ -117,13 +117,16 @@ class LLMClient:
         if not text:
             raise ValueError("Model response was empty after stripping <think> blocks.")
 
-        # Try direct JSON parse first
+        # Clean up any leading conversational preambles before extracting JSON
+        # (e.g., handles cases where the model says "Here's a thinking process: ... {json}")
+        
+        # 1. Try direct JSON parse first
         try:
             return json.loads(text)
         except json.JSONDecodeError:
             pass
 
-        # Fallback: extract JSON from markdown code fences
+        # 2. Fallback: extract JSON from markdown code fences
         match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
         if match:
             try:
@@ -131,11 +134,15 @@ class LLMClient:
             except json.JSONDecodeError:
                 pass
 
-        # Last resort: find first { ... } block in the text
-        match = re.search(r"(\{.*\})", text, re.DOTALL)
-        if match:
+        # 3. Last resort: find the FIRST opening '{' and the LAST closing '}' 
+        # This safely truncates any conversational text or "thinking process" preambles.
+        start_idx = text.find("{")
+        end_idx = text.rfind("}")
+        
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            potential_json = text[start_idx : end_idx + 1]
             try:
-                return json.loads(match.group(1))
+                return json.loads(potential_json)
             except json.JSONDecodeError:
                 pass
 

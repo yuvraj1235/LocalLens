@@ -15,6 +15,33 @@ class ActionPlanner:
         self._client = vlm_client
 
     async def plan_next_action(self, request: TaskRequest) -> StructuredAction:
+        task_lower = request.task.strip().lower()
+        
+        # 1. Instant heuristic short-circuits for basic inputs (0 latency, zero VLM cost)
+        if task_lower in ["hi", "hello", "hey", "sup"]:
+            return StructuredAction(
+                action="DONE",
+                element_id=None,
+                value=None,
+                reasoning="Hello! I am a web automation agent. What would you like to do on this page?",
+                confidence=1.0,
+                done=True
+            )
+        
+        if task_lower in ["help", "do it", "what can you do?"]:
+            return StructuredAction(
+                action="DONE",
+                element_id=None,
+                value=None,
+                reasoning="Please specify a precise task for me to execute on this webpage (e.g., 'Fill out the first name field').",
+                confidence=1.0,
+                done=True
+            )
+
+        # 2. VLM call wrapped in a safety net to prevent 500 crashes if the model yaps/times out
+        try:
+            user_prompt = build_user_prompt(request)
+
         user_prompt = build_user_prompt(request)
 
         try:
@@ -23,6 +50,21 @@ class ActionPlanner:
                 user_prompt=user_prompt,
                 image_b64=request.context.screenshot_b64,
                 max_tokens=settings.max_output_tokens,
+            )
+
+            action = StructuredAction.model_validate(raw)
+            self._validate_against_graph(action, request)
+            return action
+
+        except ValueError as e:
+            logger.warning("VLM failed to return valid JSON, triggering fallback response: %s", e)
+            return StructuredAction(
+                action="DONE",
+                element_id=None,
+                value=None,
+                reasoning="I hit a processing bottleneck trying to interpret that instruction.",
+                confidence=1.0,
+                done=True
             )
         except ValueError as e:
             logger.warning(
