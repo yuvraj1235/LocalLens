@@ -103,6 +103,21 @@ export async function analyzeScreen(image, options = {}) {
         options.latencyOut.fusionMs = fusionMs;
         options.latencyOut.totalMs = totalMs;
     }
+    if (options.cachedFields && options.cachedFields.length > 0) {
+        for (const el of graph.elements) {
+            for (const cf of options.cachedFields) {
+                const [ax, ay, aw, ah] = el.bbox;
+                const [bx, by, bw, bh] = cf.bbox;
+                // [x, y, w, h] overlap check
+                if (!(ax + aw < bx || bx + bw < ax || ay + ah < by || by + bh < ay)) {
+                    if (!el.sources.includes("cache")) {
+                        el.sources.push("cache");
+                    }
+                    break;
+                }
+            }
+        }
+    }
     lastGraph = graph;
     return graph;
 }

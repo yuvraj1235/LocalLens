@@ -2,19 +2,9 @@
  * popup.ts
  *
  * Wires the extension popup UI (popup.html) to the AgentLoop.
- *
- * Responsibilities:
- *  - Start / stop the AgentLoop when buttons are clicked.
- *  - Render each LogEntry from the loop into the live log list.
- *  - Update the status badge based on loop state.
- *  - Show the privacy strip with redaction tags from the SanitizedContext.
- *  - Handle the ASK_USER overlay interaction.
- *
- * In the final extension, `buildMockContext()` is replaced by a real
- * `chrome.runtime.sendMessage({ type: "GET_CONTEXT" })` call to Ankit's
- * content script. Everything else stays the same.
  */
 import { AgentLoop } from "../agent/agentLoop";
+import { getAutofillSettings, updateAutofillSettings, listCachedKeys, clearAllCachedValues, clearCachedValue, } from "../cache/fieldCache.js";
 // ---------------------------------------------------------------------------
 // DOM refs
 // ---------------------------------------------------------------------------
@@ -22,6 +12,9 @@ const taskInput = document.getElementById("task-input");
 const startBtn = document.getElementById("start-btn");
 const stopBtn = document.getElementById("stop-btn");
 const clearBtn = document.getElementById("clear-btn");
+const closeBtn = document.getElementById("close-btn");
+const uploadBtn = document.getElementById("upload-btn");
+const voiceBtn = document.getElementById("voice-btn");
 const statusBadge = document.getElementById("status-badge");
 const logList = document.getElementById("log-list");
 const privacyStrip = document.getElementById("privacy-strip");
@@ -30,6 +23,15 @@ const askOverlay = document.getElementById("ask-user-overlay");
 const askMessage = document.getElementById("ask-user-message");
 const askInput = document.getElementById("ask-user-input");
 const askSubmit = document.getElementById("ask-user-submit");
+// Autofill settings
+const autofillEnableCb = document.getElementById("autofill-enable-cb");
+const autofillConfirmCb = document.getElementById("autofill-confirm-cb");
+const clearCacheBtn = document.getElementById("clear-cache-btn");
+const cacheList = document.getElementById("cache-list");
+// Privacy controls
+const privacyKeyInput = document.getElementById("privacy-key-input");
+const privacyAddBtn = document.getElementById("privacy-add-btn");
+const privacyKeysList = document.getElementById("privacy-keys-list");
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
@@ -40,14 +42,47 @@ let loop = null;
 startBtn.addEventListener("click", handleStart);
 stopBtn.addEventListener("click", handleStop);
 clearBtn.addEventListener("click", clearLog);
+// Close button
+closeBtn?.addEventListener("click", () => {
+    // If we are in an iframe (floating widget), tell the content script to destroy us
+    if (window.self !== window.top) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0]?.id) {
+                chrome.tabs.sendMessage(tabs[0].id, { type: "TOGGLE_WIDGET" });
+            }
+        });
+    }
+    else {
+        // Fallback if opened as a standard popup
+        window.close();
+    }
+});
+// Placeholder handlers for upcoming features
+uploadBtn?.addEventListener("click", () => {
+    appendLog({
+        step: 0,
+        level: "info",
+        action: "UPLOAD",
+        element_id: null,
+        message: "Image upload feature coming soon.",
+        timestamp: Date.now(),
+    });
+});
+voiceBtn?.addEventListener("click", () => {
+    appendLog({
+        step: 0,
+        level: "info",
+        action: "VOICE",
+        element_id: null,
+        message: "Voice input feature coming soon.",
+        timestamp: Date.now(),
+    });
+});
 taskInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter")
         handleStart();
 });
 askSubmit.addEventListener("click", () => {
-    // User answered the ASK_USER prompt — hide overlay.
-    // The actual answer handling can be extended here (e.g. re-start the loop
-    // with the answer prepended to the task string).
     askOverlay.classList.add("hidden");
     appendLog({
         step: 0,
@@ -60,8 +95,156 @@ askSubmit.addEventListener("click", () => {
     askInput.value = "";
 });
 // ---------------------------------------------------------------------------
+// Autofill Settings Handlers
+// ---------------------------------------------------------------------------
+async function initSettings() {
+    const settings = await getAutofillSettings();
+    if (autofillEnableCb)
+        autofillEnableCb.checked = settings.enabled;
+    if (autofillConfirmCb)
+        autofillConfirmCb.checked = settings.confirmRequired;
+    autofillEnableCb?.addEventListener("change", async () => {
+        await updateAutofillSettings({ enabled: autofillEnableCb.checked });
+    });
+    autofillConfirmCb?.addEventListener("change", async () => {
+        await updateAutofillSettings({
+            confirmRequired: autofillConfirmCb.checked,
+        });
+    });
+    clearCacheBtn?.addEventListener("click", async () => {
+        await clearAllCachedValues();
+        renderCacheList();
+    });
+    const applyBtn = document.createElement("button");
+    applyBtn.textContent = "Inject Pending Autofills";
+    applyBtn.style.marginTop = "10px";
+    applyBtn.style.width = "100%";
+    applyBtn.style.padding = "6px";
+    applyBtn.style.backgroundColor = "#6366f1";
+    applyBtn.style.color = "white";
+    applyBtn.style.border = "none";
+    applyBtn.style.borderRadius = "4px";
+    applyBtn.style.cursor = "pointer";
+    applyBtn.onclick = triggerAutofill;
+    cacheList?.parentElement?.appendChild(applyBtn);
+    renderCacheList();
+}
+async function renderCacheList() {
+    if (!cacheList)
+        return;
+    const keys = await listCachedKeys();
+    cacheList.innerHTML = "";
+    if (keys.length === 0) {
+        cacheList.innerHTML =
+            '<li style="color: #666; font-size: 12px; padding: 4px;">Cache is empty</li>';
+        return;
+    }
+    for (const { key, updatedAt } of keys) {
+        const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.marginBottom = "4px";
+        const timeStr = new Date(updatedAt).toLocaleTimeString();
+        li.innerHTML = `
+      <span style="color: #fff; font-size: 12px;">${escapeHtml(key)} <span style="color:#666">(${timeStr})</span></span>
+      <button class="btn btn--ghost btn--sm" data-key="${escapeHtml(key)}">Del</button>
+    `;
+        cacheList.appendChild(li);
+    }
+    cacheList.querySelectorAll("button").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            const target = e.target;
+            const k = target.getAttribute("data-key");
+            if (k) {
+                await clearCachedValue(k);
+                renderCacheList();
+            }
+        });
+    });
+}
+initSettings();
+// ---------------------------------------------------------------------------
+// Privacy Controls handlers
+// ---------------------------------------------------------------------------
+async function renderPrivacyKeysList() {
+    if (!privacyKeysList)
+        return;
+    const settings = await getAutofillSettings();
+    const keys = settings.userRedactedKeys;
+    privacyKeysList.innerHTML = "";
+    if (keys.length === 0) {
+        privacyKeysList.innerHTML =
+            '<li style="color: #666; font-size: 12px; padding: 4px;">No custom fields added yet.</li>';
+        return;
+    }
+    for (const key of keys) {
+        const li = document.createElement("li");
+        li.className = "privacy-key-item";
+        li.innerHTML = `
+      <span class="privacy-chip privacy-chip--user">🔒 ${escapeHtml(key)}</span>
+      <button class="btn btn--ghost btn--sm" data-key="${escapeHtml(key)}" title="Remove">✕</button>
+    `;
+        privacyKeysList.appendChild(li);
+    }
+    privacyKeysList.querySelectorAll("button[data-key]").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            const target = e.target;
+            const k = target.getAttribute("data-key");
+            if (!k)
+                return;
+            const current = await getAutofillSettings();
+            await updateAutofillSettings({
+                userRedactedKeys: current.userRedactedKeys.filter((x) => x !== k),
+            });
+            renderPrivacyKeysList();
+        });
+    });
+}
+async function addPrivacyKey() {
+    if (!privacyKeyInput)
+        return;
+    // Normalize: lowercase, replace spaces with underscores
+    const raw = privacyKeyInput.value.trim().toLowerCase().replace(/\s+/g, "_");
+    if (!raw)
+        return;
+    const current = await getAutofillSettings();
+    if (!current.userRedactedKeys.includes(raw)) {
+        await updateAutofillSettings({
+            userRedactedKeys: [...current.userRedactedKeys, raw],
+        });
+    }
+    privacyKeyInput.value = "";
+    renderPrivacyKeysList();
+}
+function initPrivacyControls() {
+    privacyAddBtn?.addEventListener("click", addPrivacyKey);
+    privacyKeyInput?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter")
+            addPrivacyKey();
+    });
+    renderPrivacyKeysList();
+}
+initPrivacyControls();
+// ---------------------------------------------------------------------------
 // Core handlers
 // ---------------------------------------------------------------------------
+async function triggerAutofill() {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(tabs[0].id, { type: "APPLY_AUTOFILL" }, (response) => {
+            if (response?.success) {
+                appendLog({
+                    step: 0,
+                    level: "success",
+                    action: "AUTOFILL",
+                    element_id: null,
+                    message: `Successfully injected ${response.count} cached fields.`,
+                    timestamp: Date.now(),
+                });
+            }
+        });
+    }
+}
 async function handleStart() {
     const task = taskInput.value.trim();
     if (!task) {
@@ -71,20 +254,25 @@ async function handleStart() {
     clearLog();
     setStatus("running");
     setButtons(true);
-    // In the final extension this context comes from Ankit's content script.
-    // For now we build a mock so the popup can be developed independently.
+    // Add user message bubble to chat log
+    appendLog({
+        step: 0,
+        level: "info",
+        action: "USER",
+        element_id: null,
+        message: task,
+        timestamp: Date.now(),
+    });
     const context = await getContext();
     renderPrivacyStrip(context);
     loop = new AgentLoop({
         task,
         onLog: (entry) => {
             appendLog(entry);
-            // If backend asks the user something, surface the overlay
             if (entry.action === "ASK_USER") {
                 askMessage.textContent = entry.message;
                 askOverlay.classList.remove("hidden");
             }
-            // Detect terminal log messages to reset buttons
             if (entry.message === "Agent loop ended.") {
                 const wasSuccessful = logList.querySelector(".log-entry--success") !== null;
                 setStatus(wasSuccessful ? "done" : "idle");
@@ -118,7 +306,6 @@ function clearLog() {
     logList.innerHTML =
         '<li class="log-entry log-entry--info log-entry--placeholder">Agent output will appear here…</li>';
 }
-/** Map log level → minimal symbol */
 const ICONS = {
     info: "·",
     success: "✓",
@@ -126,39 +313,67 @@ const ICONS = {
     error: "✕",
 };
 function appendLog(entry) {
-    // Remove placeholder if present
     const placeholder = logList.querySelector(".log-entry--placeholder");
     if (placeholder)
         placeholder.remove();
-    const li = document.createElement("li");
-    li.className = `log-entry log-entry--${entry.level}`;
+    const isUser = entry.action === "USER";
+    const isAgentAnswer = entry.message.startsWith("Agent Answer:") ||
+        entry.message.startsWith("Task completed: No,") ||
+        entry.message.startsWith("Task completed: Yes,");
     const time = new Date(entry.timestamp).toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
     });
-    li.innerHTML = `
-    <span class="log-step">#${entry.step}</span>
-    <span class="log-icon">${ICONS[entry.level] ?? "•"}</span>
-    <span class="log-msg">${escapeHtml(entry.message)}</span>
-    <span class="log-time">${time}</span>
-  `;
+    const li = document.createElement("li");
+    if (isUser) {
+        // Render as user query bubble
+        li.className = "log-entry log-entry--user-bubble";
+        li.innerHTML = `
+      <div class="bubble-header"><span>You</span><span>${time}</span></div>
+      <div class="bubble-content">${escapeHtml(entry.message)}</div>
+    `;
+    }
+    else if (isAgentAnswer) {
+        // Render as chatbot response bubble
+        const cleanAnswer = entry.message.replace(/^Agent Answer:\s*/, "");
+        li.className = "log-entry log-entry--agent-bubble";
+        li.innerHTML = `
+      <div class="bubble-header"><span>LocalLens Agent</span><span>${time}</span></div>
+      <div class="bubble-content">${escapeHtml(cleanAnswer)}</div>
+    `;
+    }
+    else {
+        // Standard system step log
+        li.className = `log-entry log-entry--${entry.level}`;
+        li.innerHTML = `
+      <span class="log-step">#${entry.step}</span>
+      <span class="log-icon">${ICONS[entry.level] ?? "•"}</span>
+      <span class="log-msg">${escapeHtml(entry.message)}</span>
+      <span class="log-time">${time}</span>
+    `;
+    }
     logList.appendChild(li);
-    // Auto-scroll to the latest entry
     logList.scrollTop = logList.scrollHeight;
 }
-/** Show which fields were redacted before the context left the device. */
 function renderPrivacyStrip(context) {
-    const tags = context.ui_graph
-        .map((el) => el.redaction)
-        .filter((r) => r !== "NONE");
-    if (tags.length === 0) {
+    const redactedElements = context.ui_graph.filter((el) => el.redaction !== "NONE");
+    if (redactedElements.length === 0) {
         privacyStrip.classList.add("hidden");
         return;
     }
-    // Deduplicate
-    const unique = [...new Set(tags)];
-    redactionTags.innerHTML = unique
+    // Build a deduplicated list of label+tag chips for display
+    const seen = new Set();
+    const chips = [];
+    for (const el of redactedElements) {
+        const label = el.redacted_label;
+        const display = label ? `${label} (${el.redaction})` : el.redaction;
+        if (!seen.has(display)) {
+            seen.add(display);
+            chips.push(display);
+        }
+    }
+    redactionTags.innerHTML = chips
         .map((t) => `<span class="redaction-tag">🔒 ${escapeHtml(t)}</span>`)
         .join("");
     privacyStrip.classList.remove("hidden");
@@ -170,20 +385,7 @@ function escapeHtml(str) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
 }
-// ---------------------------------------------------------------------------
-// Context source
-// ---------------------------------------------------------------------------
-/**
- * Get the SanitizedContext for the current tab.
- *
- * Production: replace with chrome.runtime.sendMessage({ type: "GET_CONTEXT" })
- * and await the response from Ankit's content script.
- *
- * Development (current): returns a mock context so the popup UI can be
- * developed and tested without the extension infrastructure.
- */
 async function getContext() {
-    // Try to get real context from the extension runtime
     if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
         return new Promise((resolve) => {
             chrome.runtime.sendMessage({ type: "GET_CONTEXT" }, (response) => {
@@ -191,7 +393,6 @@ async function getContext() {
             });
         });
     }
-    // Fallback: mock context for standalone development
     return buildMockContext();
 }
 function buildMockContext() {

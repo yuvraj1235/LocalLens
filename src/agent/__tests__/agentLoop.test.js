@@ -88,10 +88,12 @@ describe("Termination conditions", () => {
         await loop.start(makeContext());
         expect(logs.find((l) => l.level === "warn" && l.message.includes("confidence"))).toBeDefined();
     });
-    it("stops when validation fails (hallucinated element_id)", async () => {
+    it("stops when schema validation fails (CLICK with null element_id)", async () => {
+        // agentLoop passes skipDomCheck=true (it runs in popup, not page).
+        // Schema checks still catch invalid actions like CLICK with no element_id.
         const { loop, logs } = makeLoop({
             action: "CLICK",
-            element_id: "phantom_btn", // doesn't exist in DOM
+            element_id: null, // schema error: CLICK requires element_id
             value: null,
             reasoning: null,
             confidence: 0.9,

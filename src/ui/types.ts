@@ -34,6 +34,9 @@ export interface UIElement {
   element_id: string;      // stable id, e.g. "btn_17"
   role: string;            // ARIA role, e.g. "button" | "textbox"
   label: string | null;    // visible/accessible text, already sanitised
+  /** Field name/label kept even when value is redacted — e.g. "Email Address".
+   *  This is the accessible name only, NEVER the field's current value. */
+  redacted_label?: string | null;
   bbox: BoundingBox | null;
   redaction: RedactionTag;
   clickable: boolean;

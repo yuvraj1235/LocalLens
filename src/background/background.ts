@@ -13,6 +13,13 @@ chrome.runtime.onInstalled.addListener(() => {
 // ---------------------------------------------------------------------------
 // Relay: popup → background → content script (and back)
 // ---------------------------------------------------------------------------
+chrome.action.onClicked.addListener((tab) => {
+  if (tab.id) {
+    chrome.tabs.sendMessage(tab.id, { type: "TOGGLE_WIDGET" }).catch(() => {
+      console.log("Could not toggle widget. Is the content script loaded?");
+    });
+  }
+});
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   // Only relay messages that didn't originate from a content script

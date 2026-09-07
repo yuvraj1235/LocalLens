@@ -15,9 +15,9 @@ from typing import Any
 import httpx
 
 from app.core.config import settings
+from app.schemas.context import StructuredAction
 
 logger = logging.getLogger("agent")
-
 
 
 class LLMClient:
@@ -39,7 +39,7 @@ class LLMClient:
         system_prompt: str,
         user_prompt: str,
         image_b64: str | None = None,
-        max_tokens: int = 512,
+        max_tokens: int = 2048,
     ) -> dict[str, Any]:
         """
         Calls chat/completions and parses the response as JSON.
@@ -74,8 +74,8 @@ class LLMClient:
             content = user_prompt
 
         # NOTE: Do NOT send response_format: json_object to OpenRouter/Qwen —
-        # it causes some providers to return null content. Instead we instruct
-        # the model via the system prompt and parse the text ourselves.
+        # it causes some providers to return null content. Instead we constrain
+        # via guided_json and disable thinking mode below.
         payload = {
             "model": self._model,
             "messages": [
@@ -84,6 +84,10 @@ class LLMClient:
             ],
             "max_tokens": max_tokens,
             "temperature": 0.0,
+            "chat_template_kwargs": {"enable_thinking": False},
+            "extra_body": {
+                "guided_json": StructuredAction.model_json_schema()
+            },
         }
 
         resp = await self._client.post("/chat/completions", json=payload)

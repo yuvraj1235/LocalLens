@@ -1,156 +1,107 @@
+"use strict";
 /**
- * content.ts — LocalLens Content Script (MV3)
+ * background.ts — LocalLens Service Worker (MV3)
  *
- * Runs in the context of every page. Responsibilities:
- *  1. Walk the DOM and build a SanitizedContext (UIGraph + metadata).
- *  2. Stamp every interactive element with [data-agent-id] so the
- *     actionExecutor can resolve element_id → DOM node later.
- *  3. Listen for GET_CONTEXT messages from the popup/background and reply.
- *  4. Listen for EXECUTE_ACTION messages and run them on the live DOM.
+ * Relay messages between the popup/side panel/floating widget and the
+ * active tab's content script. Cross-context communication in MV3 must
+ * go through the service worker.
  */
 
-import type { SanitizedContext, UIElement, BoundingBox, RedactionTag } from "../ui/types";
-import { executeAction } from "../agent/actionExecutor";
-import type { StructuredAction } from "../agent/actionExecutor";
-
-// ---------------------------------------------------------------------------
-// PII patterns — redact sensitive text before it ever leaves the device
-// ---------------------------------------------------------------------------
-
-const PII_PATTERNS: { label: RedactionTag; re: RegExp }[] = [
-  { label: "EMAIL_REDACTED",   re: /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g },
-  { label: "PII_REDACTED",     re: /(\+?\d[\d\s\-().]{7,}\d)/g },
-  { label: "CARD_REDACTED",    re: /\b(?:\d[ -]?){13,16}\b/g },
-  { label: "PII_REDACTED",     re: /\b\d{3}-\d{2}-\d{4}\b/g },
-  { label: "PASSWORD_REDACTED",re: /password|passwd|secret|token/i },
-];
-
-function detectPii(text: string): RedactionTag {
-  for (const { label, re } of PII_PATTERNS) {
-    if (re.test(text)) return label;
-  }
-  return "NONE";
+interface RelayMessage {
+  type: string;
+  [key: string]: unknown;
 }
 
-function getLabel(el: Element): string | null {
-  // aria-label → placeholder → associated <label> → title → null
-  return (
-    el.getAttribute("aria-label") ||
-    (el as HTMLInputElement).placeholder ||
-    (() => {
-      const id = el.id;
-      if (!id) return null;
-      const lbl = document.querySelector<HTMLLabelElement>(`label[for="${id}"]`);
-      return lbl?.textContent?.trim() ?? null;
-    })() ||
-    el.getAttribute("title") ||
-    el.textContent?.trim().slice(0, 60) ||
-    null
-  );
-}
+type SendResponse = (response?: unknown) => void;
 
-function getBbox(el: Element): BoundingBox | null {
-  const r = el.getBoundingClientRect();
-  if (r.width === 0 && r.height === 0) return null;
-  return { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) };
-}
-
-// Roles that map to ARIA / semantic roles
-const ROLE_MAP: Record<string, string> = {
-  A: "link", BUTTON: "button", INPUT: "textbox", SELECT: "listbox",
-  TEXTAREA: "textbox", DETAILS: "group", SUMMARY: "button",
-  H1: "heading", H2: "heading", H3: "heading",
-  IMG: "img", FORM: "form",
-};
-
-function getRole(el: Element): string {
-  return el.getAttribute("role") || ROLE_MAP[el.tagName] || "generic";
-}
+chrome.runtime.onInstalled.addListener(() => {
+  console.log("[LocalLens] Extension installed / updated.");
+});
 
 // ---------------------------------------------------------------------------
-// DOM walker — builds the UIGraph
+// Toggle the floating widget on icon click
 // ---------------------------------------------------------------------------
-
-// Counter never resets — IDs are permanent for the lifetime of the content script.
-// New elements that appear after the first stamp get the next available number.
-let agentIdCounter = 0;
-
-function buildUIGraph(): UIElement[] {
-  const elements: UIElement[] = [];
-
-  const SELECTOR = [
-    "a[href]", "button", "input:not([type=hidden])", "select", "textarea",
-    "[role=button]", "[role=link]", "[role=checkbox]", "[role=menuitem]",
-    "[role=tab]", "[role=option]", "[tabindex]",
-  ].join(",");
-
-  document.querySelectorAll<HTMLElement>(SELECTOR).forEach((el) => {
-    const style = window.getComputedStyle(el);
-    if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0") return;
-
-    const bbox = getBbox(el);
-    if (!bbox) return;
-
-    // PRESERVE existing stamp — only assign a new ID if the element doesn't have one yet.
-    // This keeps IDs stable across repeated GET_CONTEXT calls.
-    let agentId = el.getAttribute("data-agent-id");
-    if (!agentId) {
-      agentId = `agent_${agentIdCounter++}`;
-      el.setAttribute("data-agent-id", agentId);
-    }
-
-    const rawLabel = getLabel(el) ?? "";
-    const redaction = detectPii(rawLabel);
-
-    const isEditable =
-      el.tagName === "INPUT" ||
-      el.tagName === "TEXTAREA" ||
-      el.getAttribute("contenteditable") === "true";
-
-    elements.push({
-      element_id: agentId,
-      role: getRole(el),
-      label: redaction === "NONE" ? rawLabel || null : null,
-      bbox,
-      redaction,
-      clickable: el.tagName === "BUTTON" || el.tagName === "A" || !!el.onclick || el.getAttribute("role") === "button",
-      editable: isEditable,
+chrome.action.onClicked.addListener((tab) => {
+  if (tab.id) {
+    chrome.tabs.sendMessage(tab.id, { type: "TOGGLE_WIDGET" }).catch(() => {
+      console.log("Could not toggle widget. Is the content script loaded?");
     });
-  });
-
-  return elements;
-}
-
-// ---------------------------------------------------------------------------
-// Snapshot builder
-// ---------------------------------------------------------------------------
-
-function buildContext(): SanitizedContext {
-  return {
-    session_id: `tab-${Date.now()}`,
-    url_domain: window.location.hostname,
-    screenshot_b64: null, // screenshot handled by background via chrome.tabs.captureVisibleTab
-    viewport_width: window.innerWidth,
-    viewport_height: window.innerHeight,
-    ui_graph: buildUIGraph(),
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Message listener
-// ---------------------------------------------------------------------------
-
-chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-  if (msg.type === "GET_CONTEXT") {
-    sendResponse(buildContext());
-    return true; // keep channel open for async
-  }
-
-  if (msg.type === "EXECUTE_ACTION") {
-    const action = msg.action as StructuredAction;
-    executeAction(action).then(sendResponse);
-    return true; // async response
   }
 });
 
-console.log("[LocalLens] Content script loaded on", window.location.hostname);
+// ---------------------------------------------------------------------------
+// Relay: popup / side panel / floating-widget iframe → background → content script
+// ---------------------------------------------------------------------------
+chrome.runtime.onMessage.addListener(
+  (msg: RelayMessage, sender: chrome.runtime.MessageSender, sendResponse: SendResponse) => {
+    // Only relay messages that come from our OWN extension UI surfaces
+    // (popup, side panel, or the floating widget's injected iframe).
+    // NOTE: sender.tab is set for the floating widget too, since it's an
+    // extension-origin iframe embedded inside the page — so checking
+    // sender.tab alone incorrectly filters it out. Check sender.url instead.
+    const fromOwnExtensionUI = sender.url?.startsWith(chrome.runtime.getURL(""));
+
+    // PAGE_CHANGED / DOM_CHANGED originate from content.ts itself (not our
+    // UI), so they must be allowed through even though sender.tab is set
+    // and sender.url is the page's own URL, not an extension URL.
+    if (msg.type === "PAGE_CHANGED" || msg.type === "DOM_CHANGED") {
+      // Just forward straight through — no relay target needed, this is
+      // a broadcast-style notification for whichever UI is listening.
+      chrome.runtime.sendMessage(msg).catch(() => {
+        // No UI currently listening (side panel/widget closed) — fine.
+      });
+      return; // not expecting a sendResponse for this message type
+    }
+
+    if (!fromOwnExtensionUI) {
+      return; // ignore anything not from our own popup/side panel/widget
+    }
+
+    if (msg.type === "GET_CONTEXT" || msg.type === "EXECUTE_ACTION") {
+      // If the message came from the floating widget iframe, sender.tab
+      // already tells us exactly which tab it's embedded in — use that
+      // directly instead of re-querying "active tab", which can resolve
+      // to the wrong tab if focus has moved elsewhere.
+      if (sender.tab?.id) {
+        relayToTab(sender.tab.id, msg, sendResponse);
+      } else {
+        // Came from popup/side panel (no sender.tab) — fall back to
+        // querying the active tab in the currently focused window.
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
+          const tab = tabs[0];
+          if (!tab?.id) {
+            sendResponse({ error: "No active tab found." });
+            return;
+          }
+          relayToTab(tab.id, msg, sendResponse);
+        });
+      }
+      return true; // keep message channel open for async response
+    }
+  }
+);
+
+function relayToTab(
+  tabId: number,
+  msg: RelayMessage,
+  sendResponse: SendResponse,
+  attempt = 0
+): void {
+  chrome.tabs.sendMessage(tabId, msg, (response: unknown) => {
+    if (chrome.runtime.lastError) {
+      const isConnectionError = chrome.runtime.lastError.message?.includes(
+        "Receiving end does not exist"
+      );
+      if (isConnectionError && attempt < 3) {
+        // Content script probably still injecting after a fresh
+        // navigation — retry shortly instead of failing immediately.
+        setTimeout(() => relayToTab(tabId, msg, sendResponse, attempt + 1), 200);
+        return;
+      }
+      console.error("[LocalLens BG] Relay error:", chrome.runtime.lastError.message);
+      sendResponse({ error: chrome.runtime.lastError.message });
+    } else {
+      sendResponse(response);
+    }
+  });
+}

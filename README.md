@@ -47,3 +47,12 @@ The system is split into a robust frontend extension and an intelligent Python b
 2. Click the LocalLens extension icon in your Chrome toolbar.
 3. Enter a natural language task (e.g., *"Click the login button and wait"*).
 4. Hit **Start**! The agent will capture the page, plan the action via the backend, and execute it right before your eyes.
+
+## 🔐 Privacy-Preserving Field-Cache Autofill
+
+LocalLens includes a robust local autofill cache that prevents PII from unnecessarily leaving the device on repeat visits.
+
+*   **How it Works**: When you fill out a form (e.g., your email address) and blur or submit the form, LocalLens derives a domain-agnostic semantic key for that field and encrypts the value into your local extension storage. When a similar field is perceived in a future session, LocalLens uses this cache hit to flag the element locally, skipping server-side processing for that data.
+*   **Encrypted at Rest**: The cached values are encrypted using WebCrypto AES-GCM. The encryption key never leaves your local browser profile.
+*   **Password & OTP Protection**: `PASSWORD` and `OTP` fields are **hard-excluded** and will never be cached under any circumstances.
+*   **User Control**: You have full control in the extension settings (in the popup) to toggle the cache, require confirmation before filling, delete specific entries, or clear the entire cache instantly.
