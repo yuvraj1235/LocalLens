@@ -14,6 +14,7 @@
 *.crt
 *.cer
 *.onnx
+ner.onnx
 
 # API keys / credentials
 credentials.json
