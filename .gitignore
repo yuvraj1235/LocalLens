@@ -13,6 +13,7 @@
 *.pfx
 *.crt
 *.cer
+*.onnx
 
 # API keys / credentials
 credentials.json
