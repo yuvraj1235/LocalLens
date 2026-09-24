@@ -14,7 +14,7 @@
 *.crt
 *.cer
 *.onnx
-ner.onnx
+public/models/ner.onnx
 
 # API keys / credentials
 credentials.json
