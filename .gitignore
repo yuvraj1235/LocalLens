@@ -13,8 +13,6 @@
 *.pfx
 *.crt
 *.cer
-*.onnx
-public/models/ner.onnx
 
 # API keys / credentials
 credentials.json
