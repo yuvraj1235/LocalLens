@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    image: locallens-backend:production
+    container_name: locallens-backend
+    restart: always
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env
+    security_opt:
+      - no-new-privileges:true
