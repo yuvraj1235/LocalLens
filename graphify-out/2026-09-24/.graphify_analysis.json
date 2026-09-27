@@ -1,95 +1,37 @@
 {
   "communities": {
     "0": [
-      "src_api_analyzescreen_analyzescreenoptions",
-      "src_api_analyzescreen_latencybreakdown",
-      "src_api_analyzescreen_ts_src_api_analyzescreen",
-      "src_api_analyzescreen_ts_src_api_analyzescreen_analyzescreen",
-      "src_api_analyzescreen_ts_src_api_analyzescreen_defaultchangestate",
-      "src_api_analyzescreen_ts_src_api_analyzescreen_ensureengines",
-      "src_bench_benchmark_annotationfile",
-      "src_bench_benchmark_detectionevalresult",
-      "src_bench_benchmark_groundtruthelement",
-      "src_bench_benchmark_groundtruthpii",
-      "src_bench_benchmark_piievalresult",
-      "src_bench_benchmark_ts_src_bench_benchmark",
-      "src_bench_benchmark_ts_src_bench_benchmark_dummy_models",
-      "src_bench_benchmark_ts_src_bench_benchmark_evaluatedetections",
-      "src_bench_benchmark_ts_src_bench_benchmark_evaluatepii",
-      "src_bench_benchmark_ts_src_bench_benchmark_iou",
-      "src_bench_benchmark_ts_src_bench_benchmark_loaddataset",
-      "src_bench_benchmark_ts_src_bench_benchmark_loadimagedata",
-      "src_bench_benchmark_ts_src_bench_benchmark_main",
-      "src_bench_benchmark_ts_src_bench_benchmark_summarizelatency",
-      "src_detection_uidetector_candidate",
-      "src_detection_uidetector_detectionoptions",
-      "src_detection_uidetector_preprocessresult",
-      "src_detection_uidetector_ts_src_detection_uidetector",
-      "src_detection_uidetector_ts_src_detection_uidetector_class_names",
-      "src_detection_uidetector_ts_src_detection_uidetector_decode",
-      "src_detection_uidetector_ts_src_detection_uidetector_iouxyxy",
-      "src_detection_uidetector_ts_src_detection_uidetector_nonmaxsuppression",
-      "src_detection_uidetector_ts_src_detection_uidetector_preprocess",
-      "src_detection_uidetector_ts_src_detection_uidetector_runuidetection",
-      "src_detection_uidetector_ts_src_detection_uidetector_toxyxy",
-      "src_detection_uidetector_ts_src_detection_uidetector_unletterbox",
-      "src_fusion_bboxfusion_box",
-      "src_fusion_bboxfusion_scrollcontext",
-      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion",
-      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_deduplicateboxes",
-      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_iou",
-      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_nextelementid",
-      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_resetidcounter",
-      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_todocumentspace",
-      "src_fusion_screenunderstanding_fuseinputs",
-      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding",
-      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_boxesoverlap",
-      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_builduigraph",
-      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_normalizepiitype",
-      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_piibboxtoxywh",
-      "src_schema_uigraph",
-      "src_schema_uigraph_bbox",
-      "src_schema_uigraph_detectedelement",
-      "src_schema_uigraph_detectedface",
-      "src_schema_uigraph_elementtype",
-      "src_schema_uigraph_ocrtoken",
-      "src_schema_uigraph_piisignal",
-      "src_schema_uigraph_piitype",
-      "src_schema_uigraph_rawdetection",
-      "src_schema_uigraph_risklevel",
-      "src_schema_uigraph_uigraph"
-    ],
-    "1": [
       "src_agent_agentloop_agentloopoptions",
       "src_agent_agentloop_logentry",
       "src_agent_agentloop_loglevel",
-      "src_agent_agentloop_rationale_223",
       "src_agent_agentloop_ts_src_agent_agentloop",
       "src_agent_agentloop_ts_src_agent_agentloop_agentloop",
       "src_agent_agentloop_ts_src_agent_agentloop_agentloop_constructor",
-      "src_agent_agentloop_ts_src_agent_agentloop_agentloop_executewithretry",
       "src_agent_agentloop_ts_src_agent_agentloop_agentloop_log",
-      "src_agent_agentloop_ts_src_agent_agentloop_agentloop_sendmessage",
       "src_agent_agentloop_ts_src_agent_agentloop_agentloop_start",
       "src_agent_agentloop_ts_src_agent_agentloop_agentloop_stop",
       "src_agent_agentloop_ts_src_agent_agentloop_sleep",
-      "src_agent_agentloop_ts_src_agent_agentloop_terminal_actions",
       "src_agent_tests_agentloop_test_ts_src_agent_tests_agentloop_test",
       "src_agent_tests_agentloop_test_ts_src_agent_tests_agentloop_test_done_action",
       "src_agent_tests_agentloop_test_ts_src_agent_tests_agentloop_test_makecontext",
       "src_agent_tests_agentloop_test_ts_src_agent_tests_agentloop_test_makeloop",
       "src_agent_tests_agentloop_test_ts_src_agent_tests_agentloop_test_scroll_action",
       "src_content_content_ts_src_content_content",
-      "src_content_content_ts_src_content_content_applyautofillsuggestion",
       "src_content_content_ts_src_content_content_buildcontext",
       "src_content_content_ts_src_content_content_builduigraph",
       "src_content_content_ts_src_content_content_detectpii",
       "src_content_content_ts_src_content_content_getbbox",
       "src_content_content_ts_src_content_content_getlabel",
       "src_content_content_ts_src_content_content_getrole",
-      "src_content_content_ts_src_content_content_pendingautofillsuggestions",
       "src_content_content_ts_src_content_content_pii_patterns",
       "src_content_content_ts_src_content_content_role_map",
+      "src_ui_debugoverlay_ts_src_ui_debugoverlay",
+      "src_ui_debugoverlay_ts_src_ui_debugoverlay_clearoverlay",
+      "src_ui_debugoverlay_ts_src_ui_debugoverlay_drawelement",
+      "src_ui_debugoverlay_ts_src_ui_debugoverlay_ensurecanvas",
+      "src_ui_debugoverlay_ts_src_ui_debugoverlay_hidedebugoverlay",
+      "src_ui_debugoverlay_ts_src_ui_debugoverlay_renderdebugoverlay",
+      "src_ui_debugoverlay_ts_src_ui_debugoverlay_resizecanvas",
       "src_ui_main_ts_src_ui_main",
       "src_ui_main_ts_src_ui_main_appendlog",
       "src_ui_main_ts_src_ui_main_debugtoggle",
@@ -97,13 +39,13 @@
       "src_ui_main_ts_src_ui_main_prettyprint",
       "src_ui_main_ts_src_ui_main_promptel",
       "src_ui_main_ts_src_ui_main_runbtn",
-      "src_ui_types",
       "src_ui_types_actiontype",
       "src_ui_types_boundingbox",
       "src_ui_types_redactiontag",
       "src_ui_types_sanitizedcontext",
       "src_ui_types_structuredaction",
       "src_ui_types_taskrequest",
+      "src_ui_types_ts_src_ui_types",
       "src_ui_types_uielement",
       "src_ui_wsclient_ts_src_ui_wsclient",
       "src_ui_wsclient_ts_src_ui_wsclient_agentclient",
@@ -113,7 +55,7 @@
       "src_ui_wsclient_ts_src_ui_wsclient_agentclient_schedulereconnect",
       "src_ui_wsclient_ts_src_ui_wsclient_agentclient_send"
     ],
-    "2": [
+    "1": [
       "src_ocr_ocrengine_ocrresult",
       "src_pii_nerengine_label",
       "src_pii_nerengine_nerengineconfig",
@@ -137,8 +79,6 @@
       "src_pii_nerengine_ts_src_pii_nerengine_wordpiecetokenizer_fromurl",
       "src_pii_nerengine_ts_src_pii_nerengine_wordpiecetokenizer_tokenize",
       "src_pii_nerengine_ts_src_pii_nerengine_wordpiecetokenizer_wordpiece",
-      "src_pii_piifusion_fusedpii",
-      "src_pii_piifusion_fusedpiiresult",
       "src_pii_piifusion_piicandidate",
       "src_pii_piifusion_piifusionoptions",
       "src_pii_piifusion_piisource",
@@ -165,94 +105,46 @@
       "src_pii_test_regexrules_test_ts_src_pii_test_regexrules_test",
       "src_pii_test_regexrules_test_ts_src_pii_test_regexrules_test_ocrline"
     ],
+    "2": [
+      "src_detection_uidetector_candidate",
+      "src_detection_uidetector_detectionoptions",
+      "src_detection_uidetector_preprocessresult",
+      "src_detection_uidetector_ts_src_detection_uidetector",
+      "src_detection_uidetector_ts_src_detection_uidetector_class_names",
+      "src_detection_uidetector_ts_src_detection_uidetector_decode",
+      "src_detection_uidetector_ts_src_detection_uidetector_iouxyxy",
+      "src_detection_uidetector_ts_src_detection_uidetector_nonmaxsuppression",
+      "src_detection_uidetector_ts_src_detection_uidetector_preprocess",
+      "src_detection_uidetector_ts_src_detection_uidetector_runuidetection",
+      "src_detection_uidetector_ts_src_detection_uidetector_toxyxy",
+      "src_detection_uidetector_ts_src_detection_uidetector_unletterbox",
+      "src_fusion_bboxfusion_box",
+      "src_fusion_bboxfusion_scrollcontext",
+      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion",
+      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_deduplicateboxes",
+      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_iou",
+      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_nextelementid",
+      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_resetidcounter",
+      "src_fusion_bboxfusion_ts_src_fusion_bboxfusion_todocumentspace",
+      "src_fusion_screenunderstanding_fuseinputs",
+      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding",
+      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_boxesoverlap",
+      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_builduigraph",
+      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_normalizepiitype",
+      "src_fusion_screenunderstanding_ts_src_fusion_screenunderstanding_piibboxtoxywh",
+      "src_pii_piifusion_fusedpii",
+      "src_schema_uigraph_bbox",
+      "src_schema_uigraph_detectedelement",
+      "src_schema_uigraph_detectedface",
+      "src_schema_uigraph_elementtype",
+      "src_schema_uigraph_ocrtoken",
+      "src_schema_uigraph_piisignal",
+      "src_schema_uigraph_piitype",
+      "src_schema_uigraph_rawdetection",
+      "src_schema_uigraph_risklevel",
+      "src_schema_uigraph_ts_src_schema_uigraph"
+    ],
     "3": [
-      "src_popup_popup_badgestate",
-      "src_popup_popup_ts_src_popup_popup",
-      "src_popup_popup_ts_src_popup_popup_addprivacykey",
-      "src_popup_popup_ts_src_popup_popup_appendlog",
-      "src_popup_popup_ts_src_popup_popup_askinput",
-      "src_popup_popup_ts_src_popup_popup_askmessage",
-      "src_popup_popup_ts_src_popup_popup_askoverlay",
-      "src_popup_popup_ts_src_popup_popup_asksubmit",
-      "src_popup_popup_ts_src_popup_popup_audiochunks",
-      "src_popup_popup_ts_src_popup_popup_autofillconfirmcb",
-      "src_popup_popup_ts_src_popup_popup_autofillenablecb",
-      "src_popup_popup_ts_src_popup_popup_buildmockcontext",
-      "src_popup_popup_ts_src_popup_popup_cachelist",
-      "src_popup_popup_ts_src_popup_popup_clearbtn",
-      "src_popup_popup_ts_src_popup_popup_clearcachebtn",
-      "src_popup_popup_ts_src_popup_popup_clearlog",
-      "src_popup_popup_ts_src_popup_popup_closebtn",
-      "src_popup_popup_ts_src_popup_popup_escapehtml",
-      "src_popup_popup_ts_src_popup_popup_getcontext",
-      "src_popup_popup_ts_src_popup_popup_handlestart",
-      "src_popup_popup_ts_src_popup_popup_handlestop",
-      "src_popup_popup_ts_src_popup_popup_icons",
-      "src_popup_popup_ts_src_popup_popup_initprivacycontrols",
-      "src_popup_popup_ts_src_popup_popup_initsettings",
-      "src_popup_popup_ts_src_popup_popup_loglist",
-      "src_popup_popup_ts_src_popup_popup_privacyaddbtn",
-      "src_popup_popup_ts_src_popup_popup_privacykeyinput",
-      "src_popup_popup_ts_src_popup_popup_privacykeyslist",
-      "src_popup_popup_ts_src_popup_popup_privacystrip",
-      "src_popup_popup_ts_src_popup_popup_redactiontags",
-      "src_popup_popup_ts_src_popup_popup_rendercachelist",
-      "src_popup_popup_ts_src_popup_popup_renderprivacykeyslist",
-      "src_popup_popup_ts_src_popup_popup_renderprivacystrip",
-      "src_popup_popup_ts_src_popup_popup_setbuttons",
-      "src_popup_popup_ts_src_popup_popup_setstatus",
-      "src_popup_popup_ts_src_popup_popup_startbtn",
-      "src_popup_popup_ts_src_popup_popup_statusbadge",
-      "src_popup_popup_ts_src_popup_popup_stopbtn",
-      "src_popup_popup_ts_src_popup_popup_taskinput",
-      "src_popup_popup_ts_src_popup_popup_triggerautofill",
-      "src_popup_popup_ts_src_popup_popup_uploadbtn",
-      "src_popup_popup_ts_src_popup_popup_voicebtn"
-    ],
-    "4": [
-      "src_popup_popup_js_src_popup_popup",
-      "src_popup_popup_js_src_popup_popup_addprivacykey",
-      "src_popup_popup_js_src_popup_popup_appendlog",
-      "src_popup_popup_js_src_popup_popup_askinput",
-      "src_popup_popup_js_src_popup_popup_askmessage",
-      "src_popup_popup_js_src_popup_popup_askoverlay",
-      "src_popup_popup_js_src_popup_popup_asksubmit",
-      "src_popup_popup_js_src_popup_popup_audiochunks",
-      "src_popup_popup_js_src_popup_popup_autofillconfirmcb",
-      "src_popup_popup_js_src_popup_popup_autofillenablecb",
-      "src_popup_popup_js_src_popup_popup_buildmockcontext",
-      "src_popup_popup_js_src_popup_popup_cachelist",
-      "src_popup_popup_js_src_popup_popup_clearbtn",
-      "src_popup_popup_js_src_popup_popup_clearcachebtn",
-      "src_popup_popup_js_src_popup_popup_clearlog",
-      "src_popup_popup_js_src_popup_popup_closebtn",
-      "src_popup_popup_js_src_popup_popup_escapehtml",
-      "src_popup_popup_js_src_popup_popup_getcontext",
-      "src_popup_popup_js_src_popup_popup_handlestart",
-      "src_popup_popup_js_src_popup_popup_handlestop",
-      "src_popup_popup_js_src_popup_popup_icons",
-      "src_popup_popup_js_src_popup_popup_initprivacycontrols",
-      "src_popup_popup_js_src_popup_popup_initsettings",
-      "src_popup_popup_js_src_popup_popup_loglist",
-      "src_popup_popup_js_src_popup_popup_privacyaddbtn",
-      "src_popup_popup_js_src_popup_popup_privacykeyinput",
-      "src_popup_popup_js_src_popup_popup_privacykeyslist",
-      "src_popup_popup_js_src_popup_popup_privacystrip",
-      "src_popup_popup_js_src_popup_popup_redactiontags",
-      "src_popup_popup_js_src_popup_popup_rendercachelist",
-      "src_popup_popup_js_src_popup_popup_renderprivacykeyslist",
-      "src_popup_popup_js_src_popup_popup_renderprivacystrip",
-      "src_popup_popup_js_src_popup_popup_setbuttons",
-      "src_popup_popup_js_src_popup_popup_setstatus",
-      "src_popup_popup_js_src_popup_popup_startbtn",
-      "src_popup_popup_js_src_popup_popup_statusbadge",
-      "src_popup_popup_js_src_popup_popup_stopbtn",
-      "src_popup_popup_js_src_popup_popup_taskinput",
-      "src_popup_popup_js_src_popup_popup_triggerautofill",
-      "src_popup_popup_js_src_popup_popup_uploadbtn",
-      "src_popup_popup_js_src_popup_popup_voicebtn"
-    ],
-    "5": [
       "jsdom",
       "onnxruntime_web",
       "package",
@@ -290,10 +182,44 @@
       "vitest",
       "vitest_coverage_v8"
     ],
-    "6": [
+    "4": [
+      "src_agent_actionexecutor_actiontype",
+      "src_agent_actionexecutor_executionresult",
+      "src_agent_actionexecutor_executionstatus",
+      "src_agent_actionexecutor_structuredaction",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_doclick",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_donavigate",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_doscroll",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_doselect",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_dotype",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_dowait",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_executeaction",
+      "src_agent_actionexecutor_ts_src_agent_actionexecutor_resolveelement",
+      "src_agent_actionvalidator_rationale_60",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_element_required",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_isdisabled",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_isvisible",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_valid_actions",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_validateaction",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_validatedom",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_validateschema",
+      "src_agent_actionvalidator_ts_src_agent_actionvalidator_value_required",
+      "src_agent_actionvalidator_validationresult",
+      "src_agent_actionvalidator_validationstatus",
+      "src_agent_tests_actionexecutor_test_ts_src_agent_tests_actionexecutor_test",
+      "src_agent_tests_actionexecutor_test_ts_src_agent_tests_actionexecutor_test_addelement",
+      "src_agent_tests_actionexecutor_test_ts_src_agent_tests_actionexecutor_test_makeaction",
+      "src_agent_tests_actionvalidator_test_ts_src_agent_tests_actionvalidator_test",
+      "src_agent_tests_actionvalidator_test_ts_src_agent_tests_actionvalidator_test_addelement",
+      "src_agent_tests_actionvalidator_test_ts_src_agent_tests_actionvalidator_test_makeaction"
+    ],
+    "5": [
       "manifest",
       "manifest_action",
       "manifest_action_default_icon",
+      "manifest_action_default_popup",
       "manifest_action_default_title",
       "manifest_background",
       "manifest_background_service_worker",
@@ -313,42 +239,96 @@
       "manifest_manifest_version",
       "manifest_name",
       "manifest_permissions",
-      "manifest_side_panel",
-      "manifest_side_panel_default_path",
       "manifest_version",
-      "manifest_web_accessible_resources",
       "ref_activetab",
       "ref_http_localhost_8000",
       "ref_scripting",
-      "ref_sidepanel",
       "ref_storage",
       "ref_ws_localhost_8000"
     ],
+    "6": [
+      "src_adaptive_adaptiveinference_changedetectorstate",
+      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference",
+      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference_cheapimagehash",
+      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference_createchangedetectorstate",
+      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference_shouldrunfullpipeline",
+      "src_api_analyzescreen_analyzescreenoptions",
+      "src_api_analyzescreen_latencybreakdown",
+      "src_api_analyzescreen_ts_src_api_analyzescreen",
+      "src_api_analyzescreen_ts_src_api_analyzescreen_analyzescreen",
+      "src_api_analyzescreen_ts_src_api_analyzescreen_defaultchangestate",
+      "src_api_analyzescreen_ts_src_api_analyzescreen_ensureengines",
+      "src_bench_benchmark_annotationfile",
+      "src_bench_benchmark_detectionevalresult",
+      "src_bench_benchmark_groundtruthelement",
+      "src_bench_benchmark_groundtruthpii",
+      "src_bench_benchmark_piievalresult",
+      "src_bench_benchmark_ts_src_bench_benchmark",
+      "src_bench_benchmark_ts_src_bench_benchmark_dummy_models",
+      "src_bench_benchmark_ts_src_bench_benchmark_evaluatedetections",
+      "src_bench_benchmark_ts_src_bench_benchmark_evaluatepii",
+      "src_bench_benchmark_ts_src_bench_benchmark_iou",
+      "src_bench_benchmark_ts_src_bench_benchmark_loaddataset",
+      "src_bench_benchmark_ts_src_bench_benchmark_loadimagedata",
+      "src_bench_benchmark_ts_src_bench_benchmark_main",
+      "src_bench_benchmark_ts_src_bench_benchmark_summarizelatency",
+      "src_pii_piifusion_fusedpiiresult",
+      "src_schema_uigraph_uigraph"
+    ],
     "7": [
-      "backend_app_services_jev_classifier",
-      "backend_app_services_jev_classifier_build_element_summary",
-      "backend_app_services_jev_classifier_build_state",
-      "backend_app_services_jev_classifier_classify_action",
-      "backend_app_services_jev_classifier_extract_type_value",
-      "backend_app_services_jev_classifier_is_available",
-      "backend_app_services_jev_classifier_jev_fast_path",
-      "backend_app_services_jev_classifier_py_structuredaction",
-      "backend_app_services_jev_classifier_py_taskrequest",
-      "backend_app_services_jev_classifier_rationale_1",
-      "backend_app_services_jev_classifier_rationale_122",
-      "backend_app_services_jev_classifier_rationale_151",
-      "backend_app_services_jev_classifier_rationale_208",
-      "backend_app_services_jev_classifier_rationale_296",
-      "backend_app_services_jev_classifier_rationale_336",
-      "backend_app_services_jev_classifier_rationale_392",
-      "backend_app_services_jev_classifier_rationale_90",
-      "backend_app_services_jev_classifier_rationale_95",
-      "backend_app_services_jev_classifier_select_element",
-      "backend_app_services_jev_classifier_verify_element",
-      "typesafeclient",
-      "uielement"
+      "src_popup_popup_badgestate",
+      "src_popup_popup_ts_src_popup_popup",
+      "src_popup_popup_ts_src_popup_popup_appendlog",
+      "src_popup_popup_ts_src_popup_popup_askinput",
+      "src_popup_popup_ts_src_popup_popup_askmessage",
+      "src_popup_popup_ts_src_popup_popup_askoverlay",
+      "src_popup_popup_ts_src_popup_popup_asksubmit",
+      "src_popup_popup_ts_src_popup_popup_buildmockcontext",
+      "src_popup_popup_ts_src_popup_popup_clearbtn",
+      "src_popup_popup_ts_src_popup_popup_clearlog",
+      "src_popup_popup_ts_src_popup_popup_escapehtml",
+      "src_popup_popup_ts_src_popup_popup_getcontext",
+      "src_popup_popup_ts_src_popup_popup_handlestart",
+      "src_popup_popup_ts_src_popup_popup_handlestop",
+      "src_popup_popup_ts_src_popup_popup_icons",
+      "src_popup_popup_ts_src_popup_popup_loglist",
+      "src_popup_popup_ts_src_popup_popup_privacystrip",
+      "src_popup_popup_ts_src_popup_popup_redactiontags",
+      "src_popup_popup_ts_src_popup_popup_renderprivacystrip",
+      "src_popup_popup_ts_src_popup_popup_setbuttons",
+      "src_popup_popup_ts_src_popup_popup_setstatus",
+      "src_popup_popup_ts_src_popup_popup_startbtn",
+      "src_popup_popup_ts_src_popup_popup_statusbadge",
+      "src_popup_popup_ts_src_popup_popup_stopbtn",
+      "src_popup_popup_ts_src_popup_popup_taskinput"
     ],
     "8": [
+      "src_popup_popup_js_src_popup_popup",
+      "src_popup_popup_js_src_popup_popup_appendlog",
+      "src_popup_popup_js_src_popup_popup_askinput",
+      "src_popup_popup_js_src_popup_popup_askmessage",
+      "src_popup_popup_js_src_popup_popup_askoverlay",
+      "src_popup_popup_js_src_popup_popup_asksubmit",
+      "src_popup_popup_js_src_popup_popup_buildmockcontext",
+      "src_popup_popup_js_src_popup_popup_clearbtn",
+      "src_popup_popup_js_src_popup_popup_clearlog",
+      "src_popup_popup_js_src_popup_popup_escapehtml",
+      "src_popup_popup_js_src_popup_popup_getcontext",
+      "src_popup_popup_js_src_popup_popup_handlestart",
+      "src_popup_popup_js_src_popup_popup_handlestop",
+      "src_popup_popup_js_src_popup_popup_icons",
+      "src_popup_popup_js_src_popup_popup_loglist",
+      "src_popup_popup_js_src_popup_popup_privacystrip",
+      "src_popup_popup_js_src_popup_popup_redactiontags",
+      "src_popup_popup_js_src_popup_popup_renderprivacystrip",
+      "src_popup_popup_js_src_popup_popup_setbuttons",
+      "src_popup_popup_js_src_popup_popup_setstatus",
+      "src_popup_popup_js_src_popup_popup_startbtn",
+      "src_popup_popup_js_src_popup_popup_statusbadge",
+      "src_popup_popup_js_src_popup_popup_stopbtn",
+      "src_popup_popup_js_src_popup_popup_taskinput"
+    ],
+    "9": [
       "src_ocr_ocrengine_ocrengineconfig",
       "src_ocr_ocrengine_rawregion",
       "src_ocr_ocrengine_ts_src_ocr_ocrengine",
@@ -371,49 +351,7 @@
       "src_ocr_ocrengine_ts_src_ocr_ocrengine_sigmoid",
       "src_ocr_ocrengine_ts_src_ocr_ocrengine_unclipbox"
     ],
-    "9": [
-      "src_agent_actionexecutor_actiontype",
-      "src_agent_actionexecutor_executionresult",
-      "src_agent_actionexecutor_executionstatus",
-      "src_agent_actionexecutor_structuredaction",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_doclick",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_donavigate",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_doscroll",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_doselect",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_dotype",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_dowait",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_executeaction",
-      "src_agent_actionexecutor_ts_src_agent_actionexecutor_resolveelement",
-      "src_agent_tests_actionexecutor_test_ts_src_agent_tests_actionexecutor_test",
-      "src_agent_tests_actionexecutor_test_ts_src_agent_tests_actionexecutor_test_addelement",
-      "src_agent_tests_actionexecutor_test_ts_src_agent_tests_actionexecutor_test_makeaction",
-      "src_agent_tests_actionvalidator_test_ts_src_agent_tests_actionvalidator_test",
-      "src_agent_tests_actionvalidator_test_ts_src_agent_tests_actionvalidator_test_addelement",
-      "src_agent_tests_actionvalidator_test_ts_src_agent_tests_actionvalidator_test_makeaction"
-    ],
     "10": [
-      "src_cache_fieldcache_autofillsettings",
-      "src_cache_fieldcache_cachedentry",
-      "src_cache_fieldcache_ts_src_cache_fieldcache",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_ab2b64",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_b642ab",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_clearallcachedvalues",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_clearcachedvalue",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_decryptdata",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_encryptdata",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_getautofillsettings",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_getcachedvalue",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_getmasterkey",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_listcachedkeys",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_resetmasterkeyfortest",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_setcachedvalue",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_storageget",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_storageremove",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_storageset",
-      "src_cache_fieldcache_ts_src_cache_fieldcache_updateautofillsettings"
-    ],
-    "11": [
       "src_ocr_ocrengine_js_src_ocr_ocrengine",
       "src_ocr_ocrengine_js_src_ocr_ocrengine_connectedcomponents",
       "src_ocr_ocrengine_js_src_ocr_ocrengine_defaults",
@@ -434,7 +372,7 @@
       "src_ocr_ocrengine_js_src_ocr_ocrengine_sigmoid",
       "src_ocr_ocrengine_js_src_ocr_ocrengine_unclipbox"
     ],
-    "12": [
+    "11": [
       "src_pii_nerengine_js_src_pii_nerengine",
       "src_pii_nerengine_js_src_pii_nerengine_entity_base_risk",
       "src_pii_nerengine_js_src_pii_nerengine_entity_to_pii_type",
@@ -455,26 +393,7 @@
       "src_pii_nerengine_js_src_pii_nerengine_wordpiecetokenizer_tokenize",
       "src_pii_nerengine_js_src_pii_nerengine_wordpiecetokenizer_wordpiece"
     ],
-    "13": [
-      "src_cache_fieldcache_js_src_cache_fieldcache",
-      "src_cache_fieldcache_js_src_cache_fieldcache_ab2b64",
-      "src_cache_fieldcache_js_src_cache_fieldcache_b642ab",
-      "src_cache_fieldcache_js_src_cache_fieldcache_clearallcachedvalues",
-      "src_cache_fieldcache_js_src_cache_fieldcache_clearcachedvalue",
-      "src_cache_fieldcache_js_src_cache_fieldcache_decryptdata",
-      "src_cache_fieldcache_js_src_cache_fieldcache_encryptdata",
-      "src_cache_fieldcache_js_src_cache_fieldcache_getautofillsettings",
-      "src_cache_fieldcache_js_src_cache_fieldcache_getcachedvalue",
-      "src_cache_fieldcache_js_src_cache_fieldcache_getmasterkey",
-      "src_cache_fieldcache_js_src_cache_fieldcache_listcachedkeys",
-      "src_cache_fieldcache_js_src_cache_fieldcache_resetmasterkeyfortest",
-      "src_cache_fieldcache_js_src_cache_fieldcache_setcachedvalue",
-      "src_cache_fieldcache_js_src_cache_fieldcache_storageget",
-      "src_cache_fieldcache_js_src_cache_fieldcache_storageremove",
-      "src_cache_fieldcache_js_src_cache_fieldcache_storageset",
-      "src_cache_fieldcache_js_src_cache_fieldcache_updateautofillsettings"
-    ],
-    "14": [
+    "12": [
       "src_face_facedetector_candidate",
       "src_face_facedetector_facedetectionoptions",
       "src_face_facedetector_preprocessresult",
@@ -491,37 +410,22 @@
       "src_face_facedetector_ts_src_face_facedetector_strides",
       "src_face_facedetector_ts_src_face_facedetector_toxyxy"
     ],
-    "15": [
-      "backend_app_main",
-      "backend_app_main_health",
-      "backend_app_routers_agent",
-      "backend_app_routers_agent_transcribe_audio",
+    "13": [
       "backend_app_schemas_context",
+      "backend_app_schemas_context_boundingbox",
       "backend_app_schemas_context_rationale_1",
+      "backend_app_schemas_context_rationale_45",
+      "backend_app_schemas_context_rationale_60",
+      "backend_app_schemas_context_rationale_74",
       "backend_app_schemas_context_redactiontag",
-      "backend_app_services_action_planner",
-      "backend_docker_compose",
-      "backend_readme",
-      "enum",
-      "str",
-      "uploadfile"
-    ],
-    "16": [
-      "backend_app_schemas_context_rationale_33",
-      "backend_app_schemas_context_rationale_50",
       "backend_app_schemas_context_sanitizedcontext",
-      "backend_app_schemas_context_uielement",
-      "backend_app_tests_test_action_planner",
-      "backend_app_tests_test_action_planner_fakellmclient",
-      "backend_app_tests_test_action_planner_fakellmclient_chat_json",
-      "backend_app_tests_test_action_planner_fakellmclient_init",
-      "backend_app_tests_test_action_planner_make_request",
-      "backend_app_tests_test_action_planner_py_taskrequest",
-      "backend_app_tests_test_action_planner_rationale_8",
-      "backend_app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
-      "backend_app_tests_test_action_planner_test_valid_action_passes_through"
+      "backend_app_schemas_context_structuredaction",
+      "backend_app_schemas_context_taskrequest",
+      "basemodel",
+      "enum",
+      "str"
     ],
-    "17": [
+    "14": [
       "src_agent_latencytest_latencysample",
       "src_agent_latencytest_latencysummary",
       "src_agent_latencytest_transport",
@@ -536,7 +440,7 @@
       "src_agent_latencytest_ts_src_agent_latencytest_runlatencybenchmark",
       "src_agent_latencytest_ts_src_agent_latencytest_sleep"
     ],
-    "18": [
+    "15": [
       "ref_chrome",
       "ref_dom",
       "ref_es2020",
@@ -550,7 +454,7 @@
       "tsconfig_compileroptions_target",
       "tsconfig_compileroptions_types"
     ],
-    "19": [
+    "16": [
       "any",
       "backend_app_services_action_planner_actionplanner_init",
       "backend_app_services_llm_client",
@@ -560,36 +464,23 @@
       "backend_app_services_llm_client_llmclient_close",
       "backend_app_services_llm_client_llmclient_init",
       "backend_app_services_llm_client_rationale_1",
-      "backend_app_services_llm_client_rationale_44",
-      "backend_app_services_llm_client_rationale_76"
+      "backend_app_services_llm_client_rationale_40",
+      "backend_app_services_llm_client_rationale_72"
     ],
-    "20": [
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_element_required",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_isdisabled",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_isvisible",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_valid_actions",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_validateaction",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_validatedom",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_validateschema",
-      "src_agent_actionvalidator_ts_src_agent_actionvalidator_value_required",
-      "src_agent_actionvalidator_validationresult",
-      "src_agent_actionvalidator_validationstatus"
+    "17": [
+      "backend_app_schemas_context_rationale_33",
+      "backend_app_schemas_context_uielement",
+      "backend_app_tests_test_action_planner",
+      "backend_app_tests_test_action_planner_fakellmclient",
+      "backend_app_tests_test_action_planner_fakellmclient_chat_json",
+      "backend_app_tests_test_action_planner_fakellmclient_init",
+      "backend_app_tests_test_action_planner_make_request",
+      "backend_app_tests_test_action_planner_py_taskrequest",
+      "backend_app_tests_test_action_planner_rationale_8",
+      "backend_app_tests_test_action_planner_test_hallucinated_element_id_is_downgraded",
+      "backend_app_tests_test_action_planner_test_valid_action_passes_through"
     ],
-    "21": [
-      "src_agent_agentloop_js_src_agent_agentloop",
-      "src_agent_agentloop_js_src_agent_agentloop_agentloop",
-      "src_agent_agentloop_js_src_agent_agentloop_agentloop_constructor",
-      "src_agent_agentloop_js_src_agent_agentloop_agentloop_executewithretry",
-      "src_agent_agentloop_js_src_agent_agentloop_agentloop_log",
-      "src_agent_agentloop_js_src_agent_agentloop_agentloop_sendmessage",
-      "src_agent_agentloop_js_src_agent_agentloop_agentloop_start",
-      "src_agent_agentloop_js_src_agent_agentloop_agentloop_stop",
-      "src_agent_agentloop_js_src_agent_agentloop_sleep",
-      "src_agent_agentloop_js_src_agent_agentloop_terminal_actions",
-      "src_agent_agentloop_rationale_122"
-    ],
-    "22": [
+    "18": [
       "src_agent_latencytest_js_src_agent_latencytest",
       "src_agent_latencytest_js_src_agent_latencytest_latencytracker",
       "src_agent_latencytest_js_src_agent_latencytest_latencytracker_end",
@@ -602,20 +493,7 @@
       "src_agent_latencytest_js_src_agent_latencytest_sleep",
       "src_agent_latencytest_latencytracker_constructor"
     ],
-    "23": [
-      "src_content_content_js_src_content_content",
-      "src_content_content_js_src_content_content_applyautofillsuggestion",
-      "src_content_content_js_src_content_content_buildcontext",
-      "src_content_content_js_src_content_content_builduigraph",
-      "src_content_content_js_src_content_content_detectpii",
-      "src_content_content_js_src_content_content_getbbox",
-      "src_content_content_js_src_content_content_getlabel",
-      "src_content_content_js_src_content_content_getrole",
-      "src_content_content_js_src_content_content_pendingautofillsuggestions",
-      "src_content_content_js_src_content_content_pii_patterns",
-      "src_content_content_js_src_content_content_role_map"
-    ],
-    "24": [
+    "19": [
       "src_face_facedetector_js_src_face_facedetector",
       "src_face_facedetector_js_src_face_facedetector_decode",
       "src_face_facedetector_js_src_face_facedetector_generatepriors",
@@ -628,18 +506,31 @@
       "src_face_facedetector_js_src_face_facedetector_strides",
       "src_face_facedetector_js_src_face_facedetector_toxyxy"
     ],
-    "25": [
-      "backend_requirements",
-      "readme_action_planner_py",
-      "readme_agentloop_ts",
-      "readme_autofill_cache",
-      "readme_background_js",
-      "readme_content_ts",
-      "readme_hallucination_guard",
-      "readme_llm_client_py",
-      "readme_session_store"
+    "20": [
+      "backend_app_core_config",
+      "backend_app_core_config_rationale_1",
+      "backend_app_core_config_settings",
+      "backend_app_main",
+      "backend_app_main_health",
+      "backend_app_routers_agent",
+      "backend_app_services_action_planner",
+      "backend_docker_compose",
+      "backend_readme",
+      "basesettings"
     ],
-    "26": [
+    "21": [
+      "src_agent_actionvalidator_js_src_agent_actionvalidator",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_element_required",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_isdisabled",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_isvisible",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_valid_actions",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_validateaction",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_validatedom",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_validateschema",
+      "src_agent_actionvalidator_js_src_agent_actionvalidator_value_required",
+      "src_agent_actionvalidator_rationale_41"
+    ],
+    "22": [
       "src_agent_actionexecutor_js_src_agent_actionexecutor",
       "src_agent_actionexecutor_js_src_agent_actionexecutor_doclick",
       "src_agent_actionexecutor_js_src_agent_actionexecutor_donavigate",
@@ -650,18 +541,7 @@
       "src_agent_actionexecutor_js_src_agent_actionexecutor_executeaction",
       "src_agent_actionexecutor_js_src_agent_actionexecutor_resolveelement"
     ],
-    "27": [
-      "src_agent_actionvalidator_js_src_agent_actionvalidator",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_element_required",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_isdisabled",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_isvisible",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_valid_actions",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_validateaction",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_validatedom",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_validateschema",
-      "src_agent_actionvalidator_js_src_agent_actionvalidator_value_required"
-    ],
-    "28": [
+    "23": [
       "src_bench_benchmark_js_src_bench_benchmark",
       "src_bench_benchmark_js_src_bench_benchmark_dummy_models",
       "src_bench_benchmark_js_src_bench_benchmark_evaluatedetections",
@@ -672,7 +552,18 @@
       "src_bench_benchmark_js_src_bench_benchmark_main",
       "src_bench_benchmark_js_src_bench_benchmark_summarizelatency"
     ],
-    "29": [
+    "24": [
+      "src_content_content_js_src_content_content",
+      "src_content_content_js_src_content_content_buildcontext",
+      "src_content_content_js_src_content_content_builduigraph",
+      "src_content_content_js_src_content_content_detectpii",
+      "src_content_content_js_src_content_content_getbbox",
+      "src_content_content_js_src_content_content_getlabel",
+      "src_content_content_js_src_content_content_getrole",
+      "src_content_content_js_src_content_content_pii_patterns",
+      "src_content_content_js_src_content_content_role_map"
+    ],
+    "25": [
       "src_detection_uidetector_js_src_detection_uidetector",
       "src_detection_uidetector_js_src_detection_uidetector_class_names",
       "src_detection_uidetector_js_src_detection_uidetector_decode",
@@ -683,27 +574,17 @@
       "src_detection_uidetector_js_src_detection_uidetector_toxyxy",
       "src_detection_uidetector_js_src_detection_uidetector_unletterbox"
     ],
-    "30": [
+    "26": [
       "backend_app_routers_agent_agent_websocket",
       "backend_app_routers_agent_plan_action_http",
       "backend_app_routers_agent_py_structuredaction",
       "backend_app_routers_agent_py_taskrequest",
-      "backend_app_routers_agent_rationale_21",
-      "backend_app_routers_agent_rationale_53",
+      "backend_app_routers_agent_rationale_19",
+      "backend_app_routers_agent_rationale_45",
       "backend_app_services_llm_client_get_vlm_client",
       "websocket"
     ],
-    "31": [
-      "backend_app_services_action_planner_actionplanner",
-      "backend_app_services_action_planner_actionplanner_apply_confidence_gate",
-      "backend_app_services_action_planner_actionplanner_plan_next_action",
-      "backend_app_services_action_planner_actionplanner_validate_against_graph",
-      "backend_app_services_action_planner_py_structuredaction",
-      "backend_app_services_action_planner_py_taskrequest",
-      "backend_app_services_action_planner_rationale_113",
-      "backend_app_services_action_planner_rationale_141"
-    ],
-    "32": [
+    "27": [
       "src_pii_regexrules_js_src_pii_regexrules",
       "src_pii_regexrules_js_src_pii_regexrules_dedupesameline",
       "src_pii_regexrules_js_src_pii_regexrules_lookslikeaadhaar",
@@ -713,7 +594,16 @@
       "src_pii_regexrules_js_src_pii_regexrules_regexruleengine_detect",
       "src_pii_regexrules_js_src_pii_regexrules_rules"
     ],
-    "33": [
+    "28": [
+      "src_agent_agentloop_js_src_agent_agentloop",
+      "src_agent_agentloop_js_src_agent_agentloop_agentloop",
+      "src_agent_agentloop_js_src_agent_agentloop_agentloop_constructor",
+      "src_agent_agentloop_js_src_agent_agentloop_agentloop_log",
+      "src_agent_agentloop_js_src_agent_agentloop_agentloop_start",
+      "src_agent_agentloop_js_src_agent_agentloop_agentloop_stop",
+      "src_agent_agentloop_js_src_agent_agentloop_sleep"
+    ],
+    "29": [
       "src_pii_piifusion_js_src_pii_piifusion",
       "src_pii_piifusion_js_src_pii_piifusion_base_risk",
       "src_pii_piifusion_js_src_pii_piifusion_fusepii",
@@ -722,7 +612,7 @@
       "src_pii_piifusion_js_src_pii_piifusion_unionbbox",
       "src_pii_piifusion_js_src_pii_piifusion_upgraderisk"
     ],
-    "34": [
+    "30": [
       "src_ui_debugoverlay_js_src_ui_debugoverlay",
       "src_ui_debugoverlay_js_src_ui_debugoverlay_clearoverlay",
       "src_ui_debugoverlay_js_src_ui_debugoverlay_drawelement",
@@ -731,16 +621,7 @@
       "src_ui_debugoverlay_js_src_ui_debugoverlay_renderdebugoverlay",
       "src_ui_debugoverlay_js_src_ui_debugoverlay_resizecanvas"
     ],
-    "35": [
-      "src_ui_debugoverlay_ts_src_ui_debugoverlay",
-      "src_ui_debugoverlay_ts_src_ui_debugoverlay_clearoverlay",
-      "src_ui_debugoverlay_ts_src_ui_debugoverlay_drawelement",
-      "src_ui_debugoverlay_ts_src_ui_debugoverlay_ensurecanvas",
-      "src_ui_debugoverlay_ts_src_ui_debugoverlay_hidedebugoverlay",
-      "src_ui_debugoverlay_ts_src_ui_debugoverlay_renderdebugoverlay",
-      "src_ui_debugoverlay_ts_src_ui_debugoverlay_resizecanvas"
-    ],
-    "36": [
+    "31": [
       "src_ui_main_js_src_ui_main",
       "src_ui_main_js_src_ui_main_appendlog",
       "src_ui_main_js_src_ui_main_debugtoggle",
@@ -749,7 +630,7 @@
       "src_ui_main_js_src_ui_main_promptel",
       "src_ui_main_js_src_ui_main_runbtn"
     ],
-    "37": [
+    "32": [
       "src_ui_wsclient_js_src_ui_wsclient",
       "src_ui_wsclient_js_src_ui_wsclient_agentclient",
       "src_ui_wsclient_js_src_ui_wsclient_agentclient_constructor",
@@ -758,15 +639,15 @@
       "src_ui_wsclient_js_src_ui_wsclient_agentclient_schedulereconnect",
       "src_ui_wsclient_js_src_ui_wsclient_agentclient_send"
     ],
-    "38": [
-      "backend_app_schemas_context_boundingbox",
-      "backend_app_schemas_context_rationale_65",
-      "backend_app_schemas_context_rationale_79",
-      "backend_app_schemas_context_structuredaction",
-      "backend_app_schemas_context_taskrequest",
-      "basemodel"
+    "33": [
+      "backend_app_services_action_planner_actionplanner",
+      "backend_app_services_action_planner_actionplanner_plan_next_action",
+      "backend_app_services_action_planner_actionplanner_validate_against_graph",
+      "backend_app_services_action_planner_py_structuredaction",
+      "backend_app_services_action_planner_py_taskrequest",
+      "backend_app_services_action_planner_rationale_32"
     ],
-    "39": [
+    "34": [
       "backend_app_services_session_store",
       "backend_app_services_session_store_sessionstore",
       "backend_app_services_session_store_sessionstore_append_history",
@@ -774,7 +655,7 @@
       "backend_app_services_session_store_sessionstore_get_history",
       "backend_app_services_session_store_sessionstore_init"
     ],
-    "40": [
+    "35": [
       "src_fusion_bboxfusion_js_src_fusion_bboxfusion",
       "src_fusion_bboxfusion_js_src_fusion_bboxfusion_deduplicateboxes",
       "src_fusion_bboxfusion_js_src_fusion_bboxfusion_iou",
@@ -782,7 +663,7 @@
       "src_fusion_bboxfusion_js_src_fusion_bboxfusion_resetidcounter",
       "src_fusion_bboxfusion_js_src_fusion_bboxfusion_todocumentspace"
     ],
-    "41": [
+    "36": [
       "src_runtime_onnxruntime_executionbackend",
       "src_runtime_onnxruntime_ts_src_runtime_onnxruntime",
       "src_runtime_onnxruntime_ts_src_runtime_onnxruntime_clearsessioncache",
@@ -790,232 +671,179 @@
       "src_runtime_onnxruntime_ts_src_runtime_onnxruntime_getsession",
       "src_runtime_onnxruntime_ts_src_runtime_onnxruntime_sessioncache"
     ],
-    "42": [
-      "src_adaptive_adaptiveinference_changedetectorstate",
-      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference",
-      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference_cheapimagehash",
-      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference_createchangedetectorstate",
-      "src_adaptive_adaptiveinference_ts_src_adaptive_adaptiveinference_shouldrunfullpipeline"
-    ],
-    "43": [
+    "37": [
       "src_agent_tests_agentloop_test_js_src_agent_tests_agentloop_test",
       "src_agent_tests_agentloop_test_js_src_agent_tests_agentloop_test_done_action",
       "src_agent_tests_agentloop_test_js_src_agent_tests_agentloop_test_makecontext",
       "src_agent_tests_agentloop_test_js_src_agent_tests_agentloop_test_makeloop",
       "src_agent_tests_agentloop_test_js_src_agent_tests_agentloop_test_scroll_action"
     ],
-    "44": [
+    "38": [
       "src_fusion_screenunderstanding_js_src_fusion_screenunderstanding",
       "src_fusion_screenunderstanding_js_src_fusion_screenunderstanding_boxesoverlap",
       "src_fusion_screenunderstanding_js_src_fusion_screenunderstanding_builduigraph",
       "src_fusion_screenunderstanding_js_src_fusion_screenunderstanding_normalizepiitype",
       "src_fusion_screenunderstanding_js_src_fusion_screenunderstanding_piibboxtoxywh"
     ],
-    "45": [
+    "39": [
       "src_runtime_onnxruntime_js_src_runtime_onnxruntime",
       "src_runtime_onnxruntime_js_src_runtime_onnxruntime_clearsessioncache",
       "src_runtime_onnxruntime_js_src_runtime_onnxruntime_detectbackend",
       "src_runtime_onnxruntime_js_src_runtime_onnxruntime_getsession",
       "src_runtime_onnxruntime_js_src_runtime_onnxruntime_sessioncache"
     ],
-    "46": [
-      "backend_app_core_config",
-      "backend_app_core_config_rationale_1",
-      "backend_app_core_config_settings",
-      "basesettings"
-    ],
-    "47": [
+    "40": [
       "backend_app_services_prompt_builder",
       "backend_app_services_prompt_builder_build_user_prompt",
       "backend_app_services_prompt_builder_py_taskrequest",
       "backend_app_services_prompt_builder_rationale_1"
     ],
-    "48": [
+    "41": [
       "src_adaptive_adaptiveinference_js_src_adaptive_adaptiveinference",
       "src_adaptive_adaptiveinference_js_src_adaptive_adaptiveinference_cheapimagehash",
       "src_adaptive_adaptiveinference_js_src_adaptive_adaptiveinference_createchangedetectorstate",
       "src_adaptive_adaptiveinference_js_src_adaptive_adaptiveinference_shouldrunfullpipeline"
     ],
-    "49": [
+    "42": [
       "src_api_analyzescreen_js_src_api_analyzescreen",
       "src_api_analyzescreen_js_src_api_analyzescreen_analyzescreen",
       "src_api_analyzescreen_js_src_api_analyzescreen_defaultchangestate",
       "src_api_analyzescreen_js_src_api_analyzescreen_ensureengines"
     ],
-    "50": [
-      "src_cache_fieldclassifier_fieldcontext",
-      "src_cache_fieldclassifier_ts_src_cache_fieldclassifier",
-      "src_cache_fieldclassifier_ts_src_cache_fieldclassifier_classifyfield",
-      "src_cache_fieldclassifier_ts_src_cache_fieldclassifier_normalize_map"
-    ],
-    "51": [
-      "src_content_cacheintegration_js_src_content_cacheintegration",
-      "src_content_cacheintegration_js_src_content_cacheintegration_getsemantickey",
-      "src_content_cacheintegration_js_src_content_cacheintegration_handlefieldblur",
-      "src_content_cacheintegration_js_src_content_cacheintegration_setupcachelisteners"
-    ],
-    "52": [
-      "src_content_cacheintegration_ts_src_content_cacheintegration",
-      "src_content_cacheintegration_ts_src_content_cacheintegration_getsemantickey",
-      "src_content_cacheintegration_ts_src_content_cacheintegration_handlefieldblur",
-      "src_content_cacheintegration_ts_src_content_cacheintegration_setupcachelisteners"
-    ],
-    "53": [
+    "43": [
       "src_agent_tests_actionexecutor_test_js_src_agent_tests_actionexecutor_test",
       "src_agent_tests_actionexecutor_test_js_src_agent_tests_actionexecutor_test_addelement",
       "src_agent_tests_actionexecutor_test_js_src_agent_tests_actionexecutor_test_makeaction"
     ],
-    "54": [
+    "44": [
       "src_agent_tests_actionvalidator_test_js_src_agent_tests_actionvalidator_test",
       "src_agent_tests_actionvalidator_test_js_src_agent_tests_actionvalidator_test_addelement",
       "src_agent_tests_actionvalidator_test_js_src_agent_tests_actionvalidator_test_makeaction"
     ],
-    "55": [
-      "src_cache_fieldclassifier_js_src_cache_fieldclassifier",
-      "src_cache_fieldclassifier_js_src_cache_fieldclassifier_classifyfield",
-      "src_cache_fieldclassifier_js_src_cache_fieldclassifier_normalize_map"
-    ],
-    "56": [
-      "src_cache_cache_test_js_src_cache_cache_test",
-      "src_cache_cache_test_js_src_cache_cache_test_mockstorage"
-    ],
-    "57": [
-      "src_cache_cache_test_ts_src_cache_cache_test",
-      "src_cache_cache_test_ts_src_cache_cache_test_mockstorage"
-    ],
-    "58": [
+    "45": [
       "src_pii_test_regexrules_test_js_src_pii_test_regexrules_test",
       "src_pii_test_regexrules_test_js_src_pii_test_regexrules_test_ocrline"
     ],
-    "59": [
+    "46": [
       "src_popup_popup_html",
-      "src_popup_popup_js"
+      "src_popup_popup_ts"
     ],
-    "60": [
+    "47": [
       "src_ui_index_html",
       "src_ui_main_ts"
     ],
-    "61": [
+    "48": [
       "vite_config_js_vite_config",
       "vite_config_js_vite_config_copyextensionassets"
     ],
-    "62": [
+    "49": [
       "vite_config_ts_vite_config",
       "vite_config_ts_vite_config_copyextensionassets"
     ],
-    "63": [
+    "50": [
+      "backend_requirements"
+    ],
+    "51": [
       "readme"
     ],
-    "64": [
+    "52": [
       "src_assets_icon128"
     ],
-    "65": [
+    "53": [
       "src_background_background_js_src_background_background"
     ],
-    "66": [
+    "54": [
       "src_background_background_ts_src_background_background"
     ],
-    "67": [
+    "55": [
       "src_pii_test_piifusion_test_js_src_pii_test_piifusion_test"
     ],
-    "68": [
+    "56": [
       "src_schema_uigraph_js_src_schema_uigraph"
     ],
-    "69": [
+    "57": [
       "src_ui_types_js_src_ui_types"
     ],
-    "70": [
+    "58": [
       "vite_content_config_js_vite_content_config"
     ],
-    "71": [
+    "59": [
       "vite_content_config_ts_vite_content_config"
     ],
-    "72": [
+    "60": [
       "vitest_config_js_vitest_config"
     ],
-    "73": [
+    "61": [
       "vitest_config_ts_vitest_config"
     ],
-    "74": [
+    "62": [
       "vllm_service"
     ]
   },
   "cohesion": {
-    "0": 0.05137844611528822,
-    "1": 0.06636500754147813,
-    "2": 0.062040816326530614,
-    "3": 0.06852497096399536,
-    "4": 0.07073170731707316,
-    "5": 0.05555555555555555,
-    "6": 0.0625,
-    "7": 0.15151515151515152,
-    "8": 0.14285714285714285,
-    "9": 0.15789473684210525,
-    "10": 0.2046783625730994,
-    "11": 0.16374269005847952,
-    "12": 0.13450292397660818,
-    "13": 0.2426470588235294,
-    "14": 0.2,
-    "15": 0.20512820512820512,
-    "16": 0.23076923076923078,
-    "17": 0.23076923076923078,
-    "18": 0.16666666666666666,
-    "19": 0.2,
-    "20": 0.2545454545454545,
-    "21": 0.32727272727272727,
-    "22": 0.2909090909090909,
-    "23": 0.2727272727272727,
-    "24": 0.3090909090909091,
-    "25": 0.2222222222222222,
-    "26": 0.4722222222222222,
-    "27": 0.3333333333333333,
-    "28": 0.4166666666666667,
-    "29": 0.3888888888888889,
-    "30": 0.25,
-    "31": 0.4642857142857143,
-    "32": 0.2857142857142857,
-    "33": 0.42857142857142855,
-    "34": 0.5238095238095238,
-    "35": 0.5238095238095238,
-    "36": 0.2857142857142857,
-    "37": 0.42857142857142855,
-    "38": 0.3333333333333333,
-    "39": 0.3333333333333333,
-    "40": 0.4,
-    "41": 0.4,
-    "42": 0.5,
-    "43": 0.4,
-    "44": 0.7,
-    "45": 0.5,
-    "46": 0.5,
-    "47": 0.5,
-    "48": 0.6666666666666666,
-    "49": 0.6666666666666666,
-    "50": 0.5,
-    "51": 0.8333333333333334,
-    "52": 0.8333333333333334,
-    "53": 0.6666666666666666,
-    "54": 0.6666666666666666,
-    "55": 0.6666666666666666,
+    "0": 0.06313497822931785,
+    "1": 0.06471631205673758,
+    "2": 0.07657657657657657,
+    "3": 0.05555555555555555,
+    "4": 0.09247311827956989,
+    "5": 0.06896551724137931,
+    "6": 0.09971509971509972,
+    "7": 0.11666666666666667,
+    "8": 0.12318840579710146,
+    "9": 0.14285714285714285,
+    "10": 0.16374269005847952,
+    "11": 0.13450292397660818,
+    "12": 0.2,
+    "13": 0.20512820512820512,
+    "14": 0.23076923076923078,
+    "15": 0.16666666666666666,
+    "16": 0.2,
+    "17": 0.2727272727272727,
+    "18": 0.2909090909090909,
+    "19": 0.3090909090909091,
+    "20": 0.24444444444444444,
+    "21": 0.26666666666666666,
+    "22": 0.4722222222222222,
+    "23": 0.4166666666666667,
+    "24": 0.3611111111111111,
+    "25": 0.3888888888888889,
+    "26": 0.25,
+    "27": 0.2857142857142857,
+    "28": 0.42857142857142855,
+    "29": 0.42857142857142855,
+    "30": 0.5238095238095238,
+    "31": 0.2857142857142857,
+    "32": 0.42857142857142855,
+    "33": 0.5333333333333333,
+    "34": 0.3333333333333333,
+    "35": 0.4,
+    "36": 0.4,
+    "37": 0.4,
+    "38": 0.7,
+    "39": 0.5,
+    "40": 0.5,
+    "41": 0.6666666666666666,
+    "42": 0.6666666666666666,
+    "43": 0.6666666666666666,
+    "44": 0.6666666666666666,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
     "56": 1.0,
     "57": 1.0,
     "58": 1.0,
     "59": 1.0,
     "60": 1.0,
     "61": 1.0,
-    "62": 1.0,
-    "63": 1.0,
-    "64": 1.0,
-    "65": 1.0,
-    "66": 1.0,
-    "67": 1.0,
-    "68": 1.0,
-    "69": 1.0,
-    "70": 1.0,
-    "71": 1.0,
-    "72": 1.0,
-    "73": 1.0,
-    "74": 1.0
+    "62": 1.0
   },
   "gods": [
     {
@@ -1031,12 +859,7 @@
     {
       "id": "backend_app_services_action_planner_actionplanner",
       "label": "ActionPlanner",
-      "degree": 13
-    },
-    {
-      "id": "backend_app_services_jev_classifier_jev_fast_path",
-      "label": "jev_fast_path()",
-      "degree": 11
+      "degree": 12
     },
     {
       "id": "backend_app_tests_test_action_planner_fakellmclient",
@@ -1056,7 +879,7 @@
     {
       "id": "backend_app_services_llm_client_llmclient",
       "label": "LLMClient",
-      "degree": 9
+      "degree": 8
     },
     {
       "id": "src_agent_latencytest_js_src_agent_latencytest_latencytracker",
@@ -1067,23 +890,39 @@
       "id": "src_pii_nerengine_js_src_pii_nerengine_nerengine",
       "label": "NEREngine",
       "degree": 8
+    },
+    {
+      "id": "src_pii_nerengine_ts_src_pii_nerengine_nerengine",
+      "label": "NEREngine",
+      "degree": 8
     }
   ],
   "surprises": [
     {
-      "source": "Backend Requirements",
-      "target": "Action Planner (action_planner.py)",
+      "source": "plan_action_http()",
+      "target": "ActionPlanner",
       "source_files": [
-        "backend/requirements.txt",
-        "README.md"
+        "backend/app/routers/agent.py",
+        "backend/app/services/action_planner.py"
       ],
       "confidence": "INFERRED",
-      "relation": "references",
-      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `Backend Requirements` unexpectedly reaches hub `Action Planner (action_planner.py)`"
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "agent_websocket()",
+      "target": "ActionPlanner",
+      "source_files": [
+        "backend/app/routers/agent.py",
+        "backend/app/services/action_planner.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
     },
     {
       "source": "FakeLLMClient",
-      "target": "TaskRequest",
+      "target": "SanitizedContext",
       "source_files": [
         "backend/app/tests/test_action_planner.py",
         "backend/app/schemas/context.py"
@@ -1093,41 +932,30 @@
       "why": "inferred connection - not explicitly stated in source; bridges separate communities"
     },
     {
-      "source": "FakeLLMClient",
-      "target": "ActionPlanner",
+      "source": "make_request()",
+      "target": "SanitizedContext",
       "source_files": [
         "backend/app/tests/test_action_planner.py",
-        "backend/app/services/action_planner.py"
+        "backend/app/schemas/context.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "ActionPlanner",
+      "target": "TaskRequest",
+      "source_files": [
+        "backend/app/services/action_planner.py",
+        "backend/app/schemas/context.py"
       ],
       "confidence": "INFERRED",
       "relation": "uses",
       "why": "inferred connection - not explicitly stated in source; bridges separate communities"
-    },
-    {
-      "source": "test_valid_action_passes_through()",
-      "target": "ActionPlanner",
-      "source_files": [
-        "backend/app/tests/test_action_planner.py",
-        "backend/app/services/action_planner.py"
-      ],
-      "confidence": "INFERRED",
-      "relation": "calls",
-      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
-    },
-    {
-      "source": "test_hallucinated_element_id_is_downgraded()",
-      "target": "ActionPlanner",
-      "source_files": [
-        "backend/app/tests/test_action_planner.py",
-        "backend/app/services/action_planner.py"
-      ],
-      "confidence": "INFERRED",
-      "relation": "calls",
-      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
     }
   ],
   "tokens": {
-    "input": 4151,
-    "output": 957
+    "input": 4149,
+    "output": 1493
   }
 }
