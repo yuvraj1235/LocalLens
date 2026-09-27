@@ -55,21 +55,21 @@ let ocrEngine: OCREngine | null = null;
 let regexEngine: RegexRuleEngine | null = null;
 let nerEngine: NEREngine | null = null;
 
-async function ensureEngines(models: AnalyzeScreenOptions["models"]) {
+async function ensureEngines(models?: AnalyzeScreenOptions["models"]) {
     if (!regexEngine) {
         regexEngine = new RegexRuleEngine();
     }
-    if (!ocrEngine && models) {
+    if (!ocrEngine) {
         ocrEngine = new OCREngine({
-            detModelUrl: models.detModelUrl,
-            recModelUrl: models.recModelUrl,
-            charDictUrl: models.charDictUrl,
+            detModelUrl: models?.detModelUrl ?? "/models/det.onnx",
+            recModelUrl: models?.recModelUrl ?? "/models/rec.onnx",
+            charDictUrl: models?.charDictUrl ?? "/models/charDict.txt",
         });
     }
-    if (!nerEngine && models) {
+    if (!nerEngine) {
         nerEngine = new NEREngine({
-            modelUrl: models.nerModelUrl,
-            vocabUrl: models.nerVocabUrl,
+            modelUrl: models?.nerModelUrl ?? "/models/ner.onnx",
+            vocabUrl: models?.nerVocabUrl ?? "/models/vocab.txt",
         });
     }
 

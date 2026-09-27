@@ -1,0 +1,1 @@
+{"nodes": [{"id": "docker_compose", "label": "docker-compose.yml", "file_type": "code", "source_file": "docker-compose.yml"}], "edges": [{"source": "docker_compose", "target": "app_main", "relation": "references", "confidence": "INFERRED", "confidence_score": 0.9, "source_file": "docker-compose.yml"}], "hyperedges": []}

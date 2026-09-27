@@ -581,14 +581,52 @@ function escapeHtml(str: string): string {
 }
 
 async function getContext(): Promise<SanitizedContext> {
+  let context: SanitizedContext;
   if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
-    return new Promise((resolve) => {
+    context = await new Promise<SanitizedContext>((resolve) => {
       chrome.runtime.sendMessage({ type: "GET_CONTEXT" }, (response) => {
         resolve(response as SanitizedContext);
       });
     });
+  } else {
+    context = buildMockContext();
   }
-  return buildMockContext();
+
+  // Attach NER Engine to classify PII based on model score
+  try {
+    const { NEREngine } = await import("../pii/nerEngine.js");
+    const nerEngine = new NEREngine({
+      modelUrl: chrome.runtime.getURL("models/ner.onnx"),
+      vocabUrl: chrome.runtime.getURL("models/vocab.txt")
+    });
+    await nerEngine.initialize();
+    if (nerEngine.isReady) {
+      const ocrResults = context.ui_graph
+        .filter(el => el.bbox !== null)
+        .map(el => ({
+          text: el.label || "",
+          bbox: [el.bbox!.x, el.bbox!.y, el.bbox!.width, el.bbox!.height] as [number, number, number, number],
+          confidence: 1.0,
+          detectionScore: 1.0
+        }));
+      
+      const piiCandidates = await nerEngine.detect(ocrResults as any);
+      for (const cand of piiCandidates) {
+        const el = context.ui_graph.find(e => 
+          e.bbox !== null &&
+          e.bbox.x === cand.bbox[0] && e.bbox.y === cand.bbox[1] && 
+          e.bbox.width === cand.bbox[2] && e.bbox.height === cand.bbox[3]
+        );
+        if (el && el.redaction === "NONE") {
+          el.redaction = (cand.type + "_REDACTED") as any;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("[LocalLens] NER classification skipped:", err);
+  }
+
+  return context;
 }
 
 function buildMockContext(): SanitizedContext {
