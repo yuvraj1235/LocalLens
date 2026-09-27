@@ -97,7 +97,7 @@ export class AgentLoop {
     this.onLog = options.onLog;
     this.maxSteps = options.maxSteps ?? 20;
     this.minConfidence = options.minConfidence ?? 0.4;
-    this.client = options.client ?? new AgentClient("ws://localhost:8000/ws/agent");
+    this.client = options.client ?? new AgentClient("ws://16.176.149.70/ws/agent");
   }
 
   async start(initialContext: SanitizedContext): Promise<void> {
