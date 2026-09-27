@@ -9,7 +9,7 @@
 
 import type { TaskRequest, StructuredAction } from "./types";
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "http://16.176.149.70";
 
 export class AgentClient {
   private ws: WebSocket | null = null;

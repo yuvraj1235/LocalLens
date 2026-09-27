@@ -197,7 +197,7 @@ if (
   typeof process !== "undefined" &&
   process.argv[1]?.includes("latencyTest")
 ) {
-  const baseUrl = process.argv[2] ?? "http://localhost:8000";
+  const baseUrl = process.argv[2] ?? "http://16.176.149.70";
   const n       = parseInt(process.argv[3] ?? "10", 10);
   runLatencyBenchmark(baseUrl, n).catch(console.error);
 }

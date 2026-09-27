@@ -6,7 +6,7 @@
  *
  * Schema contract: backend/app/schemas/context.py
  */
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "http://16.176.149.70";
 export class AgentClient {
     constructor(wsUrl = BASE_URL.replace(/^http/, "ws") + "/ws/agent") {
         this.ws = null;

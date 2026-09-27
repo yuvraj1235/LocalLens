@@ -44,12 +44,12 @@
   ],
 
   "host_permissions": [
-    "http://localhost:8000/*",
-    "ws://localhost:8000/*"
+    "http://16.176.149.70/*",
+    "ws://16.176.149.70/*"
   ],
 
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self';"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://16.176.149.70 ws://16.176.149.70;"
   },
   "web_accessible_resources": [
   {
